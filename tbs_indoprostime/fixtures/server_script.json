@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 1,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Insert",
+  "enable_rate_limit": 0,
+  "event_frequency": "Daily",
+  "modified": "2026-06-23 17:02:16.652188",
+  "module": "TBS Indoprostime",
+  "name": "Auto Fetch Exchange Rate",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": null,
+  "script": "default_currency = frappe.db.get_single_value(\"Global Defaults\", \"default_currency\")\ncurrencies = frappe.get_all(\"Currency\", filters={\"enabled\": 1}, pluck=\"name\")\ntoday = frappe.utils.today()\n\nsettings = frappe.get_doc(\"Currency Exchange Settings\")\n\nfor currency in currencies:\n    if currency == default_currency:\n        continue\n    \n    # Build params dari Currency Exchange Settings\n    params = {}\n    for row in settings.req_params:\n        params[row.key] = row.value.replace(\"{from_currency}\", currency).replace(\"{to_currency}\", default_currency).replace(\"{transaction_date}\", today)\n    \n    api_url = settings.api_endpoint.replace(\"{from_currency}\", currency).replace(\"{to_currency}\", default_currency).replace(\"{transaction_date}\", today)\n    \n    response = frappe.make_get_request(api_url, params=params)\n    \n    # Traverse result_key dari settings\n    value = response\n    for res_key in settings.result_key:\n        key = res_key.key.replace(\"{from_currency}\", currency).replace(\"{to_currency}\", default_currency)\n        value = value[key]\n    \n    rate = frappe.utils.flt(value)\n    \n    if rate:\n        existing = frappe.db.get_value(\"Currency Exchange\", {\n            \"from_currency\": currency,\n            \"to_currency\": default_currency,\n            \"date\": today\n        }, \"name\")\n        \n        if existing:\n            frappe.db.set_value(\"Currency Exchange\", existing, \"exchange_rate\", rate)\n        else:\n            doc = frappe.get_doc({\n                \"doctype\": \"Currency Exchange\",\n                \"from_currency\": currency,\n                \"to_currency\": default_currency,\n                \"date\": today,\n                \"exchange_rate\": rate,\n                \"for_buying\": 1,\n                \"for_selling\": 1\n            })\n            doc.insert(ignore_permissions=True)\n\nfrappe.db.commit()",
+  "script_type": "Scheduler Event"
+ }
+]

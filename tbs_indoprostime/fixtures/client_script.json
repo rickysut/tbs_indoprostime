@@ -1,0 +1,57 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Invoice",
+  "enabled": 1,
+  "modified": "2026-06-09 22:39:00.920730",
+  "module": "TBS Indoprostime",
+  "name": "Sales Invoice Script",
+  "script": "frappe.ui.form.on('Sales Invoice', {\n    refresh(frm) {\n        if (frm.doc.currency === \"USD\") {\n\t\t\tfrm.set_value(\"debit_to\", \"110.320 - Account.Receivable (USD) - CP\");\n\t\t} else {\n\t\t\tfrm.set_value(\"debit_to\", \"110.310 - Account.Receivable (IDR) - CP\");\n\t\t}\n        setTimeout(() => {\n            frm.page.remove_inner_button('Delivery Note', 'Create');\n            frm.page.remove_inner_button('Dunning', 'Create');\n            frm.page.remove_inner_button('Maintenance Schedule', 'Create');\n            frm.page.remove_inner_button('Invoice Discounting', 'Create');\n            \n            $(\"[data-label='Timesheet']\").hide();\n            $(\"[data-label='Delivery%20Note']\").hide();\n            \n        }, 500);\n    },\n\tonload(frm) {\n        setTimeout(() => {\n            $(\"[data-doctype='Dunning']\").hide();\n            $(\"[data-doctype='Timesheet']\").hide();\n            $(\"[data-doctype='Delivery Note']\").hide();\n            $(\"[data-doctype='POS Invoice']\").hide();\n            $(\"[data-doctype='Auto Repeat']\").hide();\n            $(\"[data-doctype='Purchase Invoice']\").hide();\n            \n            \n            \n            $('.form-dashboard-section .row > div.col-md-4').each(function() {\n                let $kolom = $(this);\n                \n                // Cek apakah ada satupun link yang MASIH TERLIHAT di dalam kolom ini\n                // Kita cek atribut style display secara langsung\n                let adaLinkTerlihat = $kolom.find('.document-link').filter(function() {\n                    return $(this).css('display') !== 'none';\n                }).length > 0;\n\n                // Jika TIDAK ADA link yang terlihat (semuanya hidden), sembunyikan kolomnya\n                if (!adaLinkTerlihat) {\n                    $kolom.hide();\n                }\n            });\n           \n        }, 100);\n\t}\n})",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Item",
+  "enabled": 1,
+  "modified": "2026-05-14 21:26:08.614225",
+  "module": "TBS Indoprostime",
+  "name": "Hide Connection",
+  "script": "frappe.ui.form.on('Item', {\n    refresh: function(frm) {\n        $('.form-dashboard-section.form-links').hide();\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Sales Order",
+  "enabled": 1,
+  "modified": "2026-06-09 22:30:43.309251",
+  "module": "TBS Indoprostime",
+  "name": "Sales Order Script",
+  "script": "frappe.ui.form.on('Sales Order', {\n    onload(frm) {\n        setTimeout(() => {\n            $(\"[data-doctype='Pick List']\").hide();\n            $(\"[data-doctype='Delivery Note']\").hide();\n            $(\"[data-doctype='Maintenance Visit']\").hide();\n            $(\"[data-doctype='Purchase Order']\").hide();\n            $(\"[data-doctype='Project']\").hide();\n            $(\"[data-doctype='Work Order']\").hide();\n            $(\"[data-doctype='BOM']\").hide();\n            $(\"[data-doctype='Blanket Order']\").hide();\n            $(\"[data-doctype='Auto Repeat']\").hide();\n            $(\"[data-doctype='Stock Reservation Entry']\").hide();\n            $(\"[data-doctype='Material Request']\").hide();\n            $(\"[data-doctype='Quotation']\").hide();\n            \n            $('.form-dashboard-section .row > div.col-md-4').each(function() {\n                let $kolom = $(this);\n                \n                // Cek apakah ada satupun link yang MASIH TERLIHAT di dalam kolom ini\n                // Kita cek atribut style display secara langsung\n                let adaLinkTerlihat = $kolom.find('.document-link').filter(function() {\n                    return $(this).css('display') !== 'none';\n                }).length > 0;\n\n                // Jika TIDAK ADA link yang terlihat (semuanya hidden), sembunyikan kolomnya\n                if (!adaLinkTerlihat) {\n                    $kolom.hide();\n                }\n            });\n           \n        }, 100);\n    },\n\tvalidate(frm) {\n        // Pastikan custom_sales terisi\n        if (frm.doc.custom_sales) {\n            // Jika sales_team kosong, tambahkan baris baru\n            if (!frm.doc.sales_team || frm.doc.sales_team.length === 0) {\n                let row = frm.add_child('sales_team');\n                row.sales_person = frm.doc.custom_sales;\n                row.allocated_percentage = 100; // Opsional: set default allocation\n            } else {\n                // Update baris pertama dengan nilai custom_sales\n                frm.doc.sales_team[0].sales_person = frm.doc.custom_sales;\n            }\n            // Refresh field sales_team agar perubahan terlihat di UI\n            frm.refresh_field('sales_team');\n        }\n    },\n    custom_kurs(frm) {\n        if (frm.doc.custom_kurs && frm.doc.custom_kurs > 0) {\n            frm.set_value('conversion_rate', frm.doc.custom_kurs);\n        }\n    },\n    currency(frm) {\n        if (frm.doc.custom_kurs && frm.doc.custom_kurs > 0) {\n            // Tunggu sebentar agar ERPNext selesai set conversion_rate dari API\n            setTimeout(() => {\n                frm.set_value('conversion_rate', frm.doc.custom_kurs);\n            }, 500);\n        }\n    },\n});\n\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Order",
+  "enabled": 1,
+  "modified": "2026-06-23 17:29:38.161079",
+  "module": "TBS Indoprostime",
+  "name": "Purchase Order",
+  "script": "frappe.ui.form.on('Purchase Order', {\n    refresh: function(frm) {\n        setTimeout(function() {\n            $('div.inner-group-button[data-label=\"Get%20Items%20From\"]').hide();\n            $('div.inner-group-button[data-label=\"Tools\"]').hide();\n            hide_create_menu_by_role(frm);\n        }, 300);\n    }\n});\n\nfunction hide_create_menu_by_role(frm) {\n\n    // Sembunyikan menu berdasarkan role\n    if (!frappe.user.has_role('Accounts User')) {\n        $('div.inner-group-button[data-label=\"Create\"]').hide();\n        $('a.dropdown-item[data-label=\"Payment\"]').hide();\n        $('a.dropdown-item[data-label=\"Payment%20Request\"]').hide();\n    \n        $('a.dropdown-item[data-label=\"Vendor%20Receipt\"]').hide();\n        $('a.dropdown-item[data-label=\"Vendor%20Invoice\"]').hide();\n    } else {\n        $('a.dropdown-item[data-label=\"Vendor%20Receipt\"]').hide();\n    }\n}",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Invoice",
+  "enabled": 1,
+  "modified": "2026-06-23 17:33:21.766907",
+  "module": "TBS Indoprostime",
+  "name": "Vendor Invoice",
+  "script": "frappe.ui.form.on('Purchase Invoice', {\n\trefresh: function(frm) {\n        setTimeout(function() {\n           \n            hide_create_menu_by_role(frm);\n        }, 300);\n    }\n})\n\n\nfunction hide_create_menu_by_role(frm) {\n\n    // Sembunyikan menu berdasarkan role\n    if (frappe.user.has_role('Accounts User')) {\n\n        $('a.dropdown-item[data-label=\"Vendor%20Receipt\"]').hide();\n      \n    } \n}",
+  "view": "Form"
+ }
+]
