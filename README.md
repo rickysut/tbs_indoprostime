@@ -85,12 +85,3 @@ Ikuti Wizard nya.
 
 ---
 
-## Aturan Kerja Qwen
-
-### 1. Selalu Baca Skills Reference
-
-Setiap kali ditanya atau diberi tugas terkait project Cargo, **selalu baca dan gunakan semua skill di `/Volumes/Data/cargo/.qwen/skills/` sebagai referensi** sebelum mengerjakan.
-
-### 2. Langsung Eksekusi
-
-**TANPA planning, tanpa analisa panjang.** Langsung kerjakan tugas dan finish. Hanya output hasil eksekusi — selesai.
