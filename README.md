@@ -13,12 +13,12 @@ Folder untuk instalasi disini = **cargo**. Lokasi folder silahkan pilih sendiri 
 - git clone --depth 1 --branch v15.105.0 https://github.com/frappe/erpnext
 - cd ..
 - bench setup requirements
-- bench new-site cargoplaza
+- bench new-site indoprostime
   > isikan password Root MariaDB
-- bench --site cargoplaza install-app erpnext
+- bench --site indoprostime install-app erpnext
   > isikan password Administrator baru
-- bench --site cargoplaza scheduler enable
-- bench use cargoplaza
+- bench --site indoprostime scheduler enable
+- bench use indoprostime
 - bench start
 
 dari web browser http://127.0.0.1:port <---- lihat di console port nya 8001 / 8002
@@ -38,15 +38,15 @@ cargo> bench get-app https://username:PAT_TOKEN@github.com/rickysut/tbs_indopros
 - cargo> CTRL+C
 - cargo> bench start
 - dari terminal lain:
-  cargo> bench --site cargoplaza install-app tbs_indoprostime
-  cargo> bench --site cargoplaza migrate
+  cargo> bench --site indoprostime install-app tbs_indoprostime
+  cargo> bench --site indoprostime migrate
 - kembali ke terminal yg sedang running bench
   cargo> CTRL+C
   cargo> bench start
 
 ## Cara Aktivasi Developer Mode di ERPNext
 
-- cargo> bench --site cargoplaza set-config developer_mode 1
+- cargo> bench --site indoprostime set-config developer_mode 1
 - cargo> CTRL+C
 - cargo> bench start
 
