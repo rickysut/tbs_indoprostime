@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:mawb",
+ "creation": "2026-09-12 12:39:43.933563",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_xvll",
+  "amended_from",
+  "flight_id",
+  "mawb",
+  "description",
+  "column_break_okzf",
+  "received",
+  "issued",
+  "available",
+  "customer_order"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_xvll",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "MAWB",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "flight_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Flight ID",
+   "length": 2,
+   "reqd": 1
+  },
+  {
+   "fieldname": "mawb",
+   "fieldtype": "Data",
+   "label": "MAWB",
+   "length": 13,
+   "unique": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_okzf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "received",
+   "fieldtype": "Date",
+   "label": "Received"
+  },
+  {
+   "fieldname": "issued",
+   "fieldtype": "Date",
+   "label": "Issued"
+  },
+  {
+   "default": "0",
+   "fieldname": "available",
+   "fieldtype": "Check",
+   "label": "Available"
+  },
+  {
+   "fieldname": "customer_order",
+   "fieldtype": "Link",
+   "label": "Customer Order",
+   "options": "Sales Order"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-12 12:44:34.188465",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "MAWB",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
