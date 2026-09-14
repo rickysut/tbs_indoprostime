@@ -142,6 +142,12 @@ override_doctype_class = {
 # ---------------
 # Hook on document methods and events
 
+doc_events = {
+    "Warehouse": {
+        "autoname": "tbs_indoprostime.overrides.warehouse.set_custom_name"
+    }
+}
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
