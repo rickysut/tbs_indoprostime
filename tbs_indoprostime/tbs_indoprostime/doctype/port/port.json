@@ -46,7 +46,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-12 13:37:20.824476",
+ "modified": "2026-09-22 10:34:19.327177",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Port",
@@ -72,6 +72,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "description",
+ "title_field": "port_id",
  "track_changes": 1
 }

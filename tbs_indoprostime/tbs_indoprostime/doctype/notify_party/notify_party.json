@@ -10,14 +10,23 @@
   "naming_series",
   "notify_code",
   "notify_name",
-  "notify_type",
-  "attn",
-  "entity_type",
+  "industry_type",
+  "agent",
+  "shipping",
+  "country",
+  "port",
   "column_break_zyib",
   "address_1",
   "address_2",
   "address_3",
-  "address_4"
+  "address_4",
+  "address_5",
+  "contact_tab",
+  "contact_name",
+  "contact_phone",
+  "column_break_nlqw",
+  "contact_fax",
+  "contact_email"
  ],
  "fields": [
   {
@@ -30,7 +39,9 @@
   {
    "fieldname": "notify_code",
    "fieldtype": "Data",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Notify Code",
    "length": 4,
    "reqd": 1,
@@ -39,18 +50,12 @@
   {
    "fieldname": "notify_name",
    "fieldtype": "Data",
+   "in_filter": 1,
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Notify Name",
    "reqd": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "notify_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Notify Type",
-   "options": "Company\nIndividual\nPartnership",
-   "reqd": 1
   },
   {
    "fieldname": "address_1",
@@ -67,12 +72,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "entity_type",
-   "fieldtype": "Select",
-   "label": "Entity Type",
-   "options": "\nPERSEROAN TERBATAS\nCV\nPERUSAHAAN DAGANG\nPERORANGAN\nTOKO\nYAYASAN\nSETNONE"
-  },
-  {
    "fieldname": "address_3",
    "fieldtype": "Small Text",
    "label": "Address 3"
@@ -83,16 +82,79 @@
    "label": "Address 4"
   },
   {
-   "fieldname": "attn",
-   "fieldtype": "Data",
+   "fieldname": "industry_type",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Attn"
+   "label": "Industry Type",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "address_5",
+   "fieldtype": "Small Text",
+   "label": "Address 5"
+  },
+  {
+   "default": "0",
+   "fieldname": "agent",
+   "fieldtype": "Check",
+   "label": "Agent"
+  },
+  {
+   "default": "0",
+   "fieldname": "shipping",
+   "fieldtype": "Check",
+   "label": "Shipping"
+  },
+  {
+   "fieldname": "port",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "label": "Port",
+   "options": "Port"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "contact_tab",
+   "fieldtype": "Tab Break",
+   "in_standard_filter": 1,
+   "label": "Contact"
+  },
+  {
+   "fieldname": "contact_name",
+   "fieldtype": "Data",
+   "label": "Contact Name"
+  },
+  {
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Phone"
+  },
+  {
+   "fieldname": "column_break_nlqw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contact_fax",
+   "fieldtype": "Data",
+   "label": "Fax"
+  },
+  {
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-21 22:32:54.791118",
+ "modified": "2026-09-22 13:09:56.686747",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Notify Party",
