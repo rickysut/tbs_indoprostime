@@ -38,6 +38,7 @@ class BusinessPartner(Document):
 			"default_price_list": self.selling_price_list,
 			"default_bank_account": self.company_bank_account,
 			"disabled": self.disable,
+			"dn_required": 1,
 			"tax_id": self.tax_id,
 			"tax_category": self.tax_category,
 			"tax_withholding_category": self.tax_withholding_category,
@@ -47,6 +48,7 @@ class BusinessPartner(Document):
 
 		self.set_party_account(customer, self.receivable_account, self.customer_advance_account)
 		self.set_credit_limit(customer)
+		self.set_sales_team(customer)
 
 		if existing:
 			customer.save()
@@ -75,6 +77,8 @@ class BusinessPartner(Document):
 			"default_price_list": self.buying_price_list,
 			"default_bank_account": self.company_bank_account,
 			"disabled": self.disable,
+			"allow_purchase_invoice_creation_without_purchase_order": 1,
+			"allow_purchase_invoice_creation_without_purchase_receipt": 1,
 			"tax_id": self.tax_id,
 			"tax_category": self.tax_category,
 			"tax_withholding_category": self.tax_withholding_category,
@@ -167,3 +171,17 @@ class BusinessPartner(Document):
 			row = customer.append("credit_limits", {"company": company})
 
 		row.credit_limit = self.credit_limit
+
+	def set_sales_team(self, customer):
+		if not self.sales_person:
+			return
+
+		for row in customer.get("sales_team"):
+			if row.sales_person == self.sales_person:
+				row.allocated_percentage = 100
+				return
+
+		customer.append("sales_team", {
+			"sales_person": self.sales_person,
+			"allocated_percentage": 100,
+		})
