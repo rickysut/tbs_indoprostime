@@ -11,10 +11,12 @@
   "bp_code",
   "partner_name",
   "partner_type",
+  "currency",
+  "disable",
   "column_break_rtos",
   "territory",
   "industry",
-  "disable",
+  "company_bank_account",
   "party_section",
   "customer",
   "vendor",
@@ -26,11 +28,6 @@
   "column_break_ivbg",
   "importer",
   "exporter",
-  "default_section",
-  "currency",
-  "company_bank_account",
-  "column_break_hebv",
-  "price_list",
   "addresses_tab",
   "primary_address",
   "column_break_zrzj",
@@ -52,20 +49,42 @@
   "fax",
   "mobile_phone",
   "designation",
-  "accounting_tab",
-  "default_account",
-  "payment_term",
-  "column_break_bgnh",
-  "credit_limit",
   "tax_tab",
   "tax_id",
   "column_break_okqy",
   "tax_category",
   "tax_withholding_category",
-  "sales_team_tab",
+  "customer_tab",
+  "def_setting_customer",
+  "customer_group",
+  "selling_payment_term",
+  "selling_price_list",
+  "column_break_quml",
+  "receivable_account",
+  "customer_advance_account",
+  "credit_limit",
+  "sales_team_section",
   "sales_person",
+  "column_break_nbke",
   "account_manager",
-  "connections_tab"
+  "vendor_tab",
+  "def_setting_vendor",
+  "vendor_group",
+  "buying_payment_term",
+  "buying_price_list",
+  "column_break_ybye",
+  "payable_account",
+  "vendor_advance_account",
+  "hold_section",
+  "on_hold",
+  "hold_type",
+  "column_break_wixy",
+  "hold_release_date",
+  "connections_tab",
+  "section_break_wenk",
+  "column_connection",
+  "connection_display",
+  "hidden_state"
  ],
  "fields": [
   {
@@ -180,31 +199,10 @@
    "label": "Exporter"
   },
   {
-   "fieldname": "default_section",
-   "fieldtype": "Section Break",
-   "label": "Default"
-  },
-  {
-   "fieldname": "currency",
-   "fieldtype": "Link",
-   "label": "Currency",
-   "options": "Currency"
-  },
-  {
    "fieldname": "company_bank_account",
    "fieldtype": "Link",
    "label": "Company Bank Account",
    "options": "Bank Account"
-  },
-  {
-   "fieldname": "column_break_hebv",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "price_list",
-   "fieldtype": "Link",
-   "label": "Price List",
-   "options": "Price List"
   },
   {
    "fieldname": "addresses_tab",
@@ -354,28 +352,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "accounting_tab",
-   "fieldtype": "Tab Break",
-   "label": "Accounting"
-  },
-  {
-   "fieldname": "default_account",
-   "fieldtype": "Link",
-   "label": "Receivable Account",
-   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Asset\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Receivable\"]]",
-   "options": "Account"
-  },
-  {
-   "fieldname": "payment_term",
-   "fieldtype": "Link",
-   "label": "Payment term",
-   "options": "Payment Term"
-  },
-  {
-   "fieldname": "column_break_bgnh",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "credit_limit",
    "fieldtype": "Float",
    "label": "Credit Limit"
@@ -407,11 +383,6 @@
    "options": "Tax Withholding Category"
   },
   {
-   "fieldname": "sales_team_tab",
-   "fieldtype": "Tab Break",
-   "label": "Sales Team"
-  },
-  {
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "label": "Sales Person",
@@ -427,6 +398,171 @@
    "fieldname": "connections_tab",
    "fieldtype": "Tab Break",
    "label": "Connections"
+  },
+  {
+   "fieldname": "connection_display",
+   "fieldtype": "HTML",
+   "label": "Connection Display"
+  },
+  {
+   "fieldname": "section_break_wenk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_connection",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "hidden_state",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Hidden State",
+   "permlevel": 1
+  },
+  {
+   "depends_on": "eval:doc.customer==1",
+   "fieldname": "customer_tab",
+   "fieldtype": "Tab Break",
+   "label": "Customer "
+  },
+  {
+   "fieldname": "column_break_quml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "def_setting_customer",
+   "fieldtype": "Section Break",
+   "label": "Default Setting"
+  },
+  {
+   "depends_on": "eval:doc.vendor==1",
+   "fieldname": "vendor_tab",
+   "fieldtype": "Tab Break",
+   "label": "Vendor"
+  },
+  {
+   "fieldname": "def_setting_vendor",
+   "fieldtype": "Section Break",
+   "label": "Default Setting"
+  },
+  {
+   "fieldname": "vendor_group",
+   "fieldtype": "Link",
+   "label": "Vendor Group",
+   "options": "Supplier Group"
+  },
+  {
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "label": "Customer Group",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "payable_account",
+   "fieldtype": "Link",
+   "label": "Payable Account",
+   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Liability\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Payable\"]]",
+   "options": "Account"
+  },
+  {
+   "fieldname": "column_break_ybye",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "receivable_account",
+   "fieldtype": "Link",
+   "label": "Receivable Account",
+   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Asset\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Receivable\"]]",
+   "options": "Account"
+  },
+  {
+   "fieldname": "selling_payment_term",
+   "fieldtype": "Link",
+   "label": "Selling Payment Term",
+   "options": "Payment Terms Template"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "fieldtype": "Link",
+   "label": "Selling Price List",
+   "link_filters": "[[\"Price List\",\"selling\",\"=\",1]]",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "buying_payment_term",
+   "fieldtype": "Link",
+   "label": "Buying Payment Term",
+   "options": "Payment Terms Template"
+  },
+  {
+   "fieldname": "buying_price_list",
+   "fieldtype": "Link",
+   "label": "Buying Price List",
+   "link_filters": "[[\"Price List\",\"buying\",\"=\",1]]",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "customer_advance_account",
+   "fieldtype": "Link",
+   "label": "Advance Account",
+   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Liability\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Receivable\"]]",
+   "options": "Account"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:!doc.sales_person",
+   "fieldname": "sales_team_section",
+   "fieldtype": "Section Break",
+   "label": "Sales Team"
+  },
+  {
+   "fieldname": "column_break_nbke",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vendor_advance_account",
+   "fieldtype": "Link",
+   "label": "Advance Account",
+   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Asset\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Payable\"]]",
+   "options": "Account"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:!doc.on_hold",
+   "fieldname": "hold_section",
+   "fieldtype": "Section Break",
+   "label": "Hold"
+  },
+  {
+   "default": "0",
+   "fieldname": "on_hold",
+   "fieldtype": "Check",
+   "label": "Hold Vendor"
+  },
+  {
+   "depends_on": "eval:doc.on_hold==1",
+   "fieldname": "hold_type",
+   "fieldtype": "Select",
+   "label": "Hold Type",
+   "options": "\nAll\nInvoices\nPayments"
+  },
+  {
+   "fieldname": "column_break_wixy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.on_hold==1",
+   "description": "Leave blank if the Vendor is blocked indefinitely",
+   "fieldname": "hold_release_date",
+   "fieldtype": "Date",
+   "label": "Release Date"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
   }
  ],
  "grid_page_length": 50,
@@ -444,8 +580,8 @@
    "link_fieldname": "custom_supplier_code"
   }
  ],
- "modified": "2026-09-26 16:33:24.771435",
- "modified_by": "Administrator",
+ "modified": "2026-09-26 22:11:08.802308",
+ "modified_by": "ricky.sutanto@gmail.com",
  "module": "TBS Indoprostime",
  "name": "Business Partner",
  "naming_rule": "By fieldname",
