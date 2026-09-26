@@ -1,0 +1,474 @@
+{
+ "actions": [],
+ "allow_events_in_timeline": 1,
+ "allow_import": 1,
+ "autoname": "field:bp_code",
+ "creation": "2026-09-23 16:09:51.804759",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "bp_code",
+  "partner_name",
+  "partner_type",
+  "column_break_rtos",
+  "territory",
+  "industry",
+  "disable",
+  "party_section",
+  "customer",
+  "vendor",
+  "notify",
+  "column_break_gcgf",
+  "consignee",
+  "shipper",
+  "agent",
+  "column_break_ivbg",
+  "importer",
+  "exporter",
+  "default_section",
+  "currency",
+  "company_bank_account",
+  "column_break_hebv",
+  "price_list",
+  "addresses_tab",
+  "primary_address",
+  "column_break_zrzj",
+  "primary_contact",
+  "section_break_kzin",
+  "address_type",
+  "address_html",
+  "address_line_1",
+  "address_line_2",
+  "stateprovice",
+  "citytown",
+  "country",
+  "postal_code",
+  "column_break_enou",
+  "contact_html",
+  "full_name",
+  "email_id",
+  "phone",
+  "fax",
+  "mobile_phone",
+  "designation",
+  "accounting_tab",
+  "default_account",
+  "payment_term",
+  "column_break_bgnh",
+  "credit_limit",
+  "tax_tab",
+  "tax_id",
+  "column_break_okqy",
+  "tax_category",
+  "tax_withholding_category",
+  "sales_team_tab",
+  "sales_person",
+  "account_manager",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "default": "BP-.{bp_code}",
+   "fieldname": "naming_series",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Series"
+  },
+  {
+   "fieldname": "bp_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "partner_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "partner_type",
+   "fieldtype": "Select",
+   "label": "Partner Type",
+   "options": "Company\nIndividual\nPartnership"
+  },
+  {
+   "fieldname": "column_break_rtos",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territory",
+   "options": "Territory"
+  },
+  {
+   "fieldname": "industry",
+   "fieldtype": "Link",
+   "label": "Industry",
+   "options": "Industry Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "disable",
+   "fieldtype": "Check",
+   "label": "Disable"
+  },
+  {
+   "fieldname": "party_section",
+   "fieldtype": "Section Break",
+   "label": "Party"
+  },
+  {
+   "default": "0",
+   "fieldname": "customer",
+   "fieldtype": "Check",
+   "label": "Customer"
+  },
+  {
+   "default": "0",
+   "fieldname": "vendor",
+   "fieldtype": "Check",
+   "label": "Vendor"
+  },
+  {
+   "default": "0",
+   "fieldname": "notify",
+   "fieldtype": "Check",
+   "label": "Notify"
+  },
+  {
+   "fieldname": "column_break_gcgf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "consignee",
+   "fieldtype": "Check",
+   "label": "Consignee"
+  },
+  {
+   "default": "0",
+   "fieldname": "shipper",
+   "fieldtype": "Check",
+   "label": "Shipper"
+  },
+  {
+   "default": "0",
+   "fieldname": "agent",
+   "fieldtype": "Check",
+   "label": "Agent"
+  },
+  {
+   "fieldname": "column_break_ivbg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "importer",
+   "fieldtype": "Check",
+   "label": "Importer"
+  },
+  {
+   "default": "0",
+   "fieldname": "exporter",
+   "fieldtype": "Check",
+   "label": "Exporter"
+  },
+  {
+   "fieldname": "default_section",
+   "fieldtype": "Section Break",
+   "label": "Default"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "company_bank_account",
+   "fieldtype": "Link",
+   "label": "Company Bank Account",
+   "options": "Bank Account"
+  },
+  {
+   "fieldname": "column_break_hebv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "addresses_tab",
+   "fieldtype": "Tab Break",
+   "label": "Addresses & Contact"
+  },
+  {
+   "fieldname": "primary_address",
+   "fieldtype": "Link",
+   "label": "Primary Address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "column_break_zrzj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "primary_contact",
+   "fieldtype": "Link",
+   "label": "Primary Contact",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "section_break_kzin",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.address_type",
+   "fieldname": "address_type",
+   "fieldtype": "Data",
+   "label": "Address Type",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: !doc.__islocal",
+   "fieldname": "address_html",
+   "fieldtype": "HTML",
+   "label": "Display Address",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.address_line1",
+   "fieldname": "address_line_1",
+   "fieldtype": "Data",
+   "label": "Address Line 1",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.address_line2",
+   "fieldname": "address_line_2",
+   "fieldtype": "Data",
+   "label": "Address Line 2",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.state",
+   "fieldname": "stateprovice",
+   "fieldtype": "Data",
+   "label": "State/Provice",
+   "read_only": 1,
+   "read_only_depends_on": "eval:doc.primary_address"
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.city",
+   "fieldname": "citytown",
+   "fieldtype": "Data",
+   "label": "City/Town",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.country",
+   "fieldname": "country",
+   "fieldtype": "Data",
+   "label": "Country",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_address",
+   "fetch_from": "primary_address.pincode",
+   "fieldname": "postal_code",
+   "fieldtype": "Data",
+   "label": "Postal Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_enou",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: !doc.__islocal",
+   "fieldname": "contact_html",
+   "fieldtype": "HTML",
+   "label": "Display Contact",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.full_name",
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.email_id",
+   "fieldname": "email_id",
+   "fieldtype": "Data",
+   "label": "Email Address",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.phone",
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.custom_fax",
+   "fieldname": "fax",
+   "fieldtype": "Data",
+   "label": "Fax"
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.mobile_no",
+   "fieldname": "mobile_phone",
+   "fieldtype": "Data",
+   "label": "Mobile Phone",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.primary_contact",
+   "fetch_from": "primary_contact.designation",
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accounting_tab",
+   "fieldtype": "Tab Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "default_account",
+   "fieldtype": "Link",
+   "label": "Receivable Account",
+   "link_filters": "[[\"Account\",\"root_type\",\"=\",\"Asset\"],[\"Account\",\"is_group\",\"=\",0],[\"Account\",\"account_type\",\"=\",\"Receivable\"]]",
+   "options": "Account"
+  },
+  {
+   "fieldname": "payment_term",
+   "fieldtype": "Link",
+   "label": "Payment term",
+   "options": "Payment Term"
+  },
+  {
+   "fieldname": "column_break_bgnh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "credit_limit",
+   "fieldtype": "Float",
+   "label": "Credit Limit"
+  },
+  {
+   "fieldname": "tax_tab",
+   "fieldtype": "Tab Break",
+   "label": "Tax"
+  },
+  {
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "label": "Tax ID "
+  },
+  {
+   "fieldname": "column_break_okqy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_category",
+   "fieldtype": "Link",
+   "label": "Tax Category",
+   "options": "Tax Category"
+  },
+  {
+   "fieldname": "tax_withholding_category",
+   "fieldtype": "Link",
+   "label": "Tax Withholding Category",
+   "options": "Tax Withholding Category"
+  },
+  {
+   "fieldname": "sales_team_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sales Team"
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Link",
+   "label": "Sales Person",
+   "options": "Sales Person"
+  },
+  {
+   "fieldname": "account_manager",
+   "fieldtype": "Link",
+   "label": "Account Manager",
+   "options": "User"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Customer",
+   "link_doctype": "Customer",
+   "link_fieldname": "custom_customer_code"
+  },
+  {
+   "group": "Vendor",
+   "link_doctype": "Supplier",
+   "link_fieldname": "custom_supplier_code"
+  }
+ ],
+ "modified": "2026-09-26 16:33:24.771435",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "Business Partner",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "partner_name",
+ "track_changes": 1
+}
