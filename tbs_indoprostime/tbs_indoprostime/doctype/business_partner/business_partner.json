@@ -30,8 +30,10 @@
   "exporter",
   "addresses_tab",
   "primary_address",
+  "new_address",
   "column_break_zrzj",
   "primary_contact",
+  "new_contact",
   "section_break_kzin",
   "address_type",
   "address_html",
@@ -563,6 +565,16 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
+  },
+  {
+   "fieldname": "new_address",
+   "fieldtype": "Button",
+   "label": "New Address"
+  },
+  {
+   "fieldname": "new_contact",
+   "fieldtype": "Button",
+   "label": "New Contact"
   }
  ],
  "grid_page_length": 50,
@@ -580,8 +592,8 @@
    "link_fieldname": "custom_supplier_code"
   }
  ],
- "modified": "2026-09-26 22:11:08.802308",
- "modified_by": "ricky.sutanto@gmail.com",
+ "modified": "2026-09-28 09:10:36.334473",
+ "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Business Partner",
  "naming_rule": "By fieldname",
