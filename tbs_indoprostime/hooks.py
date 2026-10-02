@@ -261,7 +261,7 @@ override_whitelisted_methods = {
 fixtures = [
     {
         "dt": "Workspace",
-        "filters": [["name", "in", ["Cargo Plaza","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM"]]]
+        "filters": [["name", "in", ["TBS Indoprostime","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM"]]]
     },
     {"dt": "Custom Field"},             # Field custom dari Customize Form
     {"dt": "Property Setter"},          # Modifikasi UI/Layout dari Customize Form

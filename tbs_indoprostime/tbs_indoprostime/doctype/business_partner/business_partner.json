@@ -28,6 +28,8 @@
   "column_break_ivbg",
   "importer",
   "exporter",
+  "description_section",
+  "bp_description",
   "addresses_tab",
   "primary_address",
   "new_address",
@@ -53,9 +55,13 @@
   "designation",
   "tax_tab",
   "tax_id",
+  "materai",
+  "pph23",
   "column_break_okqy",
   "tax_category",
   "tax_withholding_category",
+  "section_break_gcms",
+  "tax_address",
   "customer_tab",
   "def_setting_customer",
   "customer_group",
@@ -575,6 +581,36 @@
    "fieldname": "new_contact",
    "fieldtype": "Button",
    "label": "New Contact"
+  },
+  {
+   "default": "0",
+   "fieldname": "materai",
+   "fieldtype": "Check",
+   "label": "Materai"
+  },
+  {
+   "default": "0",
+   "fieldname": "pph23",
+   "fieldtype": "Check",
+   "label": "PPH23"
+  },
+  {
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "bp_description",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "section_break_gcms",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tax_address",
+   "fieldtype": "Small Text",
+   "label": "Tax Address"
   }
  ],
  "grid_page_length": 50,
@@ -592,7 +628,7 @@
    "link_fieldname": "custom_supplier_code"
   }
  ],
- "modified": "2026-09-28 09:10:36.334473",
+ "modified": "2026-09-30 21:29:52.605024",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Business Partner",
@@ -614,6 +650,7 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

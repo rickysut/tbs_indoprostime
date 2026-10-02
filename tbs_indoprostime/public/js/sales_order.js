@@ -1,30 +1,46 @@
 // Copyright (c) 2026, Team ERP and Contributors
 // For license information, please see license.txt
 
+// Suppress cost-center update message for Sales Order only
+(function () {
+	const original_msgprint = frappe.msgprint;
+	frappe.msgprint = function (msg, ...args) {
+		let text = typeof msg === "string" ? msg : (msg && msg.message) || "";
+		if (
+			cur_frm &&
+			cur_frm.doc.doctype === "Sales Order" &&
+			text.includes("Cost Center for Item rows has been updated")
+		) {
+			return;
+		}
+		return original_msgprint.call(this, msg, ...args);
+	};
+})();
+
 // Override Sales Order form events
 frappe.ui.form.on("Sales Order", {
-	onload(frm) {
-		// frappe.msgprint("✅ Sales Order JS loaded!");
-		if (frm.is_new() && frm.doc.custom_division) {
-			ensure_default_item(frm);
-		}
-	},
+	// onload(frm) {
+	// 	// frappe.msgprint("✅ Sales Order JS loaded!");
+	// 	if (frm.is_new() && frm.doc.custom_division) {
+	// 		ensure_default_item(frm);
+	// 	}
+	// },
 
-	customer(frm) {
-		// frappe.msgprint(`Division changed: ${frm.doc.custom_division || "(empty)"}`);
-		ensure_default_item(frm);
-		// apply_horizontal_alignment(frm, fields_to_align);
-	},
+	// customer(frm) {
+	// 	// frappe.msgprint(`Division changed: ${frm.doc.custom_division || "(empty)"}`);
+	// 	// ensure_default_item(frm);
+	// 	// apply_horizontal_alignment(frm, fields_to_align);
+	// },
 	refresh(frm) {
 		let fields_to_align = [
 			"custom_division",
+			"custom_branch",
 			"po_no",
 			"po_date",
 			"customer",
 			"customer_name",
 			"transaction_date",
 			"custom_sales",
-			"custom_ref_",
 			"custom_exporter__shipper",
 			"custom_importer__consignee",
 			"custom_notify_party",
@@ -45,23 +61,27 @@ frappe.ui.form.on("Sales Order", {
 			"custom_kurs",
 			"custom_freight",
 			"custom_cost__kg",
-			"custom_flight",
 			"custom_packing_listed",
 			"custom_declared",
 			"custom_insurance",
 			"custom_carrier",
 			"custom_carrier2",
 			"custom_carrier3",
+			"custom_to",
+			"custom_to2",
+			"custom_to3",
+			"custom_other",
+			"custom_other2",
+			"custom_other3",
+			"custom_agent_charge",
+			"custom_carrier_charge",
+			"custom_trucking_no",
+			"custom_trucking2",
+			"custom_voided",
+			"custom_posted"
 		];
 		apply_horizontal_alignment(frm, fields_to_align);
-		if (frm.doc.custom_valas && frm.doc.currency !== frm.doc.custom_valas) {
-			frm.set_value("currency", frm.doc.custom_valas);
-			// if (frm.doc.custom_valas === "USD") {
-			// 	frm.set_value("debit_to", "110.320 - Account.Receivable (USD) - CP");
-			// } else {
-			// 	frm.set_value("debit_to", "110.310 - Account.Receivable (IDR) - CP");
-			// }
-		}
+		
 		setTimeout(() => {
 			frm.set_query("item_code", "items", function (doc, cdt, cdn) {
 				let filters = {};
@@ -78,30 +98,82 @@ frappe.ui.form.on("Sales Order", {
 					filters: filters,
 				};
 			});
+
+			const tabLink = $('.form-tabs .nav-link').filter(function () {
+                return $(this).text().trim() === 'Connections';
+            });
+
+            tabLink.closest('li').hide();
+
+            if (tabLink.hasClass('active')) {
+                $('.form-tabs .nav-link').filter(function () {
+                    return $(this).text().trim() === 'Details';
+                }).tab('show');
+            }
+
+			frm.remove_custom_button(__('Quotation'), __('Get Items From'));
 		}, 200);
+
+		setTimeout(() => {
+            frm.remove_custom_button(__("Pick List"), __("Create"));
+            frm.remove_custom_button(__("Material Request"), __("Create"));
+            frm.remove_custom_button(__("Request for Raw Materials"), __("Create"));
+            frm.remove_custom_button(__("Vendor Order"), __("Create"));
+            frm.remove_custom_button(__("Project"), __("Create"));
+
+			frm.add_custom_button(__("Vendor Invoice"), function() {
+                make_vendor_invoice(frm);
+            }, __("Create"));
+        }, 500);
+
+		
+
+		frm.set_query("custom_exporter__shipper", function () {
+			return {
+				query: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.exporter_shipper_query",
+			};
+		});
+
+		frm.set_query("custom_importer__consignee", function () {
+			return {
+				query: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.importer_consignee_query",
+			};
+		});
+	},
+
+	custom_division(frm) {
+		if (!frm.doc.custom_division) {
+			frm.set_value("project", "");
+			frm.set_value("cost_center", "");
+			return;
+		}
+
+		frappe.call({
+			method: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.get_project_and_cost_center",
+			args: { division: frm.doc.custom_division },
+			callback(r) {
+				if (r.message && r.message.project) {
+					frm.set_value("project", r.message.project);
+					frm.set_value("cost_center", r.message.cost_center);
+				}
+			},
+		});
 	},
 
 	custom_valas(frm) {
-		if (frm.doc.custom_valas) {
-			frm.set_value("currency", frm.doc.custom_valas);
-			// if (frm.doc.custom_valas === "USD") {
-			// 	frm.set_value("debit_to", "110.320 - Account.Receivable (USD) - CP");
-			// } else {
-			// 	frm.set_value("debit_to", "110.310 - Account.Receivable (IDR) - CP");
-			// }
-		}
+
 		setTimeout(() => {
 			frm.set_query("item_code", "items", function (doc, cdt, cdn) {
 				let filters = {};
 
-				// Menggunakan frm.doc sesuai koreksi Anda (lebih aman dan standar)
+				
 				if (frm.doc.custom_valas) {
 					filters["custom_valas"] = frm.doc.custom_valas;
 					filters["disabled"] = 0;
 					filters["is_sales_item"] = 1;
 				}
 
-				// Ini akan otomatis di-append (di-merge) dengan filter bawaan di gambar Anda
+				
 				return {
 					filters: filters,
 				};
@@ -110,37 +182,58 @@ frappe.ui.form.on("Sales Order", {
 		// frm.refresh_field("items");
 	},
 });
-function ensure_default_item(frm) {
-	let division = frm.doc.custom_division || "";
-	if (!division) {
-		frappe.msgprint({
-			title: __("Division Required"),
-			message: __("Please select a Division First."),
-			indicator: "orange",
-		});
-		return;
-	}
-	let item_code = division + "000";
+// function ensure_default_item(frm) {
+// 	let division = frm.doc.custom_division || "";
+// 	if (!division) {
+// 		frappe.msgprint({
+// 			title: __("Division Required"),
+// 			message: __("Please select a Division First."),
+// 			indicator: "orange",
+// 		});
+// 		return;
+// 	}
+// 	let item_code = division + "000";
 
-	let first = frm.doc.items && frm.doc.items[0];
+// 	let first = frm.doc.items && frm.doc.items[0];
 
-	if (first && !first.item_code) {
-		// First row exists but empty — fill it
-		frappe.model.set_value(first.doctype, first.name, "item_code", item_code);
-		frappe.model.set_value(first.doctype, first.name, "qty", 1);
-		frappe.model.set_value(first.doctype, first.name, "rate", 0);
-		frappe.model.set_value(first.doctype, first.name, "uom", "Unit");
-	} else if (!frm.doc.items || frm.doc.items.length === 0) {
-		// No items at all — add new row
-		let item = frm.add_child("items");
-		frappe.model.set_value(item.doctype, item.name, "item_code", item_code);
-		frappe.model.set_value(item.doctype, item.name, "qty", 1);
-		frappe.model.set_value(item.doctype, item.name, "rate", 0);
-		frappe.model.set_value(item.doctype, item.name, "uom", "Unit");
-	}
-	// If first row already has item_code, skip
+// 	if (first && !first.item_code) {
+// 		// First row exists but empty — fill it
+// 		frappe.model.set_value(first.doctype, first.name, "item_code", item_code);
+// 		frappe.model.set_value(first.doctype, first.name, "qty", 1);
+// 		frappe.model.set_value(first.doctype, first.name, "rate", 0);
+// 		frappe.model.set_value(first.doctype, first.name, "uom", "Unit");
+// 	} else if (!frm.doc.items || frm.doc.items.length === 0) {
+// 		// No items at all — add new row
+// 		let item = frm.add_child("items");
+// 		frappe.model.set_value(item.doctype, item.name, "item_code", item_code);
+// 		frappe.model.set_value(item.doctype, item.name, "qty", 1);
+// 		frappe.model.set_value(item.doctype, item.name, "rate", 0);
+// 		frappe.model.set_value(item.doctype, item.name, "uom", "Unit");
+// 	}
+// 	// If first row already has item_code, skip
 
-	frm.refresh_field("items");
+// 	frm.refresh_field("items");
+// }
+
+function make_vendor_invoice(frm) {
+    frappe.model.with_doctype("Purchase Invoice", () => {
+        let pi = frappe.model.get_new_doc("Purchase Invoice");
+        pi.company = frm.doc.company;
+		pi.cost_center = frm.doc.cost_center;
+		pi.project = frm.doc.project;
+
+        frm.doc.items.forEach((row) => {
+            let pi_item = frappe.model.add_child(pi, "Purchase Invoice Item", "items");
+            pi_item.item_code = row.item_code;
+            pi_item.item_name = row.item_name;
+            pi_item.description = row.description;
+            pi_item.qty = row.qty;
+            pi_item.uom = row.uom;
+            pi_item.sales_order = frm.doc.name;
+        });
+
+        frappe.set_route("Form", "Purchase Invoice", pi.name);
+    });
 }
 
 function apply_horizontal_alignment(frm, fields_to_align) {
