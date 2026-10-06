@@ -135,7 +135,8 @@ doctype_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Sales Order": "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.CustomSalesOrder"
+	"Sales Order": "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.CustomSalesOrder",
+	"Sales Invoice": "tbs_indoprostime.tbs_indoprostime.overrides.sales_invoice.CustomSalesInvoice"
 }
 
 # Document Events
@@ -276,5 +277,6 @@ fixtures = [
     {"dt": "Server Script"},
     {"dt": "Role"},
     {"dt": "Module Profile"},
-    # {"dt": "Custom DocPerm"},
+    {"dt": "Project"},
+    {"dt": "Cost Center"},
 ]

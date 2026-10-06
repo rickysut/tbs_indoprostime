@@ -85,6 +85,10 @@ class CustomSalesOrder(SalesOrder):
 		if not self.get("items"):
 			frappe.throw(_("Cost required before submit!"))
 
+	def on_cancel(self):
+		self.custom_voided = frappe.utils.now()
+		super().on_cancel()
+
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def exporter_shipper_query(doctype, txt, searchfield, start, page_len, filters):
