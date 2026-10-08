@@ -31,7 +31,7 @@ class CustomSalesOrder(SalesOrder):
 		if division and self.name:
 			name_without_division = self.name[-9:]
 		self.title = f"{division}{customer}-{name_without_division}"
-		self.po_no = f"{division}{name_without_division}"
+		self.po_no = f"{division}-{name_without_division}"
 
 	# def before_validate(self):
 	# 	self.ensure_items()

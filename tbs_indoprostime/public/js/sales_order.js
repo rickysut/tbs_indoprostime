@@ -74,7 +74,13 @@ frappe.ui.form.on("Sales Order", {
 			"custom_voided",
 			"custom_posted",
 			// AI
-			"custom_flight_ai"
+			"custom_flight_ai",
+			"custom_bc_23",
+			"custom_bc_invoice",
+			"custom_name",
+			"custom_goods",
+			"custom_air_clearance_no"
+
 		];
 		apply_horizontal_alignment(frm, fields_to_align);
 
@@ -105,6 +111,29 @@ frappe.ui.form.on("Sales Order", {
 			{ fieldname: "custom_released", width: 50, label_width: 58 }
 		]);
 
+		apply_horizontal_group(frm, [
+			{ fieldname: "custom_air_freight__other_charge", width: 50 },
+			{ fieldname: "custom_air_freight__other_charge_2", width: 50, no_label: true }
+		]);
+
+		apply_horizontal_group(frm, [
+			{ fieldname: "custom_other_cost_notevalue", width: 50 },
+			{ fieldname: "custom_other_cost_2", width: 50, no_label: true }
+		]);
+		
+		apply_horizontal_group(frm, [
+			{ fieldname: "custom_collection_agency_fee", width: 50 },
+			{ fieldname: "custom_collection_agency_fee_2", width: 50, no_label: true }
+		]);
+
+		["custom_collection_agency_fee", "custom_collection_agency_fee_2"].forEach((fn) => {
+			add_percent_suffix(frm, fn);
+		});
+
+		apply_horizontal_group(frm, [
+			{ fieldname: "custom_to_trucking_no", width: 50 },
+			{ fieldname: "custom_to_trucking_no_2", width: 50 , no_label: true}
+		]);
 
 		arrange_valas_fields(frm);
 
@@ -397,6 +426,59 @@ function apply_horizontal_alignment(frm, fields_to_align) {
 			}
 		}
 	});
+}
+
+function add_percent_suffix(frm, fieldname) {
+	let f = frm.get_field(fieldname);
+	if (!f) return;
+
+	// Ganti CSS versi lama
+	$("#percent-suffix-style, #percent-suffix-style-v2").remove();
+	if (!document.getElementById("percent-suffix-style-v3")) {
+		$("<style id='percent-suffix-style-v3'>")
+			.text(`
+				.has-percent-suffix-wrap { display: flex !important; align-items: stretch !important; position: relative; min-width: 0; }
+				.has-percent-suffix {
+					flex: 1 1 auto !important;
+					min-width: 0 !important;
+					padding-right: 10px !important;
+					position: relative;
+					z-index: 1;
+					border-radius: 8px !important;
+				}
+				.percent-suffix {
+					flex: 0 0 52px;
+					width: 52px;
+					height: 28px;
+					margin-left: -14px;
+					padding-left: 14px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background: var(--gray-200, #e9ecef);
+					color: var(--text-muted, #6c757d);
+					border-radius: 8px;
+					font-size: 12px;
+					font-weight: 600;
+					pointer-events: none;
+					box-sizing: border-box;
+					position: relative;
+					z-index: 0;
+				}
+			`)
+			.appendTo("head");
+	}
+
+	let $input = f.$input && f.$input.length ? f.$input : f.$wrapper.find("input").first();
+	if (!$input.length) return;
+
+	$input.addClass("has-percent-suffix");
+	$input.parent().addClass("has-percent-suffix-wrap");
+
+	// Hapus badge lama supaya tidak duplikat
+	$input.siblings(".percent-suffix").remove();
+
+	$('<span class="percent-suffix">%</span>').insertAfter($input);
 }
 
 function apply_horizontal_group(frm, group) {
