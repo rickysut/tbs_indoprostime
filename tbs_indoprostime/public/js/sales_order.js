@@ -32,6 +32,13 @@ frappe.ui.form.on("Sales Order", {
 	// 	// apply_horizontal_alignment(frm, fields_to_align);
 	// },
 	refresh(frm) {
+
+		frm.set_df_property(
+			"custom_bc_23",
+			"label",
+			frm.doc.custom_division === "AC" ? "BC 2.3/PIB" : "BC 2.3"
+		);
+		
 		let fields_to_align = [
 			"custom_division",
 			"custom_branch",
@@ -79,7 +86,9 @@ frappe.ui.form.on("Sales Order", {
 			"custom_bc_invoice",
 			"custom_name",
 			"custom_goods",
-			"custom_air_clearance_no"
+			"custom_air_clearance_no",
+			// AC
+			"custom_air_import_no"
 
 		];
 		apply_horizontal_alignment(frm, fields_to_align);
@@ -204,6 +213,13 @@ frappe.ui.form.on("Sales Order", {
 
 	custom_division(frm) {
 		arrange_valas_fields(frm);
+
+		frm.set_df_property(
+			"custom_bc_23",
+			"label",
+			frm.doc.custom_division === "AC" ? "BC 2.3/PIB" : "BC 2.3"
+		);
+
 		if (!frm.doc.custom_division) {
 			frm.set_value("project", "");
 			frm.set_value("cost_center", "");
