@@ -1,0 +1,219 @@
+{
+ "actions": [],
+ "creation": "2026-10-15 15:42:14.875663",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_vbvy",
+  "amended_from",
+  "section_break_ybut",
+  "m_bl",
+  "total_h_bl",
+  "origin",
+  "column_break_treo",
+  "etd",
+  "eta",
+  "destination",
+  "column_break_xccx",
+  "division",
+  "sales",
+  "job_id",
+  "section_break_wlhf",
+  "shipping_line",
+  "overseas_agent",
+  "column_break_vmab",
+  "feeder_ves",
+  "mother_ves",
+  "section_break_xdvp",
+  "ctr_seal",
+  "freight",
+  "column_break_jyjc",
+  "fcl_4020",
+  "fcl_2",
+  "fcllcl_vol",
+  "lcl_2"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_vbvy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Console Entry",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_ybut",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "m_bl",
+   "fieldtype": "Data",
+   "label": "M B/L"
+  },
+  {
+   "fieldname": "origin",
+   "fieldtype": "Data",
+   "label": "Origin"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "label": "Destination"
+  },
+  {
+   "fieldname": "column_break_xccx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales",
+   "fieldtype": "Link",
+   "label": "Sales",
+   "options": "Sales Person"
+  },
+  {
+   "fieldname": "total_h_bl",
+   "fieldtype": "Int",
+   "label": "Total H B/L"
+  },
+  {
+   "fieldname": "column_break_treo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "etd",
+   "fieldtype": "Date",
+   "label": "ETD"
+  },
+  {
+   "fieldname": "eta",
+   "fieldtype": "Date",
+   "label": "ETA"
+  },
+  {
+   "fieldname": "section_break_wlhf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "shipping_line",
+   "fieldtype": "Link",
+   "label": "Shipping Line",
+   "link_filters": "[[\"Business Partner\",\"shipper\",\"=\",1]]",
+   "options": "Business Partner"
+  },
+  {
+   "fieldname": "column_break_vmab",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "feeder_ves",
+   "fieldtype": "Data",
+   "label": "Feeder Ves"
+  },
+  {
+   "fieldname": "mother_ves",
+   "fieldtype": "Data",
+   "label": "Mother Ves"
+  },
+  {
+   "fieldname": "section_break_xdvp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ctr_seal",
+   "fieldtype": "Data",
+   "label": "Ctnr & Seal"
+  },
+  {
+   "fieldname": "freight",
+   "fieldtype": "Select",
+   "label": "Freight",
+   "options": "Prepaid\nCollect"
+  },
+  {
+   "fieldname": "column_break_jyjc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fcl_4020",
+   "fieldtype": "Float",
+   "label": "FCL 40/20",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_2",
+   "fieldtype": "Float",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcllcl_vol",
+   "fieldtype": "Float",
+   "label": "FCL/LCL Vol",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_2",
+   "fieldtype": "Float",
+   "precision": "2"
+  },
+  {
+   "fieldname": "overseas_agent",
+   "fieldtype": "Link",
+   "label": "Overseas Agent",
+   "link_filters": "[[\"Business Partner\",\"agent\",\"=\",1]]",
+   "options": "Business Partner"
+  },
+  {
+   "fieldname": "job_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Job Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "division",
+   "fieldtype": "Link",
+   "label": "Division",
+   "link_filters": "[[\"Division\",\"name\",\"in\",[\"SE\",\"SI\"]]]",
+   "options": "Division"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-15 17:35:07.530593",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "Console Entry",
+ "naming_rule": "By script",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "job_id",
+ "track_changes": 1
+}
