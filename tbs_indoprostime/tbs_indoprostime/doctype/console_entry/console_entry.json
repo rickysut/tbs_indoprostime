@@ -7,6 +7,7 @@
   "section_break_vbvy",
   "amended_from",
   "section_break_ybut",
+  "title",
   "m_bl",
   "total_h_bl",
   "origin",
@@ -15,6 +16,7 @@
   "eta",
   "destination",
   "column_break_xccx",
+  "branch",
   "division",
   "sales",
   "job_id",
@@ -55,17 +57,20 @@
   {
    "fieldname": "m_bl",
    "fieldtype": "Data",
-   "label": "M B/L"
+   "label": "M B/L",
+   "reqd": 1
   },
   {
    "fieldname": "origin",
    "fieldtype": "Data",
-   "label": "Origin"
+   "label": "Origin",
+   "reqd": 1
   },
   {
    "fieldname": "destination",
    "fieldtype": "Data",
-   "label": "Destination"
+   "label": "Destination",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_xccx",
@@ -80,7 +85,9 @@
   {
    "fieldname": "total_h_bl",
    "fieldtype": "Int",
-   "label": "Total H B/L"
+   "label": "Total H B/L",
+   "non_negative": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_treo",
@@ -105,7 +112,8 @@
    "fieldtype": "Link",
    "label": "Shipping Line",
    "link_filters": "[[\"Business Partner\",\"shipper\",\"=\",1]]",
-   "options": "Business Partner"
+   "options": "Business Partner",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_vmab",
@@ -167,13 +175,16 @@
    "fieldtype": "Link",
    "label": "Overseas Agent",
    "link_filters": "[[\"Business Partner\",\"agent\",\"=\",1]]",
-   "options": "Business Partner"
+   "options": "Business Partner",
+   "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "job_id",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Job Id",
+   "options": "Sales Order",
    "read_only": 1
   },
   {
@@ -181,14 +192,29 @@
    "fieldtype": "Link",
    "label": "Division",
    "link_filters": "[[\"Division\",\"name\",\"in\",[\"SE\",\"SI\"]]]",
-   "options": "Division"
+   "options": "Division",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-15 17:35:07.530593",
+ "modified": "2026-10-18 22:15:32.573528",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Console Entry",
@@ -214,6 +240,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "job_id",
+ "title_field": "title",
  "track_changes": 1
 }

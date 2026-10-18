@@ -19,6 +19,7 @@ frappe.ui.form.on("Console Entry", {
 			"freight",
 			"feeder_ves",
 			"mother_ves",
+			"branch"
 		];
 
 		setTimeout(() => {
@@ -34,9 +35,15 @@ frappe.ui.form.on("Console Entry", {
 				{ fieldname: "lcl_2", width: 50, no_label: true },
 			]);
 
-			
+
 		}, 700);
 
+	},
+
+	on_submit(frm) {
+		if (frm.doc.job_id) {
+			frappe.set_route("Form", "Sales Order", frm.doc.job_id);
+		}
 	},
 });
 
