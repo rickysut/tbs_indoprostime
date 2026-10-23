@@ -115,8 +115,10 @@ frappe.ui.form.on("Sales Order", {
 						d.hide();
 						frappe.model.with_doc("Sales Order", source_so, () => {
 							const src = frappe.model.get_doc("Sales Order", source_so);
-							const copy = frappe.model.copy_doc(src);
-							copy.custom_duplicate_from = source_so;
+						const copy = frappe.model.copy_doc(src);
+							copy.custom_doc_copy = frm.doctype;
+							copy.custom_copy_from = source_so;
+							copy.custom_air_clearance_no = "";
 							copy.po_no = "";
 							frappe.set_route("Form", "Sales Order", copy.name);
 						});
@@ -124,6 +126,58 @@ frappe.ui.form.on("Sales Order", {
 				});
 				d.show();
 			}, __("Duplicate"));
+		}
+		else
+		{
+			if (frm.doc.custom_division === "AI" && !frm.doc.custom_air_clearance_no) {
+				frm.add_custom_button(__("Generate Air Clearance"), () => {
+					frappe.confirm(__("Create Air Clearance Document?"), () => {
+						const copy = frappe.model.copy_doc(frm.doc);
+						copy.custom_division = "AC";
+						copy.custom_doc_copy = "";
+						copy.custom_copy_from = "";
+						copy.po_no = "";
+						copy.custom_air_import_no = frm.doc.name;
+						copy.custom_air_clearance_no = "";
+
+						const ac_doc = typeof copy.as_dict === "function" ? copy.as_dict() : { ...copy };
+						delete ac_doc.name;
+						delete ac_doc.owner;
+						delete ac_doc.creation;
+						delete ac_doc.modified;
+						delete ac_doc.modified_by;
+						delete ac_doc.docstatus;
+						delete ac_doc.idx;
+						delete ac_doc.__islocal;
+						delete ac_doc.__unsaved;
+
+						frappe.db.insert(ac_doc)
+							.then((saved) => {
+								frappe.call({
+									method: "frappe.client.set_value",
+									args: {
+										doctype: "Sales Order",
+										name: frm.doc.name,
+										fieldname: "custom_air_clearance_no",
+										value: saved.name,
+									},
+									callback(r) {
+										if (!r.exc && r.message) {
+											frm.reload_doc();
+											frappe.show_alert({
+												message: __("Air Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+												indicator: "green",
+											});
+										}
+									},
+								});
+							})
+							.catch((err) => {
+								frappe.msgprint(err.message || __("Gagal membuat Air Clearance."));
+							});
+					});
+				}, __("Generate"));
+			}
 		}
 
 		$(frm.fields_dict.custom_surender.wrapper)
@@ -183,7 +237,6 @@ frappe.ui.form.on("Sales Order", {
 			"custom_carrier_charge",
 			"custom_voided",
 			"custom_posted",
-			"custom_duplicate_from",
 			// AI
 			"custom_flight_ai",
 			"custom_bc_23",
@@ -191,6 +244,8 @@ frappe.ui.form.on("Sales Order", {
 			"custom_name",
 			"custom_goods",
 			"custom_air_clearance_no",
+			"custom_doc_copy",
+			"custom_copy_from",
 			// AC
 			"custom_air_import_no",
 			// SE
@@ -214,6 +269,16 @@ frappe.ui.form.on("Sales Order", {
 			"custom_payable_at",
 			"custom_no_orig_bl",
 			"custom_board_date",
+			// SI
+			"custom_closed",
+			"custom_factory",
+			"custom_area",
+			"custom_recv_by",
+			"custom_to_sc_no",
+			"custom_disbursmn",
+			"custom_rev__ton",
+			"custom_prepaid",
+			"custom_collect"
 			
 
 		];
@@ -239,7 +304,7 @@ frappe.ui.form.on("Sales Order", {
 
 			// AI
 			apply_horizontal_group(frm, [
-				{ fieldname: "custom_whkpbc", width: 50 },
+				{ fieldname: "custom_whkbpc", width: 50 },
 				{ fieldname: "custom_wh_kbpc_2", width: 50, no_label: true }
 			]);
 
@@ -292,6 +357,7 @@ frappe.ui.form.on("Sales Order", {
 
 			arrange_valas_fields(frm);
 			arrange_issued_fields(frm);
+			arrange_freight_fields(frm);
 			fix_delivered_full(frm);
 		}, 700);
 
@@ -332,6 +398,7 @@ frappe.ui.form.on("Sales Order", {
 	custom_division(frm) {
 		arrange_valas_fields(frm);
 		arrange_issued_fields(frm);
+		arrange_freight_fields(frm);
 		setTimeout(() => fix_delivered_full(frm), 300);
 		setTimeout(() => arrange_quantity_fields(frm), 300);
 
@@ -581,6 +648,38 @@ function arrange_issued_fields(frm) {
 	}
 
 	if (frm.doc.custom_division === "SE") {
+		let last = anchor.$wrapper;
+		fieldnames.forEach((fn) => {
+			const w = frm.get_field(fn).$wrapper;
+			last.after(w);
+			last = w;
+		});
+	} else {
+		frm._issued_orig.forEach((o) => {
+			const w = frm.get_field(o.fn).$wrapper;
+			if (o.prev.length) {
+				o.prev.after(w);
+			} else {
+				o.parent.prepend(w);
+			}
+		});
+	}
+}
+
+function arrange_freight_fields(frm) {
+	const fieldnames = ["custom_freight"];
+	const anchor = frm.get_field("custom_closed");
+	if (!anchor) return;
+
+	// simpan posisi asli sekali saja
+	if (!frm._issued_orig) {
+		frm._issued_orig = fieldnames.map((fn) => {
+			const w = frm.get_field(fn).$wrapper;
+			return { fn: fn, parent: w.parent(), prev: w.prev() };
+		});
+	}
+
+	if (frm.doc.custom_division === "SI") {
 		let last = anchor.$wrapper;
 		fieldnames.forEach((fn) => {
 			const w = frm.get_field(fn).$wrapper;
