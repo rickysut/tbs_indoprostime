@@ -97,7 +97,7 @@ frappe.ui.form.on("Sales Order", {
 				}
 
 				const d = new frappe.ui.Dialog({
-					title: __("Duplicate From Sales Order"),
+					title: __("Duplicate From Customer Order"),
 					fields: [
 						{
 							fieldname: "source_so",
@@ -119,6 +119,7 @@ frappe.ui.form.on("Sales Order", {
 							copy.custom_doc_copy = frm.doctype;
 							copy.custom_copy_from = source_so;
 							copy.custom_air_clearance_no = "";
+							copy.custom_sea_clearance_no = "";
 							copy.po_no = "";
 							frappe.set_route("Form", "Sales Order", copy.name);
 						});
@@ -177,6 +178,54 @@ frappe.ui.form.on("Sales Order", {
 							});
 					});
 				}, __("Generate"));
+			} else if (frm.doc.custom_division === "SI" && !frm.doc.custom_sea_clearance_no) {
+				frm.add_custom_button(__("Generate Sea Clearance"), () => {
+					frappe.confirm(__("Create Sea Clearance Document?"), () => {
+						const copy = frappe.model.copy_doc(frm.doc);
+						copy.custom_division = "SC";
+						copy.custom_doc_copy = "";
+						copy.custom_copy_from = "";
+						copy.po_no = "";
+						copy.custom_sea_import_no = frm.doc.name;
+						copy.custom_sea_clearance_no = "";
+
+						const sc_doc = typeof copy.as_dict === "function" ? copy.as_dict() : { ...copy };
+						delete sc_doc.name;
+						delete sc_doc.owner;
+						delete sc_doc.creation;
+						delete sc_doc.modified;
+						delete sc_doc.modified_by;
+						delete sc_doc.docstatus;
+						delete sc_doc.idx;
+						delete sc_doc.__islocal;
+						delete sc_doc.__unsaved;
+
+						frappe.db.insert(sc_doc)
+							.then((saved) => {
+								frappe.call({
+									method: "frappe.client.set_value",
+									args: {
+										doctype: "Sales Order",
+										name: frm.doc.name,
+										fieldname: "custom_sea_clearance_no",
+										value: saved.name,
+									},
+									callback(r) {
+										if (!r.exc && r.message) {
+											frm.reload_doc();
+											frappe.show_alert({
+												message: __("Sea Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+												indicator: "green",
+											});
+										}
+									},
+								});
+							})
+							.catch((err) => {
+								frappe.msgprint(err.message || __("Gagal membuat Sea Clearance."));
+							});
+					});
+				}, __("Generate"));
 			}
 		}
 
@@ -187,7 +236,7 @@ frappe.ui.form.on("Sales Order", {
 		frm.set_df_property(
 			"custom_bc_23",
 			"label",
-			frm.doc.custom_division === "AC" ? "BC 2.3/PIB" : "BC 2.3"
+			(frm.doc.custom_division === "AC" || frm.doc.custom_division === "SC")  ? "BC 2.3/PIB" : "BC 2.3"
 		);
 
 		frm.set_df_property(
@@ -239,7 +288,7 @@ frappe.ui.form.on("Sales Order", {
 			"custom_posted",
 			// AI
 			"custom_flight_ai",
-			"custom_bc_23",
+			
 			"custom_bc_invoice",
 			"custom_name",
 			"custom_goods",
@@ -274,16 +323,18 @@ frappe.ui.form.on("Sales Order", {
 			"custom_factory",
 			"custom_area",
 			"custom_recv_by",
-			"custom_to_sc_no",
+			"custom_sea_clearance_no",
 			"custom_disbursmn",
 			"custom_rev__ton",
 			"custom_prepaid",
-			"custom_collect"
-			
+			"custom_collect",
+			"custom_qty",
+			//SC
+			"custom_sea_import_no"
 
 		];
 
-		if (frm.doc.custom_division === "SE") {
+		if (frm.doc.custom_division === "SE" || frm.doc.custom_division === "SI" || frm.doc.custom_division === "SC") {
 			fields_to_align.push("custom_delivered");
 		}
 		setTimeout(() => {
@@ -295,6 +346,13 @@ frappe.ui.form.on("Sales Order", {
 				{ fieldname: "custom_trucking_no", width: 50 },
 				{ fieldname: "custom_trucking2", width: 50, no_label: true }
 			]);
+
+			apply_horizontal_group(frm, [
+				{ fieldname:"custom_bc_23", width: 50 },
+				{ fieldname: "custom_pib", width: 50, no_label: true }
+			]);
+
+			
 
 			apply_horizontal_group(frm, [
 				{ fieldname: "custom_to", width: 33.3 },
@@ -309,9 +367,9 @@ frappe.ui.form.on("Sales Order", {
 			]);
 
 			// Fungsi ini tidak ada di file ini; di-guard supaya tidak ReferenceError
-			if (typeof arrange_delivered_width === "function") {
-				arrange_delivered_width(frm);
-			}
+			// if (typeof arrange_delivered_width === "function") {
+			// 	arrange_delivered_width(frm);
+			// }
 
 			apply_horizontal_group(frm, [
 				{ fieldname: "custom_air_freight__other_charge", width: 50 },
@@ -357,6 +415,7 @@ frappe.ui.form.on("Sales Order", {
 
 			arrange_valas_fields(frm);
 			arrange_issued_fields(frm);
+			arrange_notes_fields(frm);
 			arrange_freight_fields(frm);
 			fix_delivered_full(frm);
 		}, 700);
@@ -398,6 +457,7 @@ frappe.ui.form.on("Sales Order", {
 	custom_division(frm) {
 		arrange_valas_fields(frm);
 		arrange_issued_fields(frm);
+		arrange_notes_fields(frm);
 		arrange_freight_fields(frm);
 		setTimeout(() => fix_delivered_full(frm), 300);
 		setTimeout(() => arrange_quantity_fields(frm), 300);
@@ -405,7 +465,7 @@ frappe.ui.form.on("Sales Order", {
 		frm.set_df_property(
 			"custom_bc_23",
 			"label",
-			frm.doc.custom_division === "AC" ? "BC 2.3/PIB" : "BC 2.3"
+			(frm.doc.custom_division === "AC" || frm.doc.custom_division === "SC")  ? "BC 2.3/PIB" : "BC 2.3"
 		);
 
 		frm.set_df_property(
@@ -535,7 +595,7 @@ function fix_delivered_full(frm) {
 
 	const div = frm.doc.custom_division;
 
-	if (div === "SE") {
+	if (div === "SE" || div === "SI" ) {
 		// Delivered full width
 		apply_horizontal_alignment(frm, ["custom_delivered"]);
 		f.$wrapper.find(".control-input-wrapper, .control-input, input, select").each(function () {
@@ -559,6 +619,45 @@ function fix_delivered_full(frm) {
 		}
 	}
 }
+
+// custom_goods_information
+// custom_marks__numbers
+// custom_ctnr__seal_no_note
+function arrange_notes_fields(frm) {
+	const fieldnames = ["custom_goods_information", "custom_marks__numbers", "custom_ctnr__seal_no_note"];
+	const anchor = frm.get_field("custom_gr_wgt_12_2");
+	if (!anchor) return;
+
+	// simpan posisi asli sekali saja
+	if (!frm._notes_orig) {
+		frm._notes_orig = fieldnames.map((fn) => {
+			const w = frm.get_field(fn).$wrapper;
+			return { fn: fn, parent: w.parent(), prev: w.prev() };
+		});
+	}
+
+	if (frm.doc.custom_division === "SC") {
+		// tempatkan notes setelah clearfix grup gr_wgt, bukan langsung setelah anchor,
+		// supaya tidak menimpa field floating custom_gr_wgt_12 / custom_gr_wgt_12_2
+		let clearfix = anchor.$wrapper.next(".tbs-group-clearfix");
+		let last = clearfix.length ? clearfix : anchor.$wrapper;
+		fieldnames.forEach((fn) => {
+			const w = frm.get_field(fn).$wrapper;
+			last.after(w);
+			last = w;
+		});
+	} else {
+		frm._notes_orig.forEach((o) => {
+			const w = frm.get_field(o.fn).$wrapper;
+			if (o.prev.length) {
+				o.prev.after(w);
+			} else {
+				o.parent.prepend(w);
+			}
+		});
+	}
+}
+
 
 function arrange_valas_fields(frm) {
 	const fieldnames = ["custom_valas", "custom_kurs", "custom_freight"];
@@ -672,8 +771,8 @@ function arrange_freight_fields(frm) {
 	if (!anchor) return;
 
 	// simpan posisi asli sekali saja
-	if (!frm._issued_orig) {
-		frm._issued_orig = fieldnames.map((fn) => {
+	if (!frm._freight_orig) {
+		frm._freight_orig = fieldnames.map((fn) => {
 			const w = frm.get_field(fn).$wrapper;
 			return { fn: fn, parent: w.parent(), prev: w.prev() };
 		});
@@ -687,7 +786,7 @@ function arrange_freight_fields(frm) {
 			last = w;
 		});
 	} else {
-		frm._issued_orig.forEach((o) => {
+		frm._freight_orig.forEach((o) => {
 			const w = frm.get_field(o.fn).$wrapper;
 			if (o.prev.length) {
 				o.prev.after(w);
