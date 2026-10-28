@@ -264,19 +264,16 @@ fixtures = [
         "dt": "Workspace",
         "filters": [["name", "in", ["TBS Indoprostime","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM"]]]
     },
-    {"dt": "Custom Field"},             # Field custom dari Customize Form
-    {"dt": "Property Setter"},          # Modifikasi UI/Layout dari Customize Form
-    {"dt": "Client Script"},            # JavaScript custom
-    {"dt": "Print Format"},             # Format cetak custom
-    {"dt": "Document Naming Settings"}, # Naming Setting
-    {"dt": "Selling Settings"},         # Selling Setting
-    {"dt": "Buying Settings"},         # Buying Setting
-	{"dt": "Workflow"},
+    {"dt": "Property Setter"},          # harus sebelum Custom Field (length field hidden)
+    {"dt": "Custom Field"},
+    {"dt": "Client Script"},
+    {"dt": "Print Format"},
+    {"dt": "Document Naming Settings"},
+    {"dt": "Selling Settings"},
+    {"dt": "Buying Settings"},
+    {"dt": "Workflow"},
     {"dt": "Workflow State"},
-	{"dt": "Client Script"},
     {"dt": "Server Script"},
     {"dt": "Role"},
     {"dt": "Module Profile"},
-    {"dt": "Project"},
-    {"dt": "Cost Center"},
 ]
