@@ -262,8 +262,9 @@ override_whitelisted_methods = {
 fixtures = [
     {
         "dt": "Workspace",
-        "filters": [["name", "in", ["TBS Indoprostime","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM"]]]
+        "filters": [["name", "in", ["TBS Indoprostime","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM", "Purchase"]]]
     },
+    {"dt": "Dashboard", "filters": [["name", "=", "Purchase"]]},
     {"dt": "Property Setter"},          # harus sebelum Custom Field (length field hidden)
     {"dt": "Custom Field"},
     {"dt": "Client Script"},
