@@ -260,22 +260,52 @@ override_whitelisted_methods = {
 # ignore_translatable_strings_from = []
 
 fixtures = [
+    # 1. Property Setter & Custom Field (WAJIB di awal untuk customisasi)
+    {"dt": "Property Setter"},
+    {"dt": "Custom Field"},
+    
+    # 2. Custom DocType yang baru ditemukan
+    {"dt": "Account Relation"},
+    {"dt": "Sea Clearance"},
+    
+    # 3. Client Script & Server Script
+    {"dt": "Client Script"},
+    {"dt": "Server Script"},
+    
+    # 4. Workflow & State
+    {"dt": "Workflow"},
+    {"dt": "Workflow State"},
+    
+    # 5. Print Format
+    {"dt": "Print Format"},
+    
+    # 6. Workspace (dengan filter spesifik)
     {
         "dt": "Workspace",
-        "filters": [["name", "in", ["TBS Indoprostime","Accounting", "Buying", "Selling", "Stock", "Financial Reports", "Receivables", "Payables", "Assets", "Users", "CRM", "Purchase"]]]
+        "filters": [
+            ["name", "in", [
+                "TBS Indoprostime",
+                "Accounting", 
+                "Buying", 
+                "Selling", 
+                "Stock", 
+                "Financial Reports"
+            ]]
+        ]
     },
+    
+    # 7. Dashboard (dengan filter)
     {"dt": "Dashboard", "filters": [["name", "=", "Purchase"]]},
-    {"dt": "Property Setter"},          # harus sebelum Custom Field (length field hidden)
-    {"dt": "Custom Field"},
-    {"dt": "Client Script"},
-    {"dt": "Print Format"},
+    
+    # 8. Report (hanya custom report)
+    {"dt": "Report", "filters": [["is_standard", "=", "No"]]},
+    
+    # 9. Settings (Single DocType - hati-hati!)
     {"dt": "Document Naming Settings"},
     {"dt": "Selling Settings"},
     {"dt": "Buying Settings"},
-    {"dt": "Workflow"},
-    {"dt": "Workflow State"},
-    {"dt": "Server Script"},
+    
+    # 10. Role & Module Profile
     {"dt": "Role"},
     {"dt": "Module Profile"},
-    {"dt": "Report", "filters": [["is_standard", "=", "No"]]},
 ]
