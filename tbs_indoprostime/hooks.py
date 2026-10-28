@@ -276,4 +276,5 @@ fixtures = [
     {"dt": "Server Script"},
     {"dt": "Role"},
     {"dt": "Module Profile"},
+    {"dt": "Report", "filters": [["is_standard", "=", "No"]]},
 ]
