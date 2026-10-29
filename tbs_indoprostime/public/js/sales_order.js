@@ -412,12 +412,12 @@ frappe.ui.form.on("Sales Order", {
 
 			
 			
-
+			
+			fix_delivered_full(frm);
 			arrange_valas_fields(frm);
 			arrange_issued_fields(frm);
 			arrange_notes_fields(frm);
 			arrange_freight_fields(frm);
-			fix_delivered_full(frm);
 		}, 700);
 
 		frm.set_query("custom_exporter__shipper", function () {
@@ -455,11 +455,11 @@ frappe.ui.form.on("Sales Order", {
 	},
 
 	custom_division(frm) {
+		setTimeout(() => fix_delivered_full(frm), 300);
 		arrange_valas_fields(frm);
 		arrange_issued_fields(frm);
 		arrange_notes_fields(frm);
 		arrange_freight_fields(frm);
-		setTimeout(() => fix_delivered_full(frm), 300);
 		setTimeout(() => arrange_quantity_fields(frm), 300);
 
 		frm.set_df_property(
