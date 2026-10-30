@@ -47,6 +47,10 @@ frappe.ui.form.on("Sales Order", {
 					filters["is_sales_item"] = 1;
 				}
 
+				if (frm.doc.custom_division) {
+					filters["custom_division"] = frm.doc.custom_division;
+				}
+
 				return {
 					filters: filters,
 				};
@@ -527,6 +531,10 @@ frappe.ui.form.on("Sales Order", {
 					filters["custom_valas"] = frm.doc.custom_valas;
 					filters["disabled"] = 0;
 					filters["is_sales_item"] = 1;
+				}
+
+				if (frm.doc.custom_division) {
+					filters["custom_division"] = frm.doc.custom_division;
 				}
 
 				return {
