@@ -3,6 +3,14 @@
 
 frappe.ui.form.on("Console Entry", {
 	refresh(frm) {
+		if (!frm.is_new() && frm.doc.docstatus === 1) {
+			frm.add_custom_button(__('Add Child'), function () {
+				show_add_child_dialog(frm);
+			});
+		}
+
+		frm.set_df_property("total_h_bl", "read_only", frm.doc.docstatus === 1);
+
         let fields_to_align = [
 			"m_bl",
 			"total_h_bl",
@@ -219,4 +227,76 @@ function apply_horizontal_group(frm, group) {
 		last_f.$wrapper.next(".tbs-group-clearfix").remove();
 		last_f.$wrapper.after('<div class="tbs-group-clearfix" style="clear: both; display: block; width: 100%; height: 1px;"></div>');
 	}
+}
+
+function show_add_child_dialog(frm) {
+	const current_total = cint(frm.doc.total_h_bl);
+
+	const d = new frappe.ui.Dialog({
+		title: __("Enter new Total H B/L"),
+		fields: [
+			{
+				fieldname: "new_total_h_bl",
+				fieldtype: "Int",
+				label: __("Enter new Total H B/L"),
+				default: current_total,
+				reqd: 1,
+			},
+		],
+		primary_action_label: __("Add Child"),
+		primary_action(values) {
+			const new_total = cint(values.new_total_h_bl);
+
+			if (new_total < current_total) {
+				frappe.msgprint({
+					title: __("Validation Error"),
+					indicator: "red",
+					message: __("New Total H B/L cannot be less than {0}", [current_total]),
+				});
+				return;
+			}
+
+			const to_add = new_total - current_total;
+			if (to_add <= 0) {
+				d.hide();
+				return;
+			}
+
+			frappe.confirm(__("Add {0} child console, are you sure?", [to_add]), () => {
+				d.hide();
+				frappe.call({
+					method: "tbs_indoprostime.tbs_indoprostime.doctype.console_entry.console_entry.add_child_consoles",
+					args: {
+						console_entry_name: frm.doc.name,
+						new_total_h_bl: new_total,
+					},
+					callback(r) {
+						if (r.exc) {
+							return;
+						}
+						const result = r.message || {};
+						frappe.show_alert({
+							message: __("Added {0} child console(s)", [cint(result.added)]),
+							indicator: "green",
+						});
+						frm.reload_doc();
+					},
+				});
+			});
+		},
+	});
+
+	d.fields_dict.new_total_h_bl.$input.on("change", function () {
+		const value = cint(d.get_value("new_total_h_bl"));
+		if (value < current_total) {
+			frappe.msgprint({
+				title: __("Validation Error"),
+				indicator: "red",
+				message: __("New Total H B/L cannot be less than {0}", [current_total]),
+			});
+			d.set_value("new_total_h_bl", current_total);
+		}
+	});
+
+	d.show();
 }

@@ -83,6 +83,7 @@
    "options": "Sales Person"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "total_h_bl",
    "fieldtype": "Int",
    "label": "Total H B/L",
@@ -214,7 +215,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-18 22:15:32.573528",
+ "modified": "2026-11-03 11:43:48.983585",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Console Entry",

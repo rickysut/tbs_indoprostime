@@ -31,8 +31,47 @@ class ConsoleEntry(Document):
 	def before_save(self):
 		self.set_title()
 
+	def validate(self):
+		from frappe.utils import cint
+
+		if self.name and not self.is_new() and self.docstatus == 1:
+			old_total = cint(frappe.db.get_value("Console Entry", self.name, "total_h_bl"))
+			if cint(self.total_h_bl) != old_total:
+				frappe.throw(_("Total H B/L hanya dapat diubah melalui tombol Add Child."))
+
 	def on_submit(self):
 		self.create_sales_orders()
+
+	def add_child_consoles(self, new_total_h_bl):
+		from frappe.utils import cint
+
+		current_total = cint(self.total_h_bl)
+		new_total = cint(new_total_h_bl)
+
+		if new_total < current_total:
+			frappe.throw(_("New Total H B/L cannot be less than {0}").format(current_total))
+
+		to_add = new_total - current_total
+		if to_add <= 0:
+			return 0
+
+		child_customer = get_console_customer("CC")
+		if not child_customer:
+			frappe.throw(_("Customer Child Console (CC) tidak ditemukan"))
+
+		company = frappe.defaults.get_user_default("Company") or frappe.db.get_single_value("Global Defaults", "default_company")
+		if not company:
+			frappe.throw(_("Company default belum diatur"))
+
+		master_id = self.job_id
+
+		for _ in range(to_add):
+			child_so = self.make_sales_order(customer=child_customer, company=company, is_child=True, master_id=master_id)
+			child_so.insert()
+
+		self.db_set("total_h_bl", new_total)
+
+		return to_add
 
 	def create_sales_orders(self):
 		master_customer = get_console_customer("MC")
@@ -137,3 +176,11 @@ def get_project_and_cost_center_by_division(division):
 		return project.name, project.cost_center
 
 	return None, None
+
+
+@frappe.whitelist()
+def add_child_consoles(console_entry_name, new_total_h_bl):
+	doc = frappe.get_doc("Console Entry", console_entry_name)
+	doc.check_permission("write")
+	added = doc.add_child_consoles(new_total_h_bl)
+	return {"added": added, "new_total": doc.total_h_bl}
