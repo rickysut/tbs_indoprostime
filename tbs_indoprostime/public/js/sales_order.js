@@ -35,6 +35,17 @@ frappe.ui.form.on("Sales Order", {
 				if (onload) onload(newdoc);
 			}, from_amend);
 		};
+
+		// frm.meta.fields.filter(f => f.fieldtype === 'Table').forEach(t => {
+        //     frappe.ui.form.on(t.options, {
+        //         [t.fieldname + '_add'](frm, cdt, cdn) {
+        //             frappe.model.set_value(cdt, cdn, 'qty', 1);
+        //         },
+        //         item_code(frm, cdt, cdn) {
+        //             setTimeout(() => frappe.model.set_value(cdt, cdn, 'qty', 1), 300);
+        //         }
+        //     });
+        // });
 	},
 	refresh(frm) {
 		setTimeout(() => {
@@ -435,6 +446,16 @@ frappe.ui.form.on("Sales Order", {
 				query: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.importer_consignee_query",
 			};
 		});
+
+		// frm.meta.fields.filter(f => f.fieldtype === 'Table').forEach(t => {
+        //     const grid = frm.fields_dict[t.fieldname].grid;
+        //     grid.update_docfield_property('qty', 'hidden', 1);
+        //     grid.update_docfield_property('qty', 'in_list_view', 0);
+        //     grid.update_docfield_property('item_name', 'read_only', 0);
+        //     grid.update_docfield_property('item_name', 'in_list_view', 1);
+        //     grid.update_docfield_property('item_name', 'columns', 4);
+        //     frm.refresh_field(t.fieldname);
+        // });
 	},
 
 	transaction_date(frm) {
@@ -546,6 +567,12 @@ frappe.ui.form.on("Sales Order", {
 });
 
 frappe.ui.form.on("Sales Order Item", {
+	items_add(frm, cdt, cdn) {
+        frappe.model.set_value(cdt, cdn, 'qty', 1);
+    },
+    item_code(frm, cdt, cdn) {
+        setTimeout(() => frappe.model.set_value(cdt, cdn, 'qty', 1), 300);
+    },
 	custom_cost(frm, cdt, cdn) {
 		calculate_total_cost(frm, cdt, cdn);
 	},
