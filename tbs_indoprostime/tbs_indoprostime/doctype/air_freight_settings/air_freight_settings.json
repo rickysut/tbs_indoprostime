@@ -1,0 +1,232 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-11-05 20:25:37.743080",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "naming_series",
+  "column_break_ztii",
+  "adm_charge",
+  "document_fee",
+  "manifest_fee",
+  "agency_fee",
+  "agency_currency",
+  "custom_clearance_section",
+  "handling_min_kg",
+  "handling_greater_kg",
+  "column_break_ynci",
+  "handling_min_price",
+  "handling_greater_price",
+  "trucking_section",
+  "box",
+  "box_min_cbm",
+  "box_grearter_cbm",
+  "fuso",
+  "fuso_min_cbm",
+  "fuso_greater_than",
+  "column_break_iizo",
+  "heading_bafh",
+  "box_min_price",
+  "box_greater_price",
+  "heading_hnhf",
+  "fuso_min_price",
+  "fuso_greater_price"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "link_filters": "[[\"Business Partner\",\"customer\",\"=\",1]]",
+   "options": "Business Partner",
+   "reqd": 1
+  },
+  {
+   "default": "AFS-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "AFS-"
+  },
+  {
+   "fieldname": "column_break_ztii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "adm_charge",
+   "fieldtype": "Float",
+   "label": "Adm Fee",
+   "precision": "2"
+  },
+  {
+   "fieldname": "agency_fee",
+   "fieldtype": "Currency",
+   "label": "Agency Fee",
+   "options": "agency_currency",
+   "precision": "2"
+  },
+  {
+   "fieldname": "custom_clearance_section",
+   "fieldtype": "Section Break",
+   "label": "Handling Charge"
+  },
+  {
+   "fieldname": "column_break_ynci",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "trucking_section",
+   "fieldtype": "Section Break",
+   "label": "Trucking"
+  },
+  {
+   "fieldname": "column_break_iizo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "box",
+   "fieldtype": "Heading",
+   "label": "Box"
+  },
+  {
+   "fieldname": "box_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "box_grearter_cbm",
+   "fieldtype": "Float",
+   "label": "Greater than (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso",
+   "fieldtype": "Heading",
+   "label": "Fuso"
+  },
+  {
+   "fieldname": "fuso_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_than",
+   "fieldtype": "Float",
+   "label": "Greater than (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "heading_bafh",
+   "fieldtype": "Heading",
+   "label": "Box Pricing "
+  },
+  {
+   "fieldname": "box_min_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "box_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "heading_hnhf",
+   "fieldtype": "Heading",
+   "label": "Fuso Pricing"
+  },
+  {
+   "fieldname": "fuso_min_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "default": "USD",
+   "fieldname": "agency_currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "document_fee",
+   "fieldtype": "Float",
+   "label": "Document Fee",
+   "precision": "2"
+  },
+  {
+   "fieldname": "manifest_fee",
+   "fieldtype": "Float",
+   "label": "Manifest Fee",
+   "precision": "2"
+  },
+  {
+   "fieldname": "handling_min_kg",
+   "fieldtype": "Float",
+   "label": "Minimum (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "handling_greater_kg",
+   "fieldtype": "Float",
+   "label": "Greater than (Kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "handling_min_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "handling_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-05 20:48:47.230249",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "Air Freight Settings",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

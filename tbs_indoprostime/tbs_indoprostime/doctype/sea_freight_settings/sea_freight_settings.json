@@ -1,0 +1,260 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-11-05 17:02:02.934641",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "naming_series",
+  "column_break_ztii",
+  "adm_charge",
+  "pib_edi",
+  "agency_fee",
+  "custom_clearance_section",
+  "clerance_fcl_20",
+  "clerance_fcl_40",
+  "clerance_add_container",
+  "column_break_ynci",
+  "clerance_min_cbm",
+  "clearance_greater_than",
+  "column_break_ewts",
+  "clearance_min_cbm_price",
+  "clearance_greater_price",
+  "trucking_section",
+  "trucking_fcl_20",
+  "trucking_fcl_40",
+  "column_break_iizo",
+  "box",
+  "box_min_cbm",
+  "box_grearter_cbm",
+  "fuso",
+  "fuso_min_cbm",
+  "fuso_greater_than",
+  "column_break_iypm",
+  "heading_bafh",
+  "box_min_price",
+  "box_greater_price",
+  "heading_hnhf",
+  "fuso_min_price",
+  "fuso_greater_price"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "link_filters": "[[\"Business Partner\",\"customer\",\"=\",1]]",
+   "options": "Business Partner",
+   "reqd": 1
+  },
+  {
+   "default": "SFS-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "SFS-"
+  },
+  {
+   "fieldname": "column_break_ztii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "adm_charge",
+   "fieldtype": "Float",
+   "label": "Adm Charge",
+   "precision": "2"
+  },
+  {
+   "fieldname": "pib_edi",
+   "fieldtype": "Float",
+   "label": "PIB EDI",
+   "precision": "2"
+  },
+  {
+   "fieldname": "agency_fee",
+   "fieldtype": "Float",
+   "label": "Agency Fee",
+   "precision": "2"
+  },
+  {
+   "fieldname": "custom_clearance_section",
+   "fieldtype": "Section Break",
+   "label": "Custom Clearance"
+  },
+  {
+   "fieldname": "clerance_fcl_20",
+   "fieldtype": "Float",
+   "label": "FCL 20 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clerance_fcl_40",
+   "fieldtype": "Float",
+   "label": "FCL 40 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clerance_add_container",
+   "fieldtype": "Float",
+   "label": "Additional Container",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_ynci",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clerance_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum Cbm",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clearance_greater_than",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_ewts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clearance_min_cbm_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clearance_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "trucking_section",
+   "fieldtype": "Section Break",
+   "label": "Trucking"
+  },
+  {
+   "fieldname": "trucking_fcl_20",
+   "fieldtype": "Float",
+   "label": "FCL 20 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "trucking_fcl_40",
+   "fieldtype": "Float",
+   "label": "FCL 40 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_iizo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "box",
+   "fieldtype": "Heading",
+   "label": "Box"
+  },
+  {
+   "fieldname": "box_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum Cbm",
+   "precision": "2"
+  },
+  {
+   "fieldname": "box_grearter_cbm",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso",
+   "fieldtype": "Heading",
+   "label": "Fuso"
+  },
+  {
+   "fieldname": "fuso_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum Cbm",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_than",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_iypm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "heading_bafh",
+   "fieldtype": "Heading",
+   "label": "Box Pricing "
+  },
+  {
+   "fieldname": "box_min_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "box_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "heading_hnhf",
+   "fieldtype": "Heading",
+   "label": "Fuso Pricing"
+  },
+  {
+   "fieldname": "fuso_min_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_price",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-05 19:38:40.454520",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "Sea Freight Settings",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
