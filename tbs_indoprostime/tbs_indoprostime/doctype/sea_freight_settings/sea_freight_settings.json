@@ -10,14 +10,18 @@
   "naming_series",
   "column_break_ztii",
   "adm_charge",
+  "admin_item",
   "pib_edi",
+  "pib_edi_item",
   "agency_fee",
+  "agency_item",
   "custom_clearance_section",
-  "clerance_fcl_20",
-  "clerance_fcl_40",
-  "clerance_add_container",
+  "clearance_fcl_20",
+  "clearance_fcl_40",
+  "clearance_add_container",
+  "clearance_item",
   "column_break_ynci",
-  "clerance_min_cbm",
+  "clearance_min_cbm",
   "clearance_greater_than",
   "column_break_ewts",
   "clearance_min_cbm_price",
@@ -25,6 +29,7 @@
   "trucking_section",
   "trucking_fcl_20",
   "trucking_fcl_40",
+  "trucking_item",
   "column_break_iizo",
   "box",
   "box_min_cbm",
@@ -86,32 +91,8 @@
    "label": "Custom Clearance"
   },
   {
-   "fieldname": "clerance_fcl_20",
-   "fieldtype": "Float",
-   "label": "FCL 20 ft",
-   "precision": "2"
-  },
-  {
-   "fieldname": "clerance_fcl_40",
-   "fieldtype": "Float",
-   "label": "FCL 40 ft",
-   "precision": "2"
-  },
-  {
-   "fieldname": "clerance_add_container",
-   "fieldtype": "Float",
-   "label": "Additional Container",
-   "precision": "2"
-  },
-  {
    "fieldname": "column_break_ynci",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "clerance_min_cbm",
-   "fieldtype": "Float",
-   "label": "Minimum Cbm",
-   "precision": "2"
   },
   {
    "fieldname": "clearance_greater_than",
@@ -227,12 +208,68 @@
    "fieldtype": "Float",
    "label": "Price",
    "precision": "2"
+  },
+  {
+   "fieldname": "admin_item",
+   "fieldtype": "Link",
+   "mandatory_depends_on": "eval:doc.adm_charge != 0",
+   "options": "Item"
+  },
+  {
+   "fieldname": "pib_edi_item",
+   "fieldtype": "Link",
+   "mandatory_depends_on": "eval:doc.pib_edi != 0",
+   "options": "Item"
+  },
+  {
+   "fieldname": "agency_item",
+   "fieldtype": "Link",
+   "mandatory_depends_on": "eval:doc.agency_fee != 0",
+   "options": "Item"
+  },
+  {
+   "fieldname": "clearance_item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "mandatory_depends_on": "eval:doc.clearance_fcl_20 != 0",
+   "options": "Item"
+  },
+  {
+   "fieldname": "trucking_item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "mandatory_depends_on": "eval:doc.trucking_fcl_20 != 0",
+   "options": "Item"
+  },
+  {
+   "fieldname": "clearance_fcl_20",
+   "fieldtype": "Float",
+   "label": "FCL 20 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clearance_fcl_40",
+   "fieldtype": "Float",
+   "label": "FCL 40 ft",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clearance_add_container",
+   "fieldtype": "Float",
+   "label": "Additional Container",
+   "precision": "2"
+  },
+  {
+   "fieldname": "clearance_min_cbm",
+   "fieldtype": "Float",
+   "label": "Minimum Cbm",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-05 19:38:40.454520",
+ "modified": "2026-11-06 12:48:50.598733",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Freight Settings",
