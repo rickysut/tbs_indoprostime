@@ -10,11 +10,10 @@
   "customer",
   "naming_series",
   "column_break_ztii",
-  "adm_charge",
+  "admin_fee",
   "document_fee",
   "manifest_fee",
   "agency_fee",
-  "agency_currency",
   "custom_clearance_section",
   "handling_min_kg",
   "handling_greater_kg",
@@ -23,18 +22,34 @@
   "handling_greater_price",
   "trucking_section",
   "box",
-  "box_min_cbm",
-  "box_grearter_cbm",
+  "box_min_kg",
+  "box_greater_kg",
   "fuso",
-  "fuso_min_cbm",
-  "fuso_greater_than",
+  "fuso_min_kg",
+  "fuso_greater_kg",
   "column_break_iizo",
   "heading_bafh",
   "box_min_price",
   "box_greater_price",
   "heading_hnhf",
   "fuso_min_price",
-  "fuso_greater_price"
+  "fuso_greater_price",
+  "item_tab",
+  "admin_item",
+  "admin_item_name",
+  "document_item",
+  "document_item_name",
+  "manifest_item",
+  "manifest_item_name",
+  "agency_item",
+  "agency_item_name",
+  "column_break_xhus",
+  "handling_item",
+  "handling_item_name",
+  "trucking_box_item",
+  "trucking_box_item_name",
+  "trucking_fuso_item",
+  "trucking_fuso_item_name"
  ],
  "fields": [
   {
@@ -59,16 +74,9 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "adm_charge",
-   "fieldtype": "Float",
-   "label": "Adm Fee",
-   "precision": "2"
-  },
-  {
    "fieldname": "agency_fee",
    "fieldtype": "Currency",
    "label": "Agency Fee",
-   "options": "agency_currency",
    "precision": "2"
   },
   {
@@ -95,33 +103,9 @@
    "label": "Box"
   },
   {
-   "fieldname": "box_min_cbm",
-   "fieldtype": "Float",
-   "label": "Minimum (Kg)",
-   "precision": "2"
-  },
-  {
-   "fieldname": "box_grearter_cbm",
-   "fieldtype": "Float",
-   "label": "Greater than (Kg)",
-   "precision": "2"
-  },
-  {
    "fieldname": "fuso",
    "fieldtype": "Heading",
    "label": "Fuso"
-  },
-  {
-   "fieldname": "fuso_min_cbm",
-   "fieldtype": "Float",
-   "label": "Minimum (Kg)",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fuso_greater_than",
-   "fieldtype": "Float",
-   "label": "Greater than (Kg)",
-   "precision": "2"
   },
   {
    "fieldname": "heading_bafh",
@@ -158,13 +142,6 @@
    "precision": "2"
   },
   {
-   "default": "USD",
-   "fieldname": "agency_currency",
-   "fieldtype": "Link",
-   "label": "Currency",
-   "options": "Currency"
-  },
-  {
    "fieldname": "document_fee",
    "fieldtype": "Float",
    "label": "Document Fee",
@@ -179,13 +156,13 @@
   {
    "fieldname": "handling_min_kg",
    "fieldtype": "Float",
-   "label": "Minimum (Kg)",
+   "label": "Minimum",
    "precision": "2"
   },
   {
    "fieldname": "handling_greater_kg",
    "fieldtype": "Float",
-   "label": "Greater than (Kg)",
+   "label": "Greater than",
    "precision": "2"
   },
   {
@@ -199,12 +176,146 @@
    "fieldtype": "Float",
    "label": "Price",
    "precision": "2"
+  },
+  {
+   "fieldname": "admin_item",
+   "fieldtype": "Link",
+   "label": "Admin Fee Item",
+   "mandatory_depends_on": "eval:(doc.admin_fee&&doc.admin_fee!=0)",
+   "options": "Item",
+   "precision": "2"
+  },
+  {
+   "fieldname": "document_item",
+   "fieldtype": "Link",
+   "label": "Document Fee Item",
+   "mandatory_depends_on": "eval:(doc.document_fee&&doc.document_fee!=0)",
+   "options": "Item",
+   "precision": "2"
+  },
+  {
+   "fieldname": "manifest_item",
+   "fieldtype": "Link",
+   "label": "Manifest Fee Item",
+   "mandatory_depends_on": "eval:(doc.manifest_fee&&doc.manifest_fee!=0)",
+   "options": "Item",
+   "precision": "2"
+  },
+  {
+   "fieldname": "agency_item",
+   "fieldtype": "Link",
+   "label": "Agency Fee Item",
+   "mandatory_depends_on": "eval:(doc.agency_fee&&doc.agency_fee!=0)",
+   "options": "Item",
+   "precision": "2"
+  },
+  {
+   "fieldname": "handling_item",
+   "fieldtype": "Link",
+   "label": "Handling Charge Item",
+   "mandatory_depends_on": "eval:(doc.handling_min_kg&&doc.handling_min_kg != 0)",
+   "options": "Item"
+  },
+  {
+   "fieldname": "trucking_box_item",
+   "fieldtype": "Link",
+   "label": "Trucking Box Item",
+   "mandatory_depends_on": "eval:(doc.box_min_kg&&doc.box_min_kg != 0)",
+   "options": "Item"
+  },
+  {
+   "fieldname": "trucking_fuso_item",
+   "fieldtype": "Link",
+   "label": "Trucking Fuso Item",
+   "mandatory_depends_on": "eval:(doc.fuso_min_kg&&doc.fuso_min_kg != 0)",
+   "options": "Item"
+  },
+  {
+   "fieldname": "admin_fee",
+   "fieldtype": "Float",
+   "label": "Admin Fee",
+   "precision": "2"
+  },
+  {
+   "fieldname": "item_tab",
+   "fieldtype": "Tab Break",
+   "label": "Item"
+  },
+  {
+   "fieldname": "column_break_xhus",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "box_min_kg",
+   "fieldtype": "Float",
+   "label": "Minimum",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_min_kg",
+   "fieldtype": "Float",
+   "label": "Minimum",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_kg",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
+  },
+  {
+   "fetch_from": "admin_item.item_name",
+   "fieldname": "admin_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "document_item.item_name",
+   "fieldname": "document_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "manifest_item.item_name",
+   "fieldname": "manifest_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "agency_item.item_name",
+   "fieldname": "agency_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "handling_item.item_name",
+   "fieldname": "handling_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "trucking_box_item.item_name",
+   "fieldname": "trucking_box_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "trucking_fuso_item.item_name",
+   "fieldname": "trucking_fuso_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "box_greater_kg",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-05 20:48:47.230249",
+ "modified": "2026-11-07 23:25:08.373982",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Air Freight Settings",

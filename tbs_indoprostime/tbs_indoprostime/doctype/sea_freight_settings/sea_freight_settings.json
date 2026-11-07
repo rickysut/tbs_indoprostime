@@ -9,17 +9,13 @@
   "customer",
   "naming_series",
   "column_break_ztii",
-  "adm_charge",
-  "admin_item",
-  "pib_edi",
-  "pib_edi_item",
+  "admin_fee",
+  "pib_edi_fee",
   "agency_fee",
-  "agency_item",
   "custom_clearance_section",
   "clearance_fcl_20",
   "clearance_fcl_40",
   "clearance_add_container",
-  "clearance_item",
   "column_break_ynci",
   "clearance_min_cbm",
   "clearance_greater_than",
@@ -29,21 +25,32 @@
   "trucking_section",
   "trucking_fcl_20",
   "trucking_fcl_40",
-  "trucking_item",
   "column_break_iizo",
   "box",
   "box_min_cbm",
-  "box_grearter_cbm",
+  "box_greater_cbm",
   "fuso",
   "fuso_min_cbm",
-  "fuso_greater_than",
+  "fuso_greater_cbm",
   "column_break_iypm",
   "heading_bafh",
   "box_min_price",
   "box_greater_price",
   "heading_hnhf",
   "fuso_min_price",
-  "fuso_greater_price"
+  "fuso_greater_price",
+  "item_tab",
+  "admin_item",
+  "admin_item_name",
+  "pib_edi_item",
+  "pib_edi_item_name",
+  "agency_item",
+  "agency_item_name",
+  "column_break_ungy",
+  "clearance_item",
+  "clearance_item_name",
+  "trucking_item",
+  "trucking_item_name"
  ],
  "fields": [
   {
@@ -66,18 +73,6 @@
   {
    "fieldname": "column_break_ztii",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "adm_charge",
-   "fieldtype": "Float",
-   "label": "Adm Charge",
-   "precision": "2"
-  },
-  {
-   "fieldname": "pib_edi",
-   "fieldtype": "Float",
-   "label": "PIB EDI",
-   "precision": "2"
   },
   {
    "fieldname": "agency_fee",
@@ -124,13 +119,13 @@
   {
    "fieldname": "trucking_fcl_20",
    "fieldtype": "Float",
-   "label": "FCL 20 ft",
+   "label": "Price FCL 20 ft",
    "precision": "2"
   },
   {
    "fieldname": "trucking_fcl_40",
    "fieldtype": "Float",
-   "label": "FCL 40 ft",
+   "label": "Price FCL 40 ft",
    "precision": "2"
   },
   {
@@ -149,12 +144,6 @@
    "precision": "2"
   },
   {
-   "fieldname": "box_grearter_cbm",
-   "fieldtype": "Float",
-   "label": "Greater than",
-   "precision": "2"
-  },
-  {
    "fieldname": "fuso",
    "fieldtype": "Heading",
    "label": "Fuso"
@@ -163,12 +152,6 @@
    "fieldname": "fuso_min_cbm",
    "fieldtype": "Float",
    "label": "Minimum Cbm",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fuso_greater_than",
-   "fieldtype": "Float",
-   "label": "Greater than",
    "precision": "2"
   },
   {
@@ -212,45 +195,48 @@
   {
    "fieldname": "admin_item",
    "fieldtype": "Link",
-   "mandatory_depends_on": "eval:doc.adm_charge != 0",
+   "label": "Admin Fee Item",
+   "mandatory_depends_on": "eval:(doc.admin_fee&&doc.admin_fee!=0)",
    "options": "Item"
   },
   {
    "fieldname": "pib_edi_item",
    "fieldtype": "Link",
-   "mandatory_depends_on": "eval:doc.pib_edi != 0",
+   "label": "PIB EDI Item",
+   "mandatory_depends_on": "eval:(doc.pib_edi_fee&&doc.pib_edi_fee != 0)",
    "options": "Item"
   },
   {
    "fieldname": "agency_item",
    "fieldtype": "Link",
-   "mandatory_depends_on": "eval:doc.agency_fee != 0",
+   "label": "Agency Fee Item",
+   "mandatory_depends_on": "eval:(doc.agency_fee&&doc.agency_fee != 0)",
    "options": "Item"
   },
   {
    "fieldname": "clearance_item",
    "fieldtype": "Link",
-   "label": "Item",
-   "mandatory_depends_on": "eval:doc.clearance_fcl_20 != 0",
+   "label": "Clearance Fee Item",
+   "mandatory_depends_on": "eval:(doc.clearance_fcl_20&&doc.clearance_fcl_20 != 0)",
    "options": "Item"
   },
   {
    "fieldname": "trucking_item",
    "fieldtype": "Link",
-   "label": "Item",
-   "mandatory_depends_on": "eval:doc.trucking_fcl_20 != 0",
+   "label": "Trucking Fee Item",
+   "mandatory_depends_on": "eval:(doc.trucking_fcl_20&&doc.trucking_fcl_20 != 0)",
    "options": "Item"
   },
   {
    "fieldname": "clearance_fcl_20",
    "fieldtype": "Float",
-   "label": "FCL 20 ft",
+   "label": "Price FCL 20 ft",
    "precision": "2"
   },
   {
    "fieldname": "clearance_fcl_40",
    "fieldtype": "Float",
-   "label": "FCL 40 ft",
+   "label": "Price FCL 40 ft",
    "precision": "2"
   },
   {
@@ -264,12 +250,75 @@
    "fieldtype": "Float",
    "label": "Minimum Cbm",
    "precision": "2"
+  },
+  {
+   "fieldname": "item_tab",
+   "fieldtype": "Tab Break",
+   "label": "Item"
+  },
+  {
+   "fieldname": "column_break_ungy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "admin_item.item_name",
+   "fieldname": "admin_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "pib_edi_item.item_name",
+   "fieldname": "pib_edi_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "agency_item.item_name",
+   "fieldname": "agency_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "admin_fee",
+   "fieldtype": "Float",
+   "label": "Adm Charge",
+   "precision": "2"
+  },
+  {
+   "fieldname": "pib_edi_fee",
+   "fieldtype": "Float",
+   "label": "PIB EDI",
+   "precision": "2"
+  },
+  {
+   "fetch_from": "clearance_item.item_name",
+   "fieldname": "clearance_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "trucking_item.item_name",
+   "fieldname": "trucking_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "box_greater_cbm",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fuso_greater_cbm",
+   "fieldtype": "Float",
+   "label": "Greater than",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-06 12:48:50.598733",
+ "modified": "2026-11-07 22:47:54.307846",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Freight Settings",
