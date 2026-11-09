@@ -1,0 +1,291 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-11-09 13:39:31.064997",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "naming_series",
+  "column_break_jsqg",
+  "origin",
+  "section_break_pcfl",
+  "minimum",
+  "ocean_freight",
+  "cfs_thc",
+  "other_charges",
+  "lss",
+  "ebs",
+  "rate_restoration",
+  "column_break_wrre",
+  "lcl",
+  "lcl_cbm_1",
+  "lcl_cbm_2",
+  "lcl_cbm_3",
+  "lcl_cbm_4",
+  "lcl_cbm_5",
+  "lcl_cbm_6",
+  "column_break_wxuc",
+  "fcl_20",
+  "fcl_20_1",
+  "fcl_20_2",
+  "fcl_20_3",
+  "fcl_20_4",
+  "fcl_20_5",
+  "fcl_20_6",
+  "column_break_vmsh",
+  "fcl_40",
+  "fcl_40_1",
+  "fcl_40_2",
+  "fcl_40_3",
+  "fcl_40_4",
+  "fcl_40_5",
+  "fcl_40_6",
+  "section_break_bzhy",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "link_filters": "[[\"Business Partner\",\"customer\",\"=\",1]]",
+   "options": "Business Partner",
+   "reqd": 1
+  },
+  {
+   "default": "SIF-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "SIF-"
+  },
+  {
+   "fieldname": "column_break_jsqg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "origin",
+   "fieldtype": "Data",
+   "label": "Origin"
+  },
+  {
+   "fieldname": "section_break_pcfl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ocean_freight",
+   "fieldtype": "Float",
+   "label": "Ocean Freight",
+   "precision": "2"
+  },
+  {
+   "fieldname": "other_charges",
+   "fieldtype": "HTML",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "lss",
+   "fieldtype": "Float",
+   "label": "LSS",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ebs",
+   "fieldtype": "Float",
+   "label": "EBS",
+   "precision": "2"
+  },
+  {
+   "fieldname": "rate_restoration",
+   "fieldtype": "Float",
+   "label": "Rate Restoration",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_wrre",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lcl",
+   "fieldtype": "Heading",
+   "label": "LCL"
+  },
+  {
+   "fieldname": "column_break_wxuc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fcl_20",
+   "fieldtype": "Heading",
+   "label": "FCL 20"
+  },
+  {
+   "fieldname": "fcl_20_1",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_20_2",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_vmsh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fcl_40",
+   "fieldtype": "Heading",
+   "label": "FCL 40"
+  },
+  {
+   "fieldname": "fcl_40_1",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_40_2",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "section_break_bzhy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "minimum",
+   "fieldtype": "Heading",
+   "label": "Minimum"
+  },
+  {
+   "fieldname": "lcl_cbm_1",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_cbm_2",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_cbm_3",
+   "fieldtype": "Float",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_cbm_4",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_cbm_5",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lcl_cbm_6",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_20_3",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_20_4",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_20_5",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_20_6",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_40_3",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_40_4",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_40_5",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "fcl_40_6",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cfs_thc",
+   "fieldtype": "Float",
+   "label": "CFS/THC",
+   "precision": "2"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-09 15:28:34.706308",
+ "modified_by": "Administrator",
+ "module": "TBS Indoprostime",
+ "name": "Sea Import Freight Settings",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

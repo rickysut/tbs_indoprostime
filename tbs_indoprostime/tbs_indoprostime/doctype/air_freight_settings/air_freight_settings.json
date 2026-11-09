@@ -34,6 +34,8 @@
   "heading_hnhf",
   "fuso_min_price",
   "fuso_greater_price",
+  "section_break_mepn",
+  "notes",
   "item_tab",
   "admin_item",
   "admin_item_name",
@@ -310,12 +312,21 @@
    "fieldtype": "Float",
    "label": "Greater than",
    "precision": "2"
+  },
+  {
+   "fieldname": "section_break_mepn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-07 23:25:08.373982",
+ "modified": "2026-11-09 15:28:59.549032",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Air Freight Settings",
@@ -339,5 +350,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
