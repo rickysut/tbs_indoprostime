@@ -42,11 +42,30 @@ frappe.ui.form.on("Sea Import Freight Settings", {
 			add_input_prefix(frm, "ebs", "Min");
 			add_input_prefix(frm, "rate_restoration", "Min");
 
-            // add_input_prefix(frm, "lcl_cbm_1", "Cbm:");
-			// add_input_prefix(frm, "lcl_cbm_2", "Cbm:");
-			// add_input_prefix(frm, "lcl_cbm_4", "Cbm:");
-			// add_input_prefix(frm, "lcl_cbm_5", "Cbm:");
-			// add_input_prefix(frm, "lcl_cbm_6", "Cbm:");
+            apply_horizontal_group(frm, [
+				{ fieldname: "ocean_freight_item", width: 20 },
+				{ fieldname: "ocean_freight_item_name", width: 80, no_label: true }
+			]);
+			apply_horizontal_group(frm, [
+				{ fieldname: "cfs_thc_item", width: 20 },
+				{ fieldname: "cfs_thc_item_name", width: 80, no_label: true }
+			]);
+			apply_horizontal_group(frm, [
+				{ fieldname: "other_charges_item", width: 20 },
+				{ fieldname: "other_charges_item_name", width: 80, no_label: true }
+			]);
+			apply_horizontal_group(frm, [
+				{ fieldname: "lss_item", width: 20 },
+				{ fieldname: "lss_item_name", width: 80, no_label: true }
+			]);
+			apply_horizontal_group(frm, [
+				{ fieldname: "ebs_item", width: 20 },
+				{ fieldname: "ebs_item_name", width: 80, no_label: true }
+			]);
+			apply_horizontal_group(frm, [
+				{ fieldname: "rate_item", width: 20 },
+				{ fieldname: "rate_item_name", width: 80, no_label: true }
+			]);
 
             frm.set_df_property('other_charges', 'options',
                 '<div class="form-group"><label class="control-label">Other Charges</label></div>');
