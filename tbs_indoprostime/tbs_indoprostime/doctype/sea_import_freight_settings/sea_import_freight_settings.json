@@ -313,7 +313,7 @@
    "options": "Item"
   },
   {
-   "fetch_from": "cfs_thc_item.item_name",
+   "fetch_from": "other_charges_item.item_name",
    "fieldname": "other_charges_item_name",
    "fieldtype": "Data",
    "read_only": 1
@@ -325,7 +325,7 @@
    "options": "Item"
   },
   {
-   "fetch_from": "ocean_freight_item.item_name",
+   "fetch_from": "lss_item.item_name",
    "fieldname": "lss_item_name",
    "fieldtype": "Data",
    "read_only": 1
@@ -337,7 +337,7 @@
    "options": "Item"
   },
   {
-   "fetch_from": "ocean_freight_item.item_name",
+   "fetch_from": "ebs_item.item_name",
    "fieldname": "ebs_item_name",
    "fieldtype": "Data",
    "read_only": 1
@@ -349,7 +349,7 @@
    "options": "Item"
   },
   {
-   "fetch_from": "ocean_freight_item.item_name",
+   "fetch_from": "rate_item.item_name",
    "fieldname": "rate_item_name",
    "fieldtype": "Data",
    "read_only": 1
@@ -358,7 +358,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-09 16:46:29.211800",
+ "modified": "2026-11-09 16:52:43.405680",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Import Freight Settings",

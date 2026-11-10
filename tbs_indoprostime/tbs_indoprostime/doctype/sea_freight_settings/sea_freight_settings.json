@@ -198,6 +198,7 @@
    "fieldname": "admin_item",
    "fieldtype": "Link",
    "label": "Admin Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SC\"]]",
    "mandatory_depends_on": "eval:(doc.admin_fee&&doc.admin_fee!=0)",
    "options": "Item"
   },
@@ -205,6 +206,7 @@
    "fieldname": "pib_edi_item",
    "fieldtype": "Link",
    "label": "PIB EDI Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SC\"]]",
    "mandatory_depends_on": "eval:(doc.pib_edi_fee&&doc.pib_edi_fee != 0)",
    "options": "Item"
   },
@@ -212,6 +214,7 @@
    "fieldname": "agency_item",
    "fieldtype": "Link",
    "label": "Agency Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SC\"]]",
    "mandatory_depends_on": "eval:(doc.agency_fee&&doc.agency_fee != 0)",
    "options": "Item"
   },
@@ -219,6 +222,7 @@
    "fieldname": "clearance_item",
    "fieldtype": "Link",
    "label": "Clearance Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SC\"]]",
    "mandatory_depends_on": "eval:(doc.clearance_fcl_20&&doc.clearance_fcl_20 != 0)",
    "options": "Item"
   },
@@ -226,6 +230,7 @@
    "fieldname": "trucking_item",
    "fieldtype": "Link",
    "label": "Trucking Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SC\"]]",
    "mandatory_depends_on": "eval:(doc.trucking_fcl_20&&doc.trucking_fcl_20 != 0)",
    "options": "Item"
   },
@@ -329,7 +334,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-09 15:28:43.608195",
+ "modified": "2026-11-10 17:20:21.947782",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Freight Settings",

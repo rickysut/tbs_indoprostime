@@ -4,6 +4,7 @@
 import frappe
 import json
 from frappe import _
+from frappe.utils import flt
 from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
 
 
@@ -55,8 +56,208 @@ class CustomSalesOrder(SalesOrder):
 	# 				"amount": 0,
 	# 			})
 
+	def update_rate(self):
+		if self.custom_division == "AC":
+			self._update_rate_ac()
+		elif self.custom_division == "SC":
+			self._update_rate_sc()
+
+	def _update_rate_ac(self):
+		if not self.customer:
+			return
+
+		settings_name = frappe.db.get_value(
+			"Air Freight Settings", {"customer": self.customer}, "name"
+		)
+		if not settings_name:
+			return
+
+		settings = frappe.get_doc("Air Freight Settings", settings_name)
+		weight = flt(self.custom_chgbl_weight)
+		if weight <= 0:
+			return
+
+		conversion_rate = flt(self.custom_kurs) or flt(self.conversion_rate) or 1
+
+		# Handling
+		if flt(settings.handling_min_price) > 0:
+			handling_min_kg = flt(settings.handling_min_kg)
+			handling_min_price = flt(settings.handling_min_price)
+			handling_greater_price = flt(settings.handling_greater_price)
+
+			if weight <= handling_min_kg:
+				amount = handling_min_price
+			else:
+				amount = (weight - handling_min_kg) * handling_greater_price + handling_min_price
+
+			description = (
+				"HANDLING"
+				if weight <= handling_min_kg
+				else f"HANDLING ({weight:,.0f}-{handling_min_kg:,.0f}) x {handling_greater_price:,.0f} + {handling_min_price:,.0f}"
+			)
+			self._upsert_rate_item(settings.handling_item, description, 1, amount)
+
+		# Trucking (menggunakan harga Box)
+		if flt(settings.box_min_price) > 0:
+			truck_min_kg = flt(settings.box_min_kg)
+			truck_min_price = flt(settings.box_min_price)
+			truck_greater_price = flt(settings.box_greater_price)
+
+			if weight <= truck_min_kg:
+				amount = truck_min_price
+			else:
+				amount = (weight - truck_min_kg) * truck_greater_price + truck_min_price
+
+			description = (
+				"TRUCKING"
+				if weight <= truck_min_kg
+				else f"TRUCKING ({weight:,.0f}-{truck_min_kg:,.0f}) x {truck_greater_price:,.0f} + {truck_min_price:,.0f}"
+			)
+			self._upsert_rate_item(settings.trucking_item, description, 1, amount)
+
+		# Agency Fee (USD -> IDR)
+		if flt(settings.agency_fee) > 0:
+			amount_usd = flt(settings.agency_fee)
+			amount_idr = amount_usd * conversion_rate
+			description = f"AGENCY FEE (USD {amount_usd:,.2f} x {conversion_rate:,.2f})"
+			self._upsert_rate_item(settings.agency_item, description, 1, amount_idr)
+
+		# Document Fee
+		if flt(settings.document_fee) > 0:
+			self._upsert_rate_item(settings.document_item, "DOCUMENT FEE", 1, flt(settings.document_fee))
+
+		# Admin Fee
+		if flt(settings.admin_fee) > 0:
+			self._upsert_rate_item(settings.admin_item, "ADM FEE", 1, flt(settings.admin_fee))
+
+		# Manifest Fee
+		if flt(settings.manifest_fee) > 0:
+			self._upsert_rate_item(settings.manifest_item, "MANIFEST FEE", 1, flt(settings.manifest_fee))
+
+	def _update_rate_sc(self):
+		if not self.customer:
+			return
+
+		settings_name = frappe.db.get_value(
+			"Sea Freight Settings", {"customer": self.customer}, "name"
+		)
+		if not settings_name:
+			return
+
+		settings = frappe.get_doc("Sea Freight Settings", settings_name)
+
+		fcl_40 = flt(self.custom_fcl_40_ft20_ft)
+		fcl_20 = flt(self.custom_fcl_40_ft20_ft_2)
+		lcl_cbm = flt(self.custom_fcllcl_vol)
+
+		# Custom Clearance
+		if lcl_cbm > 0:
+			threshold = flt(settings.clearance_min_cbm)
+			base = flt(settings.clearance_min_cbm_price)
+			per_cbm = flt(settings.clearance_greater_price)
+
+			if lcl_cbm <= threshold:
+				amount = base
+			else:
+				amount = (lcl_cbm - threshold) * per_cbm + base
+
+			description = (
+				"CUSTOM CLEARANCE LCL"
+				if lcl_cbm <= threshold
+				else f"CUSTOM CLEARANCE LCL ({lcl_cbm:,.0f}-{threshold:,.0f}) x {per_cbm:,.0f} + {base:,.0f}"
+			)
+			self._upsert_rate_item(settings.clearance_item, description, 1, amount)
+		elif fcl_20 or fcl_40:
+			amount = 0
+			if fcl_20:
+				amount += flt(settings.clearance_fcl_20) + max(fcl_20 - 1, 0) * flt(settings.clearance_add_container)
+			if fcl_40:
+				amount += flt(settings.clearance_fcl_40) + max(fcl_40 - 1, 0) * flt(settings.clearance_add_container)
+
+			self._upsert_rate_item(settings.clearance_item, "CUSTOM CLEARANCE FCL", 1, amount)
+
+		# Trucking
+		if lcl_cbm > 0:
+			if lcl_cbm > 10:
+				threshold = flt(settings.fuso_min_cbm)
+				base = flt(settings.fuso_min_price)
+				per_cbm = flt(settings.fuso_greater_price)
+				tier_label = "FUSO"
+			else:
+				threshold = flt(settings.box_min_cbm)
+				base = flt(settings.box_min_price)
+				per_cbm = flt(settings.box_greater_price)
+				tier_label = "BOX"
+
+			if lcl_cbm <= threshold:
+				amount = base
+			else:
+				amount = (lcl_cbm - threshold) * per_cbm + base
+
+			description = (
+				f"TRUCKING LCL {tier_label}"
+				if lcl_cbm <= threshold
+				else f"TRUCKING LCL {tier_label} ({lcl_cbm:,.0f}-{threshold:,.0f}) x {per_cbm:,.0f} + {base:,.0f}"
+			)
+			self._upsert_rate_item(settings.trucking_item, description, 1, amount)
+		elif fcl_20 or fcl_40:
+			amount = fcl_20 * flt(settings.trucking_fcl_20) + fcl_40 * flt(settings.trucking_fcl_40)
+			self._upsert_rate_item(settings.trucking_item, "TRUCKING FCL", 1, amount)
+
+		# Admin Fee
+		if flt(settings.admin_fee) > 0:
+			self._upsert_rate_item(settings.admin_item, "ADM FEE", 1, flt(settings.admin_fee))
+
+		# PIB EDI
+		if flt(settings.pib_edi_fee) > 0:
+			self._upsert_rate_item(settings.pib_edi_item, "PIB EDI", 1, flt(settings.pib_edi_fee))
+
+		# Agency Fee
+		if flt(settings.agency_fee) > 0:
+			self._upsert_rate_item(settings.agency_item, "Agency Fee", 1, flt(settings.agency_fee))
+
+	def _upsert_rate_item(self, item_code, description, qty, amount):
+		if not item_code:
+			return
+
+		for row in self.items:
+			if row.item_code == item_code:
+				row.qty = qty
+				row.rate = amount
+				row.amount = qty * amount
+				row.custom_cost = amount
+				row.custom_total_cost = qty * amount
+				row.description = description
+				if not row.conversion_factor:
+					row.conversion_factor = 1
+				if not row.price_list_rate:
+					row.price_list_rate = amount
+				return
+
+		item = frappe.db.get_value("Item", item_code, ["item_name", "stock_uom"], as_dict=True)
+		if not item:
+			return
+
+		self.append("items", {
+			"item_code": item_code,
+			"item_name": item.item_name,
+			"description": description,
+			"qty": qty,
+			"rate": amount,
+			"amount": qty * amount,
+			"price_list_rate": amount,
+			"custom_cost": amount,
+			"custom_total_cost": qty * amount,
+			"uom": item.stock_uom,
+			"stock_uom": item.stock_uom,
+			"conversion_factor": 1,
+		})
+
 	def before_save(self):
 		self.set_title()
+		self.update_rate()
+		if self.get("items") and self.get("payment_schedule"):
+			self.payment_schedule = []
 
 	def validate(self):
 		if not self.get("items"):
@@ -67,7 +268,7 @@ class CustomSalesOrder(SalesOrder):
 		if self.custom_kurs and self.custom_kurs > 0:
 			self.conversion_rate = self.custom_kurs
 		super().validate()
-	
+
 	def set_payment_schedule(self):
 		if not self.get("items"):
 			return

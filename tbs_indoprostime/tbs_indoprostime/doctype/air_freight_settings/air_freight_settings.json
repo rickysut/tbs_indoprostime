@@ -21,19 +21,11 @@
   "handling_min_price",
   "handling_greater_price",
   "trucking_section",
-  "box",
   "box_min_kg",
   "box_greater_kg",
-  "fuso",
-  "fuso_min_kg",
-  "fuso_greater_kg",
   "column_break_iizo",
-  "heading_bafh",
   "box_min_price",
   "box_greater_price",
-  "heading_hnhf",
-  "fuso_min_price",
-  "fuso_greater_price",
   "section_break_mepn",
   "notes",
   "item_tab",
@@ -43,15 +35,13 @@
   "document_item_name",
   "manifest_item",
   "manifest_item_name",
+  "column_break_xhus",
   "agency_item",
   "agency_item_name",
-  "column_break_xhus",
   "handling_item",
   "handling_item_name",
-  "trucking_box_item",
-  "trucking_box_item_name",
-  "trucking_fuso_item",
-  "trucking_fuso_item_name"
+  "trucking_item",
+  "trucking_item_name"
  ],
  "fields": [
   {
@@ -100,21 +90,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "box",
-   "fieldtype": "Heading",
-   "label": "Box"
-  },
-  {
-   "fieldname": "fuso",
-   "fieldtype": "Heading",
-   "label": "Fuso"
-  },
-  {
-   "fieldname": "heading_bafh",
-   "fieldtype": "Heading",
-   "label": "Box Pricing "
-  },
-  {
    "fieldname": "box_min_price",
    "fieldtype": "Float",
    "label": "Price",
@@ -122,23 +97,6 @@
   },
   {
    "fieldname": "box_greater_price",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "heading_hnhf",
-   "fieldtype": "Heading",
-   "label": "Fuso Pricing"
-  },
-  {
-   "fieldname": "fuso_min_price",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fuso_greater_price",
    "fieldtype": "Float",
    "label": "Price",
    "precision": "2"
@@ -183,6 +141,7 @@
    "fieldname": "admin_item",
    "fieldtype": "Link",
    "label": "Admin Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
    "mandatory_depends_on": "eval:(doc.admin_fee&&doc.admin_fee!=0)",
    "options": "Item",
    "precision": "2"
@@ -191,6 +150,7 @@
    "fieldname": "document_item",
    "fieldtype": "Link",
    "label": "Document Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
    "mandatory_depends_on": "eval:(doc.document_fee&&doc.document_fee!=0)",
    "options": "Item",
    "precision": "2"
@@ -199,6 +159,7 @@
    "fieldname": "manifest_item",
    "fieldtype": "Link",
    "label": "Manifest Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
    "mandatory_depends_on": "eval:(doc.manifest_fee&&doc.manifest_fee!=0)",
    "options": "Item",
    "precision": "2"
@@ -207,6 +168,7 @@
    "fieldname": "agency_item",
    "fieldtype": "Link",
    "label": "Agency Fee Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
    "mandatory_depends_on": "eval:(doc.agency_fee&&doc.agency_fee!=0)",
    "options": "Item",
    "precision": "2"
@@ -215,21 +177,8 @@
    "fieldname": "handling_item",
    "fieldtype": "Link",
    "label": "Handling Charge Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
    "mandatory_depends_on": "eval:(doc.handling_min_kg&&doc.handling_min_kg != 0)",
-   "options": "Item"
-  },
-  {
-   "fieldname": "trucking_box_item",
-   "fieldtype": "Link",
-   "label": "Trucking Box Item",
-   "mandatory_depends_on": "eval:(doc.box_min_kg&&doc.box_min_kg != 0)",
-   "options": "Item"
-  },
-  {
-   "fieldname": "trucking_fuso_item",
-   "fieldtype": "Link",
-   "label": "Trucking Fuso Item",
-   "mandatory_depends_on": "eval:(doc.fuso_min_kg&&doc.fuso_min_kg != 0)",
    "options": "Item"
   },
   {
@@ -251,18 +200,6 @@
    "fieldname": "box_min_kg",
    "fieldtype": "Float",
    "label": "Minimum",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fuso_min_kg",
-   "fieldtype": "Float",
-   "label": "Minimum",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fuso_greater_kg",
-   "fieldtype": "Float",
-   "label": "Greater than",
    "precision": "2"
   },
   {
@@ -296,18 +233,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "trucking_box_item.item_name",
-   "fieldname": "trucking_box_item_name",
-   "fieldtype": "Data",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "trucking_fuso_item.item_name",
-   "fieldname": "trucking_fuso_item_name",
-   "fieldtype": "Data",
-   "read_only": 1
-  },
-  {
    "fieldname": "box_greater_kg",
    "fieldtype": "Float",
    "label": "Greater than",
@@ -321,12 +246,26 @@
    "fieldname": "notes",
    "fieldtype": "Small Text",
    "label": "Notes"
+  },
+  {
+   "fieldname": "trucking_item",
+   "fieldtype": "Link",
+   "label": "Trucking Item",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"AC\"]]",
+   "mandatory_depends_on": "eval:(doc.box_min_kg&&doc.box_min_kg != 0)",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "trucking_item.item_name",
+   "fieldname": "trucking_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-09 15:28:59.549032",
+ "modified": "2026-11-10 16:21:22.404572",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Air Freight Settings",

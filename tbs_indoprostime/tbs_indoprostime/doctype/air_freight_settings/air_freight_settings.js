@@ -15,7 +15,7 @@ frappe.ui.form.on("Air Freight Settings", {
             "handling_min_price",
             "handling_greater_price",
             "box_min_kg",
-            "box_grearter_kg",
+            "box_greater_kg",
             "fuso_min_kg",
             "fuso_greater_kg",
             "box_min_price",
@@ -69,13 +69,13 @@ frappe.ui.form.on("Air Freight Settings", {
 					{ fieldname: "handling_item_name", width: 80, no_label: true }
 				]);
 				apply_horizontal_group(frm, [
-					{ fieldname: "trucking_box_item", width: 20 },
-					{ fieldname: "trucking_box_item_name", width: 80, no_label: true }
+					{ fieldname: "trucking_item", width: 20 },
+					{ fieldname: "trucking_item_name", width: 80, no_label: true }
 				]);
-				apply_horizontal_group(frm, [
-					{ fieldname: "trucking_fuso_item", width: 20 },
-					{ fieldname: "trucking_fuso_item_name", width: 80, no_label: true }
-				]);
+				// apply_horizontal_group(frm, [
+				// 	{ fieldname: "trucking_fuso_item", width: 20 },
+				// 	{ fieldname: "trucking_fuso_item_name", width: 80, no_label: true }
+				// ]);
 			}, 1000);
 	},
 });
