@@ -265,8 +265,8 @@ fixtures = [
     {"dt": "Custom Field"},
     
     # 2. Custom DocType yang baru ditemukan
-    {"dt": "Account Relation"},
-    {"dt": "Sea Clearance"},
+    # {"dt": "Account Relation"},
+    # {"dt": "Sea Clearance"},
     
     # 3. Client Script & Server Script
     {"dt": "Client Script"},
@@ -280,32 +280,32 @@ fixtures = [
     {"dt": "Print Format"},
     
     # 6. Workspace (dengan filter spesifik)
-    {
-        "dt": "Workspace",
-        "filters": [
-            ["name", "in", [
-                "TBS Indoprostime",
-                "Accounting", 
-                "Buying", 
-                "Selling", 
-                "Stock", 
-                "Financial Reports"
-            ]]
-        ]
-    },
+    # {
+    #     "dt": "Workspace",
+    #     "filters": [
+    #         ["name", "in", [
+    #             "TBS Indoprostime",
+    #             "Accounting", 
+    #             "Buying", 
+    #             "Selling", 
+    #             "Stock", 
+    #             "Financial Reports"
+    #         ]]
+    #     ]
+    # },
     
     # 7. Dashboard (dengan filter)
-    {"dt": "Dashboard", "filters": [["name", "=", "Purchase"]]},
+    # {"dt": "Dashboard", "filters": [["name", "=", "Purchase"]]},
     
     # 8. Report (hanya custom report)
     {"dt": "Report", "filters": [["is_standard", "=", "No"]]},
     
     # 9. Settings (Single DocType - hati-hati!)
     {"dt": "Document Naming Settings"},
-    {"dt": "Selling Settings"},
-    {"dt": "Buying Settings"},
+    # {"dt": "Selling Settings"},
+    # {"dt": "Buying Settings"},
     
     # 10. Role & Module Profile
-    {"dt": "Role"},
-    {"dt": "Module Profile"},
+    # {"dt": "Role"},
+    # {"dt": "Module Profile"},
 ]
