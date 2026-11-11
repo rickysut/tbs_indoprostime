@@ -10,38 +10,39 @@
   "naming_series",
   "column_break_jsqg",
   "origin",
+  "customer_origin",
   "section_break_pcfl",
   "minimum",
-  "ocean_freight",
-  "cfs_thc",
-  "other_charges",
-  "lss",
-  "ebs",
-  "rate_restoration",
+  "of_lcl01",
+  "cfs_lcl01",
+  "other_charges_label",
+  "lss_lcl01",
+  "ebs_lcl01",
+  "rr_lcl01",
   "column_break_wrre",
   "lcl",
-  "lcl_cbm_1",
-  "lcl_cbm_2",
-  "lcl_cbm_3",
-  "lcl_cbm_4",
-  "lcl_cbm_5",
-  "lcl_cbm_6",
+  "of_lcl",
+  "cfs_lcl",
+  "oc_lcl",
+  "lss_lcl",
+  "ebs_lcl",
+  "rr_lcl",
   "column_break_wxuc",
   "fcl_20",
-  "fcl_20_1",
-  "fcl_20_2",
-  "fcl_20_3",
-  "fcl_20_4",
-  "fcl_20_5",
-  "fcl_20_6",
+  "of_fcl20",
+  "cfs_fcl20",
+  "oc_fcl20",
+  "lss_fcl20",
+  "ebs_fcl20",
+  "rr_fcl20",
   "column_break_vmsh",
   "fcl_40",
-  "fcl_40_1",
-  "fcl_40_2",
-  "fcl_40_3",
-  "fcl_40_4",
-  "fcl_40_5",
-  "fcl_40_6",
+  "of_fcl40",
+  "cfs_fcl40",
+  "oc_fcl40",
+  "lss_fcl40",
+  "ebs_fcl40",
+  "rr_fcl40",
   "section_break_bzhy",
   "notes",
   "item_tab",
@@ -84,40 +85,12 @@
   {
    "fieldname": "origin",
    "fieldtype": "Data",
-   "label": "Origin"
+   "label": "Origin",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_pcfl",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "ocean_freight",
-   "fieldtype": "Float",
-   "label": "Ocean Freight",
-   "precision": "2"
-  },
-  {
-   "fieldname": "other_charges",
-   "fieldtype": "HTML",
-   "label": "Other Charges"
-  },
-  {
-   "fieldname": "lss",
-   "fieldtype": "Float",
-   "label": "LSS",
-   "precision": "2"
-  },
-  {
-   "fieldname": "ebs",
-   "fieldtype": "Float",
-   "label": "EBS",
-   "precision": "2"
-  },
-  {
-   "fieldname": "rate_restoration",
-   "fieldtype": "Float",
-   "label": "Rate Restoration",
-   "precision": "2"
   },
   {
    "fieldname": "column_break_wrre",
@@ -138,18 +111,6 @@
    "label": "FCL 20"
   },
   {
-   "fieldname": "fcl_20_1",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_20_2",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
    "fieldname": "column_break_vmsh",
    "fieldtype": "Column Break"
   },
@@ -157,18 +118,6 @@
    "fieldname": "fcl_40",
    "fieldtype": "Heading",
    "label": "FCL 40"
-  },
-  {
-   "fieldname": "fcl_40_1",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_40_2",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
   },
   {
    "fieldname": "section_break_bzhy",
@@ -185,95 +134,6 @@
    "label": "Minimum"
   },
   {
-   "fieldname": "lcl_cbm_1",
-   "fieldtype": "Float",
-   "label": "Cbm:",
-   "precision": "2"
-  },
-  {
-   "fieldname": "lcl_cbm_2",
-   "fieldtype": "Float",
-   "label": "Cbm:",
-   "precision": "2"
-  },
-  {
-   "fieldname": "lcl_cbm_3",
-   "fieldtype": "Float",
-   "precision": "2"
-  },
-  {
-   "fieldname": "lcl_cbm_4",
-   "fieldtype": "Float",
-   "label": "Cbm:",
-   "precision": "2"
-  },
-  {
-   "fieldname": "lcl_cbm_5",
-   "fieldtype": "Float",
-   "label": "Cbm:",
-   "precision": "2"
-  },
-  {
-   "fieldname": "lcl_cbm_6",
-   "fieldtype": "Float",
-   "label": "Cbm:",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_20_3",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_20_4",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_20_5",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_20_6",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_40_3",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_40_4",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_40_5",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "fcl_40_6",
-   "fieldtype": "Float",
-   "label": "Price",
-   "precision": "2"
-  },
-  {
-   "fieldname": "cfs_thc",
-   "fieldtype": "Float",
-   "label": "CFS/THC",
-   "precision": "2"
-  },
-  {
    "fieldname": "item_tab",
    "fieldtype": "Tab Break",
    "label": "Item"
@@ -282,6 +142,7 @@
    "fieldname": "ocean_freight_item",
    "fieldtype": "Link",
    "label": "Ocean Freight",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
    "options": "Item"
   },
   {
@@ -298,6 +159,7 @@
    "fieldname": "cfs_thc_item",
    "fieldtype": "Link",
    "label": "CFS/THC",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
    "options": "Item"
   },
   {
@@ -310,6 +172,7 @@
    "fieldname": "other_charges_item",
    "fieldtype": "Link",
    "label": "Other Charges",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
    "options": "Item"
   },
   {
@@ -319,9 +182,172 @@
    "read_only": 1
   },
   {
+   "fieldname": "rate_item",
+   "fieldtype": "Link",
+   "label": "Rate Restoration",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "rate_item.item_name",
+   "fieldname": "rate_item_name",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "of_lcl01",
+   "fieldtype": "Float",
+   "label": "Ocean Freight",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cfs_lcl01",
+   "fieldtype": "Float",
+   "label": "CFS/THC",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lss_lcl01",
+   "fieldtype": "Float",
+   "label": "LSS",
+   "precision": "2"
+  },
+  {
+   "fieldname": "rr_lcl01",
+   "fieldtype": "Float",
+   "label": "Rate Restoration",
+   "precision": "2"
+  },
+  {
+   "fieldname": "of_lcl",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cfs_lcl",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "oc_lcl",
+   "fieldtype": "Float",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lss_lcl",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "rr_lcl",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "of_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cfs_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "oc_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lss_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "rr_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "of_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cfs_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "oc_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "lss_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "rr_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ebs_lcl01",
+   "fieldtype": "Float",
+   "label": "EBS",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ebs_lcl",
+   "fieldtype": "Float",
+   "label": "Cbm:",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ebs_fcl20",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ebs_fcl40",
+   "fieldtype": "Float",
+   "label": "Price",
+   "precision": "2"
+  },
+  {
+   "fieldname": "other_charges_label",
+   "fieldtype": "HTML",
+   "label": "Other Charges"
+  },
+  {
+   "fieldname": "customer_origin",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Customer Origin",
+   "unique": 1
+  },
+  {
    "fieldname": "lss_item",
    "fieldtype": "Link",
    "label": "LSS",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
    "options": "Item"
   },
   {
@@ -334,6 +360,7 @@
    "fieldname": "ebs_item",
    "fieldtype": "Link",
    "label": "EBS",
+   "link_filters": "[[\"Item\",\"custom_division\",\"=\",\"SI\"]]",
    "options": "Item"
   },
   {
@@ -341,24 +368,12 @@
    "fieldname": "ebs_item_name",
    "fieldtype": "Data",
    "read_only": 1
-  },
-  {
-   "fieldname": "rate_item",
-   "fieldtype": "Link",
-   "label": "Rate Restoration",
-   "options": "Item"
-  },
-  {
-   "fetch_from": "rate_item.item_name",
-   "fieldname": "rate_item_name",
-   "fieldtype": "Data",
-   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-09 16:52:43.405680",
+ "modified": "2026-11-11 15:57:27.558988",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Import Freight Settings",

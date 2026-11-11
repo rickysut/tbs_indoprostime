@@ -121,6 +121,7 @@ frappe.ui.form.on("Sales Order", {
 							options: "Sales Order",
 							reqd: 1,
 							get_query: () => ({
+								query: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.sales_order_duplicate_query",
 								filters: { custom_division: frm.doc.custom_division },
 							}),
 						},
@@ -170,21 +171,31 @@ frappe.ui.form.on("Sales Order", {
 						frappe.db.insert(ac_doc)
 							.then((saved) => {
 								frappe.call({
-									method: "frappe.client.set_value",
-									args: {
-										doctype: "Sales Order",
-										name: frm.doc.name,
-										fieldname: "custom_air_clearance_no",
-										value: saved.name,
-									},
-									callback(r) {
-										if (!r.exc && r.message) {
-											frm.reload_doc();
-											frappe.show_alert({
-												message: __("Air Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
-												indicator: "green",
-											});
+									method: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.update_rate_sales_order",
+									args: { name: saved.name },
+									callback(r_rate) {
+										if (r_rate.exc) {
+											frappe.msgprint(__("Gagal memperbarui rate Air Clearance."));
+											return;
 										}
+										frappe.call({
+											method: "frappe.client.set_value",
+											args: {
+												doctype: "Sales Order",
+												name: frm.doc.name,
+												fieldname: "custom_air_clearance_no",
+												value: saved.name,
+											},
+											callback(r) {
+												if (!r.exc && r.message) {
+													frm.reload_doc();
+													frappe.show_alert({
+														message: __("Air Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+														indicator: "green",
+													});
+												}
+											},
+										});
 									},
 								});
 							})
@@ -218,21 +229,31 @@ frappe.ui.form.on("Sales Order", {
 						frappe.db.insert(sc_doc)
 							.then((saved) => {
 								frappe.call({
-									method: "frappe.client.set_value",
-									args: {
-										doctype: "Sales Order",
-										name: frm.doc.name,
-										fieldname: "custom_sea_clearance_no",
-										value: saved.name,
-									},
-									callback(r) {
-										if (!r.exc && r.message) {
-											frm.reload_doc();
-											frappe.show_alert({
-												message: __("Sea Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
-												indicator: "green",
-											});
+									method: "tbs_indoprostime.tbs_indoprostime.overrides.sales_order.update_rate_sales_order",
+									args: { name: saved.name },
+									callback(r_rate) {
+										if (r_rate.exc) {
+											frappe.msgprint(__("Gagal memperbarui rate Sea Clearance."));
+											return;
 										}
+										frappe.call({
+											method: "frappe.client.set_value",
+											args: {
+												doctype: "Sales Order",
+												name: frm.doc.name,
+												fieldname: "custom_sea_clearance_no",
+												value: saved.name,
+											},
+											callback(r) {
+												if (!r.exc && r.message) {
+													frm.reload_doc();
+													frappe.show_alert({
+														message: __("Sea Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+														indicator: "green",
+													});
+												}
+											},
+										});
 									},
 								});
 							})

@@ -4,7 +4,7 @@
 import frappe
 import json
 from frappe import _
-from frappe.utils import flt
+from frappe.utils import flt, cint
 from erpnext.selling.doctype.sales_order.sales_order import SalesOrder
 
 
@@ -61,6 +61,8 @@ class CustomSalesOrder(SalesOrder):
 			self._update_rate_ac()
 		elif self.custom_division == "SC":
 			self._update_rate_sc()
+		elif self.custom_division == "SI":
+			self._update_rate_si()
 
 	def _update_rate_ac(self):
 		if not self.customer:
@@ -216,6 +218,88 @@ class CustomSalesOrder(SalesOrder):
 		if flt(settings.agency_fee) > 0:
 			self._upsert_rate_item(settings.agency_item, "Agency Fee", 1, flt(settings.agency_fee))
 
+	def _update_rate_si(self):
+		if not self.customer:
+			return
+
+		settings_name = frappe.db.get_value(
+			"Sea Import Freight Settings",
+			{"customer": self.customer, "origin": self.custom_origin},
+			"name",
+		)
+		if not settings_name:
+			return
+
+		settings = frappe.get_doc("Sea Import Freight Settings", settings_name)
+
+		fcl_40 = flt(self.custom_fcl_40_ft20_ft)
+		fcl_20 = flt(self.custom_fcl_40_ft20_ft_2)
+		lcl_cbm = flt(self.custom_fcllcl_vol)
+		conversion_rate = flt(self.custom_kurs) or flt(self.conversion_rate) or 1
+
+		def upsert_si_charge(label, lcl_threshold_field, lcl_rate_field, fcl20_field, fcl40_field, item_field):
+			if lcl_cbm > 0:
+				threshold = flt(getattr(settings, lcl_threshold_field))
+				rate = flt(getattr(settings, lcl_rate_field))
+				if threshold and lcl_cbm < threshold:
+					amount = rate
+					display_cbm = threshold
+				else:
+					amount = lcl_cbm * rate
+					display_cbm = lcl_cbm
+				description = f"{label} (USD {rate:,.2f} x {display_cbm:,.3f} CBM)"
+			elif fcl_20 or fcl_40:
+				amount = fcl_20 * flt(getattr(settings, fcl20_field)) + fcl_40 * flt(getattr(settings, fcl40_field))
+				description = (
+					f"{label} "
+					f"(USD {flt(getattr(settings, fcl20_field)):,.2f} x {fcl_20} x20', "
+					f"USD {flt(getattr(settings, fcl40_field)):,.2f} x {fcl_40} x40')"
+				)
+			else:
+				return
+
+			if amount:
+				self._upsert_rate_item(getattr(settings, item_field), description, 1, amount * conversion_rate)
+
+		upsert_si_charge(
+			"OCEAN FREIGHT",
+			"of_lcl01", "of_lcl", "of_fcl20", "of_fcl40", "ocean_freight_item"
+		)
+		upsert_si_charge(
+			"CFS/THC",
+			"cfs_lcl01", "cfs_lcl", "cfs_fcl20", "cfs_fcl40", "cfs_thc_item"
+		)
+		upsert_si_charge(
+			"LSS",
+			"lss_lcl01", "lss_lcl", "lss_fcl20", "lss_fcl40", "lss_item"
+		)
+		upsert_si_charge(
+			"EBS",
+			"ebs_lcl01", "ebs_lcl", "ebs_fcl20", "ebs_fcl40", "ebs_item"
+		)
+		upsert_si_charge(
+			"RATE RESTORATION",
+			"rr_lcl01", "rr_lcl", "rr_fcl20", "rr_fcl40", "rate_item"
+		)
+
+		# Other Charges (flat for LCL, per-container for FCL)
+		if lcl_cbm > 0:
+			amount = flt(settings.oc_lcl)
+			description = "OTHER CHARGES"
+		elif fcl_20 or fcl_40:
+			amount = fcl_20 * flt(settings.oc_fcl20) + fcl_40 * flt(settings.oc_fcl40)
+			description = (
+				"OTHER CHARGES "
+				f"(USD {flt(settings.oc_fcl20):,.2f} x {fcl_20} x20', "
+				f"USD {flt(settings.oc_fcl40):,.2f} x {fcl_40} x40')"
+			)
+		else:
+			amount = 0
+			return
+
+		if amount:
+			self._upsert_rate_item(settings.other_charges_item, description, 1, amount * conversion_rate)
+
 	def _upsert_rate_item(self, item_code, description, qty, amount):
 		if not item_code:
 			return
@@ -255,11 +339,11 @@ class CustomSalesOrder(SalesOrder):
 
 	def before_save(self):
 		self.set_title()
-		self.update_rate()
 		if self.get("items") and self.get("payment_schedule"):
 			self.payment_schedule = []
 
 	def validate(self):
+		self.update_rate()
 		if not self.get("items"):
 			self.grand_total = self.grand_total or 0
 			self.rounded_total = self.rounded_total or 0
@@ -345,3 +429,38 @@ def get_project_and_cost_center(division):
 		"project": project.name,
 		"cost_center": project.cost_center,
 	}
+
+
+@frappe.whitelist()
+def update_rate_sales_order(name):
+	doc = frappe.get_doc("Sales Order", name)
+	if doc.docstatus != 0:
+		frappe.throw(_("Only Draft document allowed"))
+
+	doc.update_rate()
+	doc.save(ignore_permissions=True)
+	return {"name": doc.name}
+
+
+@frappe.whitelist()
+def sales_order_duplicate_query(doctype, txt, searchfield, start, page_len, filters):
+	filters = frappe.parse_json(filters) if isinstance(filters, str) else filters or {}
+
+	or_filters = None
+	if txt:
+		or_filters = {
+			"name": ["like", f"%{txt}%"],
+			"customer_name": ["like", f"%{txt}%"],
+		}
+
+	docs = frappe.get_list(
+		"Sales Order",
+		fields=["name", "customer_name"],
+		filters=filters,
+		or_filters=or_filters,
+		order_by="creation DESC",
+		start=cint(start),
+		page_length=cint(page_len),
+	)
+
+	return [[d.name, d.customer_name] for d in docs]

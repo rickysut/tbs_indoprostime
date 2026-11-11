@@ -6,43 +6,36 @@ frappe.ui.form.on("Sea Import Freight Settings", {
 		let fields_to_align = [
 			"customer",
 			"origin",
-            "ocean_freight",
-            "cfs_thc",
-            "other_charges",
-            "lss",
-            "ebs",
-            "rate_restoration",
-            "lcl_cbm_1",
-            "lcl_cbm_2",
-            "lcl_cbm_3",
-            "lcl_cbm_4",
-            "lcl_cbm_5",
-            "lcl_cbm_6",
-            "fcl_20_1",
-            "fcl_20_2",
-            "fcl_20_3",
-            "fcl_20_4",
-            "fcl_20_5",
-            "fcl_20_6",
-            "fcl_40_1",
-            "fcl_40_2",
-            "fcl_40_3",
-            "fcl_40_4",
-            "fcl_40_5",
-            "fcl_40_6",
-
+			"of_lcl01",
+			"of_lcl",
+			"of_fcl20",
+			"of_fcl40",
+			"cfs_lcl01",
+			"cfs_lcl",
+			"cfs_fcl20",
+			"cfs_fcl40",
+			"oc_lcl",
+			"oc_fcl20",
+			"oc_fcl40",
+			"lss_lcl01",
+			"lss_lcl",
+			"lss_fcl20",
+			"lss_fcl40",
+			"ebs_lcl01",
+			"ebs_lcl",
+			"ebs_fcl20",
+			"ebs_fcl40",
+			"rr_lcl01",
+			"rr_lcl",
+			"rr_fcl20",
+			"rr_fcl40",
+			"notes",
 		];
 
 		setTimeout(() => {
 			apply_horizontal_alignment(frm, fields_to_align);
 
-			add_input_prefix(frm, "ocean_freight", "Min");
-			add_input_prefix(frm, "cfs_thc", "Min");
-			add_input_prefix(frm, "lss", "Min");
-			add_input_prefix(frm, "ebs", "Min");
-			add_input_prefix(frm, "rate_restoration", "Min");
-
-            apply_horizontal_group(frm, [
+			apply_horizontal_group(frm, [
 				{ fieldname: "ocean_freight_item", width: 20 },
 				{ fieldname: "ocean_freight_item_name", width: 80, no_label: true }
 			]);
@@ -67,11 +60,9 @@ frappe.ui.form.on("Sea Import Freight Settings", {
 				{ fieldname: "rate_item_name", width: 80, no_label: true }
 			]);
 
-            frm.set_df_property('other_charges', 'options',
-                '<div class="form-group"><label class="control-label">Other Charges</label></div>');
-            frm.refresh_field('other_charges')
-			
-
+			frm.set_df_property('other_charges_label', 'options',
+				'<div class="form-group"><label class="control-label">Other Charges</label></div>');
+			frm.refresh_field('other_charges_label');
 		}, 1000);
 	},
 });

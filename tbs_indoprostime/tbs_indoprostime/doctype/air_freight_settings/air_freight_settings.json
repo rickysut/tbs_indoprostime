@@ -51,7 +51,8 @@
    "label": "Customer",
    "link_filters": "[[\"Business Partner\",\"customer\",\"=\",1]]",
    "options": "Business Partner",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "default": "AFS-",
@@ -265,7 +266,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-10 16:21:22.404572",
+ "modified": "2026-11-11 10:04:34.387051",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Air Freight Settings",

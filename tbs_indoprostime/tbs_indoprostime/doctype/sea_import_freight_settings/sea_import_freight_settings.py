@@ -1,9 +1,12 @@
 # Copyright (c) 2026, Team ERP and contributors
 # For license information, please see license.txt
 
-# import frappe
 from frappe.model.document import Document
 
 
 class SeaImportFreightSettings(Document):
-	pass
+	def validate(self):
+		if self.customer and self.origin:
+			self.customer_origin = f"{self.customer}-{self.origin}"
+		else:
+			self.customer_origin = ""

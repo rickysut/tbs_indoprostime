@@ -62,7 +62,8 @@
    "label": "Customer",
    "link_filters": "[[\"Business Partner\",\"customer\",\"=\",1]]",
    "options": "Business Partner",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "default": "SFS-",
@@ -334,7 +335,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-10 17:20:21.947782",
+ "modified": "2026-11-11 10:04:08.015774",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Freight Settings",
