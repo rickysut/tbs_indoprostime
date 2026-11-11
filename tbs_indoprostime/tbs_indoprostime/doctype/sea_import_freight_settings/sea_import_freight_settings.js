@@ -35,6 +35,34 @@ frappe.ui.form.on("Sea Import Freight Settings", {
 		setTimeout(() => {
 			apply_horizontal_alignment(frm, fields_to_align);
 
+			// add_input_prefix(frm, "of_lcl01","USD");
+			add_input_prefix(frm, "of_lcl","USD");
+			add_input_prefix(frm, "of_fcl20","USD");
+			add_input_prefix(frm, "of_fcl40","USD");
+
+			add_input_prefix(frm, "cfs_lcl","USD");
+			add_input_prefix(frm, "cfs_fcl20","USD");
+			add_input_prefix(frm, "cfs_fcl40","USD");
+
+			add_input_prefix(frm, "oc_lcl","USD");
+			add_input_prefix(frm, "oc_fcl20","USD");
+			add_input_prefix(frm, "oc_fcl40","USD");
+
+			// add_input_prefix(frm, "lss_lcl01","USD");
+			add_input_prefix(frm, "lss_lcl","USD");
+			add_input_prefix(frm, "lss_fcl20","USD");
+			add_input_prefix(frm, "lss_fcl40","USD");
+			
+			// add_input_prefix(frm, "ebs_lcl01","USD");
+			add_input_prefix(frm, "ebs_lcl","USD");
+			add_input_prefix(frm, "ebs_fcl20","USD");
+			add_input_prefix(frm, "ebs_fcl40","USD");
+			
+			// add_input_prefix(frm, "rr_lcl01","USD");
+			add_input_prefix(frm, "rr_lcl","USD");
+			add_input_prefix(frm, "rr_fcl20","USD");
+			add_input_prefix(frm, "rr_fcl40","USD");
+
 			apply_horizontal_group(frm, [
 				{ fieldname: "ocean_freight_item", width: 20 },
 				{ fieldname: "ocean_freight_item_name", width: 80, no_label: true }
@@ -81,7 +109,7 @@ function apply_horizontal_alignment(frm, fields_to_align) {
 
 			f.$wrapper.find(".control-label").attr("style", function (i, s) {
 				let ret =
-					"flex: 0 0 140px !important; min-width: 140px !important; margin-bottom: 12px !important; text-align: left !important; font-weight: normal !important;";
+					"flex: 0 0 100px !important; min-width: 100px !important; margin-bottom: 12px !important; text-align: left !important; font-weight: normal !important;";
 
 				return (s || "") + ret;
 			});
