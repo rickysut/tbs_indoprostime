@@ -30,7 +30,8 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-	"Sales Order": "public/js/sales_order.js"
+	"Sales Order": "public/js/sales_order.js",
+	"Purchase Invoice": "public/js/purchase_invoice.js",
 }
 
 # include js, css files in header of web template

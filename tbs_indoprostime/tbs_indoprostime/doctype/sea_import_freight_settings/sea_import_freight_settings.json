@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "naming_series:",
  "creation": "2026-11-09 13:39:31.064997",
@@ -373,7 +374,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-11 15:57:27.558988",
+ "modified": "2026-11-16 21:21:16.969952",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Sea Import Freight Settings",
