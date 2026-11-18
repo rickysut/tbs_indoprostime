@@ -106,7 +106,7 @@ frappe.ui.form.on("Sales Order", {
 					frappe.msgprint({
 						title: __("Warning"),
 						indicator: "orange",
-						message: __("Pilih Division terlebih dahulu sebelum Duplicate From."),
+						message: __("Please select Division before Duplicate From."),
 					});
 					return;
 				}
@@ -175,7 +175,7 @@ frappe.ui.form.on("Sales Order", {
 									args: { name: saved.name },
 									callback(r_rate) {
 										if (r_rate.exc) {
-											frappe.msgprint(__("Gagal memperbarui rate Air Clearance."));
+											frappe.msgprint(__("Failed to update Air Clearance rate."));
 											return;
 										}
 										frappe.call({
@@ -190,7 +190,7 @@ frappe.ui.form.on("Sales Order", {
 												if (!r.exc && r.message) {
 													frm.reload_doc();
 													frappe.show_alert({
-														message: __("Air Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+														message: __("Air Clearance {0} created and linked to {1}", [saved.name, frm.doc.name]),
 														indicator: "green",
 													});
 												}
@@ -200,7 +200,7 @@ frappe.ui.form.on("Sales Order", {
 								});
 							})
 							.catch((err) => {
-								frappe.msgprint(err.message || __("Gagal membuat Air Clearance."));
+								frappe.msgprint(err.message || __("Failed to create Air Clearance."));
 							});
 					});
 				}, __("Generate"));
@@ -233,7 +233,7 @@ frappe.ui.form.on("Sales Order", {
 									args: { name: saved.name },
 									callback(r_rate) {
 										if (r_rate.exc) {
-											frappe.msgprint(__("Gagal memperbarui rate Sea Clearance."));
+											frappe.msgprint(__("Failed to update Sea Clearance rate."));
 											return;
 										}
 										frappe.call({
@@ -248,7 +248,7 @@ frappe.ui.form.on("Sales Order", {
 												if (!r.exc && r.message) {
 													frm.reload_doc();
 													frappe.show_alert({
-														message: __("Sea Clearance {0} dibuat dan ditautkan ke {1}", [saved.name, frm.doc.name]),
+														message: __("Sea Clearance {0} created and linked to {1}", [saved.name, frm.doc.name]),
 														indicator: "green",
 													});
 												}
@@ -258,7 +258,7 @@ frappe.ui.form.on("Sales Order", {
 								});
 							})
 							.catch((err) => {
-								frappe.msgprint(err.message || __("Gagal membuat Sea Clearance."));
+								frappe.msgprint(err.message || __("Failed to create Sea Clearance."));
 							});
 					});
 				}, __("Generate"));
@@ -631,6 +631,7 @@ function make_vendor_invoice(frm) {
 			pi_item.uom = row.uom;
 			pi_item.sales_order = frm.doc.name;
 			pi_item.custom_customer_order = frm.doc.name;
+			pi_item.custom_so_detail = row.name;
 		});
 
 		frappe.set_route("Form", "Purchase Invoice", pi.name);

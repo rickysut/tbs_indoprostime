@@ -61,41 +61,23 @@ function setup_get_items_from(frm) {
 			() => {
 				if (!frm.doc.custom_division) {
 					frappe.msgprint({
-						title: __("Division belum dipilih"),
-						message: __("Pilih Division terlebih dahulu sebelum Get Items From."),
+						title: __("Division not selected"),
+						message: __("Please select Division before Get Items From."),
 						indicator: "orange",
 					});
 					return;
 				}
-
-				const existing_so = (frm.doc.items || [])
-					.map((row) => row.custom_customer_order)
-					.filter(Boolean);
 
 				const filters = {
 					docstatus: 0,
 					workflow_state: "To Bill",
 					custom_division: frm.doc.custom_division,
 				};
-				if (existing_so.length) {
-					filters.name = ["not in", existing_so];
-				}
+				const existing_so_details = (frm.doc.items || [])
+					.map((row) => row.custom_so_detail)
+					.filter(Boolean);
 
-				erpnext.utils.map_current_doc({
-					method: "tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.make_purchase_invoice",
-					get_query_method:
-						"tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.sales_order_query",
-					source_doctype: "Sales Order",
-					target: frm,
-					setters: {
-						transaction_date: undefined,
-						customer_name: undefined,
-					},
-					get_query_filters: filters,
-					allow_child_item_selection: false,
-					child_fieldname: "items",
-					child_columns: ["item_code", "item_name", "custom_cost"],
-				});
+				show_customer_order_dialog(frm, filters, existing_so_details);
 			},
 			GROUP
 		);
@@ -122,4 +104,136 @@ function setup_get_items_from(frm) {
 		add_customer_order_button();
 		if (attempts >= 12) clearInterval(frm._pi_get_items_timer);
 	}, 250);
+}
+
+function show_customer_order_dialog(frm, filters, existing_so_details) {
+	const d = new frappe.ui.Dialog({
+		title: __("Customer Order"),
+		fields: [
+			{
+				fieldname: "source_so",
+				fieldtype: "Link",
+				label: __("Sales Order"),
+				options: "Sales Order",
+				reqd: 1,
+				get_query: () => ({
+					query: "tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.sales_order_query",
+					filters: { ...filters, custom_division: frm.doc.custom_division, exclude_so_details: existing_so_details },
+				}),
+			},
+			{
+				fieldname: "items",
+				fieldtype: "Table",
+				label: __("Items"),
+				cannot_add_rows: true,
+				in_place_edit: false,
+				fields: [
+					{
+						fieldname: "so_detail",
+						fieldtype: "Data",
+						hidden: 1,
+					},
+					{
+						fieldname: "item_code",
+						fieldtype: "Link",
+						options: "Item",
+						in_list_view: 1,
+						label: __("Item Code"),
+						read_only: 1,
+					},
+					{
+						fieldname: "item_name",
+						fieldtype: "Data",
+						in_list_view: 1,
+						label: __("Item Name"),
+						read_only: 1,
+					},
+					{
+						fieldname: "custom_cost",
+						fieldtype: "Currency",
+						in_list_view: 1,
+						label: __("Cost"),
+						read_only: 1,
+					},
+				],
+			},
+		],
+		primary_action_label: __("Add Items"),
+		primary_action: () => {
+			const rows = (d.fields_dict.items.df.data || []).filter((row) => row.__checked);
+			if (!rows.length) {
+				frappe.msgprint(__("Please select at least one item."));
+				return;
+			}
+
+			const so_name = d.get_value("source_so");
+			for (const row of rows) {
+				const pi_item = frappe.model.add_child(frm.doc, "Purchase Invoice Item", "items");
+				pi_item.item_code = row.item_code;
+				pi_item.item_name = row.item_name;
+				pi_item.description = row.description;
+				pi_item.uom = row.uom;
+				pi_item.qty = 1;
+				pi_item.rate = flt(row.custom_cost);
+				pi_item.price_list_rate = flt(row.custom_cost);
+				pi_item.amount = flt(row.custom_cost);
+				pi_item.base_rate = flt(row.custom_cost);
+				pi_item.base_amount = flt(row.custom_cost);
+				pi_item.custom_cost = row.custom_cost;
+				pi_item.custom_total_cost = row.custom_cost;
+				pi_item.custom_customer_order = so_name;
+				pi_item.custom_so_detail = row.so_detail;
+				pi_item.sales_order = so_name;
+			}
+
+			frm.refresh_field("items");
+
+			// Trigger recalculation of parent totals
+			frm.dirty();
+			frm.trigger("calculate_taxes_and_totals");
+
+			d.hide();
+		},
+	});
+
+	d.fields_dict.source_so.$input.on("awesomplete-selectcomplete", () => {
+		frappe.run_serially([
+			() => {
+				const so_name = d.get_value("source_so");
+				if (!so_name) {
+					d.fields_dict.items.df.data = [];
+					d.fields_dict.items.grid.refresh();
+					return;
+				}
+
+				frappe.model.with_doc("Sales Order", so_name, () => {
+					const so = frappe.model.get_doc("Sales Order", so_name);
+					frappe.call({
+						method:
+							"tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.get_used_so_item_details",
+						args: { so_name },
+						callback: (r) => {
+							if (r.exc) return;
+							const used = new Set([...(r.message || []), ...(existing_so_details || [])]);
+							const rows = so.items
+								.filter((row) => !used.has(row.name))
+								.map((row) => ({
+									so_detail: row.name,
+									item_code: row.item_code,
+									item_name: row.item_name,
+									custom_cost: row.custom_cost,
+									description: row.description,
+									uom: row.uom,
+									__checked: 0,
+								}));
+							d.fields_dict.items.df.data = rows;
+							d.fields_dict.items.grid.refresh();
+						},
+					});
+				});
+			},
+		]);
+	});
+
+	d.show();
 }
