@@ -1,0 +1,732 @@
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+JLeft = 1
+Top = 220
+Width = 520
+Height = 200
+Name = "Dataenvironment"
+form
+form
+frmSo_post
+Height = 420
+Width = 695
+ShowWindow = 1
+DoCreate = .T.
+AutoCenter = .T.
+Caption = "  Post/Finish Order"
+ControlBox = .F.
+MaxButton = .F.
+MinHeight = 420
+MinWidth = 595
+KeyPreview = .T.
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSo_post"
+PROCEDURE status_on
+thisform.cgrEdit.visible = .t.
+thisform.cgrEdit.enabled = .t.
+ENDPROC
+PROCEDURE status_off
+thisform.cgrEdit.visible = .f.
+thisform.cgrEdit.enabled = .f.
+ENDPROC
+PROCEDURE Init
+parameter mflag
+public _fflag
+store .t. to _lmenu
+_fflag = mflag
+wait "Please wait, opening file order of " + mflag + "..." window nowait
+thisform.caption = "Post/Finish Order of " + mflag
+select sohdr
+set order to order
+set filter to empty(posted) and empty(voided)
+replace all lposted with .f.
+go top
+thisform.txtWritten.value   = date()
+thisform.grid1.setfocus
+thisform.status_on
+ENDPROC
+PROCEDURE Unload
+release _fflag
+store .f. to _lmenu
+close data
+ENDPROC
+SOHDR
+MRECNO
+THISFORM
+REFRESH
+Click,
+SOHDR
+MRECNO
+THISFORM
+REFRESH
+Click,
+SOHDR
+LPOSTED
+THISFORM
+REFRESH
+DblClick,
+frmSo_post
+*status_on 
+*status_off 
+commandgroup
+commandgroup
+cgrEdit
+frmSo_post
+;AutoSize = .T.
+ButtonCount = 4
+Value = 1
+Height = 37
+Left = 473
+Top = 370
+Width = 210
+TabIndex = 4
+BackColor = 35,129,115
+Name = "cgrEdit"
+Command1.AutoSize = .F.
+Command1.Top = 5
+Command1.Left = 5
+Command1.Height = 27
+Command1.Width = 50
+Command1.FontName = "Times New Roman"
+Command1.FontSize = 11
+Command1.Caption = "\<Esc"
+Command1.TabIndex = 1
+Command1.Name = "cmdEsc"
+Command2.AutoSize = .F.
+Command2.Top = 5
+Command2.Left = 55
+Command2.Height = 27
+Command2.Width = 50
+Command2.FontName = "Times New Roman"
+Command2.FontSize = 11
+Command2.Caption = "\<Ok"
+Command2.TabIndex = 2
+Command2.Name = "cmdOk"
+Command3.Top = 5
+Command3.Left = 105
+Command3.Height = 27
+Command3.Width = 50
+Command3.FontName = "Times New Roman"
+Command3.FontSize = 11
+Command3.Caption = "\<Cost"
+Command3.TabIndex = 3
+Command3.Name = "cmdZoom"
+Command4.Top = 5
+Command4.Left = 155
+Command4.Height = 27
+Command4.Width = 50
+Command4.FontName = "Times New Roman"
+Command4.FontSize = 11
+Command4.Caption = "SO"
+Command4.TabIndex = 4
+Command4.Name = "Command1"
+PROCEDURE cmdEsc.Click
+thisform.release
+ENDPROC
+PROCEDURE cmdOk.Click
+* CHECK VALIDITY
+mdate = thisform.txtWritten.value
+select sohdr
+locate for lposted
+if not found()
+   =MESSAGEBOX("You have cancelled posting order procedure.",0+48, "Command Warning")
+else
+   nAnswer=MESSAGEBOX("Post all 'TAG' order, now ?", 4+32, "Command Warning")
+   if nAnswer # 6
+      =MESSAGEBOX("You have cancelled posting order procedure.",0+48, "Command Warning")
+   else
+      select sodtl
+      set order to order
+      
+      select sohdr
+      go top
+      scan for sohdr.lposted
+         wait "Please wait, posting " + sohdr.order + " ..." window nowait
+         select sodtl
+         seek sohdr.order
+         scan while sodtl.order = sohdr.order
+            select sodtl
+            *if empty(sodtl.invoice) and not empty(sodtl.amount)
+            *   replace amount with 0
+            *endif
+            *if empty(sodtl.pv + sodtl.vinvoice) and not empty(sodtl.cost)
+            *   replace cost with 0
+            *endif
+            if empty(amount) and empty(cost) and empty(invoice + pv + vinvoice) 
+               delete
+            endif
+         endscan
+         select sohdr
+         replace sohdr.posted with thisform.txtWritten.value, sohdr.postedby with left(_userid,10)
+      endscan
+      =MESSAGEBOX("Posting order procedure is succesfull.",0+48, "Command Warning")
+   endif
+endif
+select sohdr
+thisform.release
+ENDPROC
+PROCEDURE cmdZoom.Click
+select sohdr
+do form So_post_zoom.scx
+select sohdr
+thisform.refresh
+ENDPROC
+PROCEDURE Command1.Click
+select sohdr
+do Case
+   Case _fflag = 'AE'
+      do form faeordentry.scx with sohdr.order
+   Case _fflag = 'AI'
+      do form faiordentry.scx with sohdr.order
+   Case _fflag = 'SE'
+      do form fseordentry.scx with sohdr.order
+   Case _fflag = 'SI'
+      do form fsiordentry.scx with sohdr.order
+   *Case mdivs = 'DE'
+   *   do form fdeordentry.scx with sohdr.order
+   *Case mdivs = 'DI'
+   *   do form fdiordentry.scx with sohdr.order
+   Otherwise
+     =MESSAGEBOX("No zoom order for this order.",0+48, "Command Warning")
+endcase
+select sohdr
+thisform.refresh
+ENDPROC
+hawb
+SOHDR
+HAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+LINEITEM
+QUANTITY
+RangeHigh,
+RangeLowS
+mawb
+SOHDR
+MAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+refno
+SOHDR
+REFNO
+MRECNO
+THISFORM
+REFRESH
+Click,
+So_post_zoom.scx
+SOHDR
+SO_POST_ZOOM
+THISFORM
+REFRESH
+DblClick,
+, 0, 9, 6, 14, 10, 12, 2, 2
+Times New Roman, 0, 11, 6, 18, 13, 39, 4, 1
+Arial, 0, 9, 5, 15, 12, 32, 3, 0
+Times New Roman, 1, 11, 6, 18, 14, 38, 3, 1
+Label3
+label
+label
+frmSo_post
+txtWritten
+textbox
+textbox
+Text1
+grid
+grid
+Grid1
+frmSo_post
+&ColumnCount = 8
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 312
+Left = 12
+Panel = 1
+RecordMark = .F.
+RecordSource = "sohdr"
+ScrollBars = 3
+TabIndex = 3
+Top = 48
+Width = 670
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "Grid1"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.Alignment = 0
+Column1.ControlSource = "sohdr.order"
+Column1.Enabled = .F.
+Column1.Width = 75
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.Alignment = 0
+Column2.ColumnOrder = 3
+Column2.ControlSource = "sohdr.written"
+Column2.Enabled = .F.
+Column2.Width = 67
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.ColumnOrder = 2
+Column3.ControlSource = "sohdr.refno"
+Column3.Enabled = .F.
+Column3.Width = 95
+Column3.DynamicBackColor = ""
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.ColumnOrder = 6
+Column4.ControlSource = "sohdr.mawb"
+Column4.Enabled = .F.
+Column4.Width = 110
+Column4.DynamicBackColor = ""
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontName = "Arial"
+Column5.ColumnOrder = 7
+Column5.ControlSource = "sohdr.hawb"
+Column5.Enabled = .F.
+Column5.Width = 110
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontName = "Arial"
+Column6.Alignment = 2
+Column6.ColumnOrder = 8
+Column6.ControlSource = "sohdr.lposted"
+Column6.Width = 48
+Column6.InputMask = "Y"
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+Column7.FontName = "Arial"
+Column7.ColumnOrder = 4
+Column7.ControlSource = "sohdr.eta"
+Column7.Enabled = .F.
+Column7.Width = 67
+Column7.ForeColor = 0,0,0
+Column7.BackColor = 255,255,255
+Column7.Name = "Column7"
+Column8.FontName = "Arial"
+Column8.ColumnOrder = 5
+Column8.ControlSource = "sohdr.etd"
+Column8.Enabled = .F.
+Column8.Width = 67
+Column8.ForeColor = 0,0,0
+Column8.BackColor = 255,255,255
+Column8.Name = "Column8"
+header
+header
+Header1
+frmSo_post.Grid1.Column1
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "SO No."
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to order
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+order
+SOHDR
+ORDER
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSo_post.Grid1.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ReadOnly = .F.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+header
+header
+Header1
+frmSo_post.Grid1.Column2
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Date"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to written
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+written
+SOHDR
+WRITTEN
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSo_post.Grid1.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+ePROCEDURE DblClick
+select sohdr
+do form So_post_zoom.scx
+select sohdr
+thisform.refresh
+ENDPROC
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Date/Per.  :"
+Height = 20
+Left = 0
+Top = 14
+Width = 90
+TabIndex = 5
+Name = "Label3"
+frmSo_post.Grid1.Column8
+textbox
+textbox
+Header1
+header
+header
+Header1
+frmSo_post.Grid1.Column3
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Job No."
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to refno
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 11
+Height = 24
+Left = 101
+TabIndex = 2
+Top = 12
+Width = 96
+Name = "txtWritten"
+|FontName = "Arial"
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+frmSo_post.Grid1.Column8
+header
+textbox
+textbox
+Text1
+frmSo_post.Grid1.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 3
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+header
+header
+Header1
+frmSo_post.Grid1.Column4
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Mawb/Mbl"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to mawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+PROCEDURE Click
+select sohdr
+set order to etd
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+header
+|FontName = "Arial"
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+textbox
+textbox
+Text1
+frmSo_post.Grid1.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+_PROCEDURE RangeHigh
+return lineitem.quantity
+ENDPROC
+PROCEDURE RangeLow
+return 0
+ENDPROC
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "ETD"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+frmSo_post.Grid1.Column7
+Text1
+textbox
+textbox
+Header1
+header
+header
+header
+Header1
+frmSo_post.Grid1.Column5
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Hawb/Hbl"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to hawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+PROCEDURE Click
+select sohdr
+set order to eta
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+frmSo_post.Grid1.Column7
+header
+frmSo_post.Grid1.Column6
+Text1
+textbox
+textbox
+Header1
+header
+textbox
+textbox
+Text1
+frmSo_post.Grid1.Column5
+FontName = "Arial"
+Alignment = 3
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+header
+frmSo_post.Grid1.Column6
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Clear"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+|FontName = "Arial"
+Alignment = 2
+BorderStyle = 0
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+kPROCEDURE DblClick
+select sohdr
+replace sohdr.lposted with not sohdr.lposted
+thisform.refresh
+ENDPROC
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "ETA"
+ForeColor = 255,255,255
+BackColor = 35,129,115
+Name = "Header1"
+THISFORM
+RELEASE
+You have cancelled posting order procedure.
+Command Warning
+Post all 'TAG' order, now ?
+Command Warning
+You have cancelled posting order procedure.
+Command Warning
+order
+Please wait, posting 
+ ...
+Posting order procedure is succesfull.
+Command Warning
+MDATE
+THISFORM
+TXTWRITTEN
+VALUE
+SOHDR
+LPOSTED
+NANSWER
+SODTL
+ORDER
+AMOUNT
+COST
+INVOICE
+VINVOICE
+POSTED
+POSTEDBY
+_USERID
+RELEASE3
+So_post_zoom.scx
+SOHDR
+SO_POST_ZOOM
+THISFORM
+REFRESH6
+faeordentry.scx
+faiordentry.scx
+fseordentry.scx
+fsiordentry.scx
+No zoom order for this order.
+Command Warning
+SOHDR
+_FFLAG
+FAEORDENTRY
+ORDER
+FAIORDENTRY
+FSEORDENTRY
+FSIORDENTRY
+THISFORM
+REFRESH
+cmdEsc.Click,
+cmdOk.ClickP
+cmdZoom.Clickp
+Command1.Click
+THISFORM
+CGREDIT
+VISIBLE
+ENABLED%
+THISFORM
+CGREDIT
+VISIBLE
+ENABLED
+Please wait, opening file order of 
+Post/Finish Order of 
+order
+MFLAG
+_FFLAG
+_LMENU
+THISFORM
+CAPTION
+SOHDR
+ORDER
+POSTED
+VOIDED
+LPOSTED
+TXTWRITTEN
+VALUE
+GRID1
+SETFOCUS
+STATUS_ON
+_FFLAG
+_LMENU
+status_on,
+status_offz
+Init
+UnloadA

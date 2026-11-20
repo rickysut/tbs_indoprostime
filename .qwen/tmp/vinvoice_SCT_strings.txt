@@ -1,0 +1,3528 @@
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+_Top = 220
+Left = 1
+Width = 520
+Height = 200
+DataSource = .NULL.
+Name = "Dataenvironment"
+form
+form
+frmVinvoice
+Height = 490
+Width = 786
+ShowWindow = 1
+DoCreate = .T.
+AutoCenter = .T.
+Caption = "Vendor Invoice"
+MinHeight = 490
+MinWidth = 765
+TabIndex = 1
+LockScreen = .F.
+BackColor = 43,170,213
+Themes = .F.
+Name = "frmVinvoice"
+PROCEDURE status_on
+thisform.closable = .t.
+THISFORM.commandgroup1.ENABLED = .T.
+thisform.commandgroup1.cmdAdd.enabled    = iif(_pass[9], .f., .t.)
+thisform.commandgroup1.cmdEdit.enabled   = iif(_pass[9], .f., .t.)
+thisform.commandgroup1.cmdVoid.enabled   = iif(_pass[9], .f., .t.)
+thisform.commandgroup1.cmdPost.enabled   = iif(_pass[9], .f., .t.)
+thisform.commandgroup1.visible = .t.
+thisform.cmd_ok_new_del1.visible = .f.
+thisform.commandgroup2.visible = .f.
+ENDPROC
+PROCEDURE status_off
+thisform.closable = .f.
+thisform.commandgroup1.enabled = .F.
+thisform.commandgroup1.visible = .f.
+ENDPROC
+PROCEDURE txt_disable
+thisform.txtInvoice.enabled = .f.
+thisform.txtBranch.enabled  = .f.
+thisform.txtDivisi.enabled  = .f.
+thisform.txtWritten.enabled = .f.
+thisform.txtPeriod.enabled  = .f.
+thisform.txtGlap.enabled    = .f.
+thisform.txtValas.enabled   = .f.
+thisform.txtRate.enabled    = .f.
+thisform.txtTaxno.enabled   = .f.
+thisform.txtRefno.enabled   = .f.
+thisform.txtTermofpay.enabled = .f.
+thisform.txtVendcode.enabled  = .f.
+thisform.txtOperator.enabled  = .f.
+thisform.grdInvoice.enabled   = .f.
+thisform.cmd_ok_new_del1.enabled = .f.
+thisform.cmd_ok_new_del1.visible = .f.
+* thisform.cmdDone.enabled    = .f.
+* thisform.cmdNew.enabled     = .f.
+* thisform.cmdDel.enabled     = .f.
+ENDPROC
+PROCEDURE txt_enable
+thisform.txtInvoice.enabled = .f.
+thisform.txtbranch.enabled  = .f.
+thisform.txtDivisi.enabled  = .t.
+thisform.txtVendcode.enabled= .t.
+thisform.txtWritten.enabled = .t.
+thisform.txtPeriod.enabled  = .t.
+thisform.txtGlap.enabled    = .t.
+thisform.txtValas.enabled   = .t.
+thisform.txtRate.enabled    = .t.
+thisform.txtTaxno.enabled   = .t.
+thisform.txtRefno.enabled   = .t.
+thisform.txtTermofpay.enabled = .t.
+thisform.txtOperator.enabled  = .f.
+thisform.grdInvoice.enabled   = .t.
+thisform.grdInvoice.colRate.enabled = .f.
+thisform.cmd_ok_new_del1.enabled = .t.
+thisform.cmd_ok_new_del1.visible = .t.
+ENDPROC
+PROCEDURE txt_update
+select lineitem
+set key to
+select vendor
+seek invoice.vendcode
+minvpay  = Vinvpay('VAL')
+select invoice
+if empty(invoice.amount_sub) or empty(invoice.amount_tot) or empty(invoice.amount_bal) or (invoice.amount_pay # minvpay)
+   *minvsub  = VinvSub('VAL')
+   *minvbal  = Vinvbal('VAL')
+   store 0 to msub, mpph, mvat, mtot
+   select lineitem
+   set order to invoice
+   seek invoice.invoice
+   scan while lineitem.invoice = invoice.invoice
+      if 'PPH 23' $ lineitem.descript or 'PPH23' $ lineitem.descript
+         mpph = mpph + lineitem.cost
+      else
+         if 'VAT' $ lineitem.descript
+            mvat = mvat + lineitem.cost
+         else
+            msub = msub + lineitem.cost
+         endif
+      endif
+      mtot = mtot + lineitem.cost
+   endscan
+   select invoice
+   replace;
+     invoice.amount_sub with msub,;
+     invoice.amount_pph with mpph,;
+     invoice.amount_vat with mvat,;
+     invoice.amount_tot with mtot,;
+     invoice.amount_pay with minvpay,;
+     invoice.amount_bal with invoice.amount_tot - minvpay  &&invoice.amount_pay
+endif
+select invoice
+mamtpic = iif(invoice.valas=_valas, '999,999,999,999', '999,999,999.99')
+minvoice = invoice.invoice
+thisform.txtTermofpay.value = invoice.termofpay
+thisform.txtInvoice  .value = invoice.invoice
+thisform.txtbranch   .value = invoice.branch
+thisform.txtDivisi   .value = invoice.divisi
+thisform.txtWritten  .value = invoice.written
+thisform.txtPeriod   .value = invoice.period
+thisform.txtGlap     .value = invoice.glap
+thisform.txtValas    .value = invoice.valas
+thisform.txtRate     .value = invoice.valrate
+thisform.txtTaxno    .value = invoice.taxno
+thisform.txtRefno    .value = invoice.refno
+thisform.txtPrinted  .value = invoice.printed
+thisform.txtVoided   .value = invoice.voided
+thisform.txtPosted   .value = invoice.posted
+thisform.txtVendcode .value = invoice.vendcode
+thisform.txtCompany  .value = vendor.company
+thisform.txtAddress1 .value = vendor.address1
+thisform.txtAddress2 .value = vendor.address2
+thisform.txtAddress3 .value = vendor.address3
+thisform.txtAddress4 .value = vendor.address4
+thisform.txtOperator .value = invoice.operator
+thisform.txtOutcome  .value = invoice.amount_sub
+thisform.txtPPh      .value = invoice.amount_pph
+thisform.txtVat      .value = invoice.amount_vat
+thisform.txtTotal    .value = invoice.amount_tot
+thisform.txtPayment  .value = invoice.amount_pay
+thisform.txtBalance  .value = invoice.amount_bal
+thisform.grdInvoice.colCost.inputmask   = mamtpic
+thisform.txtOutcome.inputmask = mamtpic
+thisform.txtPph    .inputmask = mamtpic
+thisform.txtVat    .inputmask = mamtpic
+thisform.txtTotal  .inputmask = mamtpic
+thisform.txtPayment.inputmask = mamtpic
+thisform.txtBalance.inputmask = mamtpic
+select lineitem
+seek minvoice
+set key to minvoice
+go top
+select invoice
+thisform.refresh
+ENDPROC
+PROCEDURE check_editable
+do Case
+   case eof() or bof()
+      =MESSAGEBOX("Invoice file is empty.",0+16, "Command Warning")
+      editable = .f.
+   case not empty(invoice.voided)
+      =MESSAGEBOX("Invoice has been voided.",0+16, "Command Warning")
+      editable = .f.
+   case not empty(invoice.posted)
+      =MESSAGEBOX("Invoice has been posted.",0+16, "Command Warning")
+      editable = .f.
+   case not empty(invoice.printed)  and _pass[7]
+      =MESSAGEBOX("Invoice has been printed.",0+16, "Command Warning")
+      editable = .f.
+   *case alltrim(invoice.operator) # alltrim(_userid)  and _pass[7]
+   *   =MESSAGEBOX("You are not " + alltrim(invoice.operator) + " !",0+16, "Command Warning")
+   *   editable = .f.
+   case Vinvpay() # 0     && and _pass[7]
+      =MESSAGEBOX("Invoice has payment.",0+16, "Command Warning")
+      editable = .f.
+   otherwise
+      editable = .t.
+endcase
+ENDPROC
+PROCEDURE so_open
+wait 'Opening SO dbf...' window nowait
+pbranch = alltrim(thisform.txtbranch.value)
+pfdiv   = alltrim(thisform.txtDivisi.value)
+if used('sohdr')
+   select sohdr
+   use
+endif
+if used('sodtl')
+   select sodtl
+   use
+endif
+if pbranch = 'JHO'
+   do Case
+      Case pfdiv = 'AE'
+         pitem = 'AE'
+         psohf = 'AEHDR'
+         psodf = 'AELINE'
+      Case pfdiv = 'AX'
+         pitem = 'AX'
+         psohf = 'AXHDR'
+         psodf = 'AXLINE'   
+      Case pfdiv = 'AI'
+         pitem = 'AE'
+         psohf = 'AIHDR'
+         psodf = 'AILINE'
+      Case pfdiv = 'AC'
+         pitem = 'AC'
+         psohf = 'ACHDR'
+         psodf = 'ACLINE'   
+      Case pfdiv = 'SE'
+         pitem = 'SE'
+         psohf = 'SEHDR'
+         psodf = 'SELINE'
+      Case pfdiv = 'SI'
+         pitem = 'SE'
+         psohf = 'SIHDR'
+         psodf = 'SILINE'
+      Case pfdiv = 'SC'
+         pitem = 'SC'
+         psohf = 'SCHDR'
+         psodf = 'SCLINE'  
+      Case pfdiv = 'CE'
+         pitem = 'CE'
+         psohf = 'CEHDR'
+         psodf = 'CELINE'
+      Case pfdiv = 'CI'
+         pitem = 'CI'
+         psohf = 'CIHDR'
+         psodf = 'CILINE'     
+      Case pfdiv = 'DI'
+         pitem = 'DI'
+         psohf = 'DIHDR'
+         psodf = 'DILINE'
+      Case pfdiv = 'DE'
+         pitem = 'DE'
+         psohf = 'DEHDR'
+         psodf = 'DELINE'
+      Case pfdiv = 'LC'
+         pitem = 'LC'
+         psohf = 'LCHDR'
+         psodf = 'LC_LINE'
+      Case pfdiv = 'TC'
+         pitem = 'TC'
+         psohf = 'TCHDR'
+         psodf = 'TCLINE'      
+      Case pfdiv = '*'
+         wait 'Non Order Invoice !' window nowait
+         return
+      Otherwise
+         wait 'Error passing parameter !' window
+         return
+   endcase
+else
+   if pbranch = 'SUB'
+   do Case
+      Case pfdiv = 'AE'
+         pitem = 'AE'
+         psohf = 'AEHDR_SUB'
+         psodf = 'AELINE_SUB'
+      Case pfdiv = 'AI'
+         pitem = 'AE'
+         psohf = 'AIHDR_SUB'
+         psodf = 'AILINE_SUB'
+      Case pfdiv = 'AC'
+         pitem = 'AC'
+         psohf = 'ACHDR_SUB'
+         psodf = 'ACLINE_SUB'   
+      Case pfdiv = 'SE'
+         pitem = 'SE'
+         psohf = 'SEHDR_SUB'
+         psodf = 'SELINE_SUB'
+      Case pfdiv = 'SI'
+         pitem = 'SE'
+         psohf = 'SIHDR_SUB'
+         psodf = 'SILINE_SUB'
+      Case pfdiv = 'SC'
+         pitem = 'SC'
+         psohf = 'SCHDR_SUB'
+         psodf = 'SCLINE_SUB'  
+      Case pfdiv = 'CE'
+         pitem = 'CE'
+         psohf = 'CEHDR_SUB'
+         psodf = 'CELINE_SUB'
+      Case pfdiv = 'CI'
+         pitem = 'CI'
+         psohf = 'CIHDR_SUB'
+         psodf = 'CILINE_SUB'     
+      Case pfdiv = 'DI'
+         pitem = 'DI'
+         psohf = 'DIHDR_SUB'
+         psodf = 'DILINE_SUB'
+      Case pfdiv = 'DE'
+         pitem = 'DE'
+         psohf = 'DEHDR_SUB'
+         psodf = 'DELINE_SUB'
+      Case pfdiv = 'LC'
+         pitem = 'LC'
+         psohf = 'LCHDR_SUB'
+         psodf = 'LC_LINE_SUB'
+      Case pfdiv = 'TC'
+         pitem = 'TC'
+         psohf = 'TCHDR_SUB'
+         psodf = 'TCLINE_SUB'      
+      Case pfdiv = '*'
+         wait 'Non Order Invoice !' window nowait
+         return
+      Otherwise
+         wait 'Error passing parameter !' window
+         return
+   endcase
+   else
+      do Case
+      Case pfdiv = 'AE'
+         pitem = 'AE'
+         psohf = 'AEHDR_SMR'
+         psodf = 'AELINE_SMR'
+      Case pfdiv = 'AI'
+         pitem = 'AE'
+         psohf = 'AIHDR_SMR'
+         psodf = 'AILINE_SMR'
+      Case pfdiv = 'AC'
+         pitem = 'AC'
+         psohf = 'ACHDR_SMR'
+         psodf = 'ACLINE_SMR'   
+      Case pfdiv = 'SE'
+         pitem = 'SE'
+         psohf = 'SEHDR_SMR'
+         psodf = 'SELINE_SMR'
+      Case pfdiv = 'SI'
+         pitem = 'SE'
+         psohf = 'SIHDR_SMR'
+         psodf = 'SILINE_SMR'
+      Case pfdiv = 'SC'
+         pitem = 'SC'
+         psohf = 'SCHDR_SMR'
+         psodf = 'SCLINE_SMR'  
+      Case pfdiv = 'CE'
+         pitem = 'CE'
+         psohf = 'CEHDR_SMR'
+         psodf = 'CELINE_SMR'
+      Case pfdiv = 'CI'
+         pitem = 'CI'
+         psohf = 'CIHDR_SMR'
+         psodf = 'CILINE_SMR'     
+      Case pfdiv = 'DI'
+         pitem = 'DI'
+         psohf = 'DIHDR_SMR'
+         psodf = 'DILINE_SMR'
+      Case pfdiv = 'DE'
+         pitem = 'DE'
+         psohf = 'DEHDR_SMR'
+         psodf = 'DELINE_SMR'
+      Case pfdiv = 'LC'
+         pitem = 'LC'
+         psohf = 'LCHDR_SMR'
+         psodf = 'LC_LINE_SMR'
+      Case pfdiv = 'TC'
+         pitem = 'TC'
+         psohf = 'TCHDR_SMR'
+         psodf = 'TCLINE_SMR'      
+      Case pfdiv = '*'
+         wait 'Non Order Invoice !' window nowait
+         return
+      Otherwise
+         wait 'Error passing parameter !' window
+         return
+   endcase
+   endif
+endif
+select 0
+use (psohf) alias sohdr
+set order to order
+set filter to empty(posted) and empty(voided)
+select 0
+use (psodf) alias sodtl
+set order to order
+ENDPROC
+PROCEDURE so_close
+wait 'Closing SO file ...' window nowait
+if invoice.divisi='*'
+   return
+else
+   store select() to oldarea
+   if used('sohdr')
+      select sohdr
+      use
+   endif
+   if used('sodtl')
+      select sodtl
+      use
+   endif
+   select (oldarea)
+endif
+ENDPROC
+PROCEDURE so_match
+wait 'Matching data to SO ...' window nowait
+if invoice.divisi='*'
+   return
+endif
+* First, clear any existing invoice number in soline
+select 0
+use lineitem alias ar_line
+set order to lns_itm
+wait 'Deleting existing invoice no ' + invoice.invoice window nowait
+select sodtl
+set order to vinvoice
+seek invoice.invoice
+do while found()
+   replace vinvoice with '', cost with 0, rate with 1, vendcode with ''
+   seek invoice.invoice
+enddo
+set order to order
+select lineitem
+seek invoice.invoice
+scan while invoice = invoice.invoice
+   select sodtl
+   seek lineitem.order + lineitem.itemcode
+   if found()
+      replace ;
+        vinvoice with lineitem.invoice,;
+        cost     with lineitem.cost,;
+        rate     with lineitem.rate,;
+        vendcode with lineitem.vendcode
+      if not empty(sodtl.invoice)
+         select ar_line
+         seek sodtl.invoice + sodtl.itemcode
+         if found()
+            replace;
+               ar_line.cost  with sodtl.cost,;
+               ar_line.rate  with sodtl.rate,;
+               ar_line.vinvoice with sodtl.vinvoice
+         endif
+      endif
+      select sodtl
+   else
+      wait 'SO No.'+lineitem.order + ' - ' + lineitem.itemcode + " doesn't exists." window timeout 3
+   endif
+   select lineitem
+endscan
+select ar_line
+select lineitem
+ENDPROC
+PROCEDURE dbf_update
+wait 'Updating dbf..' window nowait
+store 0 to msub, mpph, mvat, mtot
+select lineitem
+set order to invoice
+seek invoice.invoice
+scan while lineitem.invoice = invoice.invoice
+   if 'PPH 23' $ lineitem.descript or 'PPH23' $ lineitem.descript
+      mpph = mpph + lineitem.cost
+   else
+      if 'VAT' $ lineitem.descript
+         mvat = mvat + lineitem.cost
+      else
+         msub = msub + lineitem.cost
+      endif
+   endif
+   mtot = mtot + lineitem.cost
+endscan
+select invoice
+replace;
+  invoice.divisi    with thisform.txtDivisi.value,;
+  invoice.branch
+with thisform.txtbranch.value,;
+  invoice.vendcode  with alltrim(thisform.txtVendcode.value),;
+  invoice.operator  with thisform.txtOperator.value,;
+  invoice.written   with thisform.txtWritten.value,;
+  invoice.period    with alltrim(thisform.txtPeriod.value),;
+  invoice.glap      with alltrim(thisform.txtGlap.value),;
+  invoice.valas     with alltrim(thisform.txtValas.value),;
+  invoice.valrate   with thisform.txtRate.value,;
+  invoice.termofpay with thisform.txtTermofpay.value,;
+  invoice.taxno     with alltrim(thisform.txtTaxno.value),;
+  invoice.refno     with alltrim(thisform.txtRefno.value),;
+  invoice.amount_sub with msub,;
+  invoice.amount_pph with mpph,;
+  invoice.amount_vat with mvat,;
+  invoice.amount_tot with mtot,;
+  invoice.amount_bal with amount_tot - amount_pay
+select lineitem
+seek invoice.invoice
+scan while lineitem.invoice = invoice.invoice 
+   select lineitem
+   replace lineitem.rate with invoice.valrate, vendcode with invoice.vendcode, divisi with invoice.divisi, branch with invoice.branch 
+endscan
+select invoice
+ENDPROC
+PROCEDURE txt_init
+thisform.txtTermofpay.value = 0
+thisform.txtInvoice.value = ""
+thisform.txtbranch.value  = ""
+thisform.txtDivisi.value  = ""
+thisform.txtWritten.value = date()
+thisform.txtPeriod.value  = _apperiod
+thisform.txtGlap.value    = _glap
+thisform.txtValas.value   = _valas
+thisform.txtRate.value    = 1
+thisform.txtTaxno.value   = ""
+thisform.txtRefno.value   = ""
+thisform.txtPrinted.value = {  /  /    }
+thisform.txtVoided.value  = {  /  /    }
+thisform.txtPosted.value  = {  /  /    }
+thisform.txtVendcode.value = ""
+thisform.txtCompany.value  = ""
+thisform.txtAddress1.value = ""
+thisform.txtAddress2.value = ""
+thisform.txtAddress3.value = ""
+thisform.txtAddress4.value = ""
+thisform.txtOperator.value = left(_userid,10)
+thisform.txtOutcome.value  = 0
+thisform.txtPPh    .value  = 0
+thisform.txtVat    .value  = 0
+thisform.txtTotal.value    = 0
+thisform.txtPayment.value  = 0
+thisform.txtBalance.value  = 0
+minvoice = "-1"
+select lineitem
+seek minvoice
+set key to minvoice
+go top
+select invoice
+thisform.refresh
+ENDPROC
+PROCEDURE Unload
+store .f. to _lmenu
+do FSOMenu with .f.
+close data
+ENDPROC
+PROCEDURE Init
+public editable
+store .t. to _lmenu
+do FSOMenu with .t.
+store .f. to editable
+thisform.txtGlap.inputmask = _acctformat
+thisform.grdInvoice.colGlcogs.inputmask = _acctformat
+thisform.txt_update
+thisform.status_on
+ENDPROC
+PROCEDURE Load
+close data
+wait 'Please wait, setting the working environment ...' window nowait
+select 0
+use account
+set order to number
+select 0
+use divisi
+set order to divisi
+select 0
+use valas
+set order to valas
+select 0
+use item
+set order to itemcode
+select 0
+use vendor
+set order to ven_ven
+select 0
+use check alias payment
+set order to pay_ven
+select 0
+use vline alias lineitem
+set order to invoice
+select 0
+use vinvoice alias invoice
+set order to invoice
+go bottom
+ENDPROC
+INVOICE
+THISFORM
+TXT_UPDATE
+INVOICE
+THISFORM
+TXT_UPDATEx
+End of file, there is no next record.
+Command Warning
+INVOICE
+THISFORM
+TXT_UPDATE
+Beginning of file, there is no previous record.
+Command Warning
+INVOICE
+THISFORM
+TXT_UPDATE
+fVinSearch(
+invoice
+THISFORM
+STATUS_OFF
+INVOICE
+MINVOICE
+MSEARCH
+FVINSEARCH
+TXT_UPDATE
+STATUS_ONi
+invoice
+VINVOICE NUMBER
+vinvoice_log.dbf
+INVOICE
+MINVOICE
+NEXTNUM
+DIVISI
+BRANCH
+PERIOD
+_APPERIOD
+WRITTEN
+VALAS
+_VALAS
+VALRATE
+GLAP
+_GLAP
+DEPT
+_DEPT
+OPERATOR
+_USERID
+FLOGS_ADD
+THISFORM
+STATUS_OFF
+TXT_UPDATE
+TXT_ENABLE
+TXTDIVISI
+SETFOCUS
+EDITABLE
+vinvoice_log.dbf
+EDIT
+THISFORM
+CHECK_EDITABLE
+EDITABLE
+FLOGS_ADD
+INVOICE
+STATUS_OFF
+DIVISI
+TXT_ENABLE
+TXTDIVISI
+SETFOCUS
+SO_OPEN
+TXTWRITTEN
+TXTOPERATOR
+VALUE
+_USERID
+Invoice file is empty.
+Command Warning
+LINEITEM
+THISFORM
+STATUS_OFF
+COMMANDGROUP2
+VISIBLE
+GRDINVOICE
+ENABLED
+READONLY
+TXTDIVISI
+VALUE
+COLSO
+TEXT1
+SETFOCUS
+COLDESCRIPT
+INVOICE
+Can't VOID: it has been VOIDED.
+Command Warning
+Can't VOID: it has been POSTED.
+Command Warning
+Can't VOID: payments exist.
+Command Warning
+Can't VOID: You don't have access/right.
+Command Warning
+Void invoice no. 
+, now ?
+Command Warning
+REVERSE AP INVOICE
+lineitem
+lns_itm
+line
+vinvoice
+vinvoice_log.dbf
+VOID
+Invoice has been voided.
+Command Warning
+INVOICE
+VOIDED
+POSTED
+VINVPAY
+_PASS
+NANSWER
+THISFORM
+STATUS_OFF
+_APPERIOD
+NEWPERIOD
+NEWVOIDATE
+POSTTYPE
+DIVISI
+LINEITEM
+AR_LINE
+LNS_ITM
+SODTL
+VINVOICE
+ITEMCODE
+COST
+RATE
+POST2GL
+TXTVOIDED
+VALUE
+VPERIOD
+PRINTED
+ORDER
+WHILE
+FLOGS_ADD
+STATUS_ON
+TXT_UPDATE
+REFRESH9
+fVinNote.scx
+THISFORM
+STATUS_OFF
+CHECK_EDITABLE
+FVINNOTE
+EDITABLE
+STATUS_ON
+Can't void invoice: it has been voided.
+Command Warning
+Can't UNPOST: You don't have access/right.
+Command Warning
+Can't UNPOST: Invoice has been payment.
+Command Warning
+POST
+UN-POST6
+Authorize(
+vinvoice_log.dbf
+invoice
+INVOICE
+Authorize_ex(
+vinvoice_log.dbf
+invoice
+INVOICE
+Please wait, updating ledger...
+POST
+Error: Wrong Period !!! Please check your PERIOD and DATE first.
+Command Warning
+POST AP INVOICE
+REVERSE AP INVOICE
+POST
+  /  /    #
+AP Invoice has been 
+Command Warning
+INVOICE
+VOIDED
+POSTED
+_PASS
+VINVPAY
+MACTION
+MAUTHORIZED
+NO_VARIANCE
+MRIGHT
+AUTHORIZE
+AUTHORIZE_EX
+THISFORM
+STATUS_OFF
+MINVOICE
+GETPERIOD
+WRITTEN
+PERIOD
+POST2GL
+STATUS_ON
+TXT_UPDATE
+REFRESH
+Invoice has been printed.Contact your manager
+Command Warning
+fVinprint.scx
+invoice
+THISFORM
+STATUS_OFF
+INVOICE
+PRINTED
+_PASS
+MOLDINV
+FVINPRINT
+TXT_UPDATE
+STATUS_ON
+THISFORM
+RELEASE7
+fVinpay
+THISFORM
+STATUS_OFF
+FVINPAY
+INVOICE
+TXT_UPDATE
+STATUS_ON
+vinvoice_log
+invoice
+View_Log.scx
+fdbf
+View Payable Log
+THISFORM
+STATUS_OFF
+VINVOICE_LOG
+FDBF
+INVOICE
+VIEW_LOG
+TXT_UPDATE
+STATUS_ON
+cmdtop.Click,
+cmdbottom.Clickh
+cmdnext.Click
+cmdprev.Click?
+cmdsearch.Click
+cmdadd.Click
+cmdedit.Click'
+cmdview.Click
+cmdvoid.Click
+cmdzoom.Click
+cmdpost.Clickl
+cmdprint.Click
+cmdexit.Click 
+cmdPay.ClickD
+cmdLog.Click
+invoice
+LINEITEM
+INVOICEz
+divisi
+divisi
+divisi + ' ' + descript
+divisi
+MFIELD
+THISFORM
+TXTDIVISI
+VALUE
+MVALID
+SO_OPEN
+TXTVENDCODE
+SETFOCUS
+When,
+LostFocus
+THISFORM
+STATUS_ON
+COMMANDGROUP1
+CMDVIEW
+SETFOCUS
+cmddone.Click,
+EDITABLE
+THISFORM
+DBF_UPDATE
+SO_MATCH
+SO_CLOSE
+GRDINVOICE
+READONLY
+INVOICE
+TXT_UPDATE
+TXT_DISABLE
+STATUS_ON
+REFRESH
+VALRATE
+THISFORM
+TXTRATE
+VALUE
+LINEITEM
+INVOICE
+DIVISI
+VENDCODE
+RATE
+TXTDIVISI
+GRDINVOICE
+COLSO
+SETFOCUS
+COLDESCRIPT
+REFRESHP
+LINEITEM
+INVOICE
+NEXT
+THISFORM
+REFRESH
+GRDINVOICE
+SETFOCUS
+cmdok.Click,
+cmdNew.Click5
+cmdDel.Click{
+When,
+When,
+THISFORM
+GRDINVOICE
+COLDESCRIPT
+TEXT1
+VALUE
+When,
+fGlvalid.scx(
+LINEITEM
+MFIELD
+GLCOGS
+GLVALID
+FGLVALID
+MRETVAL
+THISFORM
+GRDINVOICE
+REFRESH0
+THISFORM
+GRDINVOICE
+COLITEM
+TEXT1
+VALUE
+COLDESCRIPT
+Valid,
+When$
+THISFORM
+TXTDIVISI
+VALUE
+LINEITEM
+ITEMCODE
+When,
+lns_ord
+Item exists in invoice # 
+Command Warning
+invoice
+order
+SO number 
+ cost has not been defined.
+fSoitem_ap.scx(
+Currency doesn't match !!! You should select item of 
+Command Warning
+Item 
+ exists in TR #
+Command Warning
+Item 
+ exists in PV #
+Command Warning
+Item 
+ exists in vendor invoice #
+Command Warning
+lns_ord
+Item exists in vendor invoice # 
+Command Warning
+invoice
+invoice
+FITEM
+THISFORM
+GRDINVOICE
+COLITEM
+TEXT1
+VALUE
+XINV
+INVOICE
+FDIV
+DIVISI
+FORDER
+LINEITEM
+ORDER
+LNS_ORD
+MLASTREC
+ITEMCODE
+MVALAS
+TXTVALAS
+SODTL
+FSOITEM_AP
+VALAS
+VINVOICE
+COLDESCRIPT
+DESCRIPT
+COLCOST
+COST
+COLRATE
+TXTRATE
+COLGLCOGS
+GLCOGS
+REFRESH
+LINEITEM
+COST
+ORDER
+Valid,
+When
+THISFORM
+TXTVALAS
+VALUE
+When,
+Arial, 0, 9, 5, 15, 12, 32, 3, 0
+Times New Roman, 0, 11, 6, 18, 13, 39, 4, 1
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Times New Roman, 0, 8, 4, 14, 11, 29, 3, 0
+frmVinvoice
+Commandgroup1
+commandgroup
+textbox
+*status_on 
+*status_off 
+*init_txt 
+*txt_disable 
+*txt_enable 
+*txt_update 
+*check_editable 
+*so_open 
+*so_close 
+*so_match 
+*dbf_update 
+*txt_init 
+*so_void 
+line
+line
+linTitle
+frmVinvoice
+BorderStyle = 1
+BorderWidth = 2
+Enabled = .T.
+Height = 0
+Left = 10
+Top = 45
+Width = 764
+ColorSource = 4
+BorderColor = 255,255,255
+Name = "linTitle"
+textbox
+textbox
+txtInvoice
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 106
+MaxLength = 6
+TabIndex = 1
+Top = 12
+Width = 73
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtInvoice"
+textbox
+textbox
+txtWritten
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 167
+TabIndex = 6
+Top = 54
+Width = 73
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtWritten"
+PROCEDURE LostFocus
+mwritten = thisform.txtwritten.value
+thisform.txtperiod.value = getperiod(mwritten)
+ENDPROC
+PROCEDURE Valid
+mwritten = dtos(thisform.txtWritten.value)
+mperiod  = thisform.txtPeriod.value
+if left(mwritten,4) # left(mperiod,4)
+   =MESSAGEBOX("Error entry: invalid YEAR entered. The year should be " + left(mperiod,4) + ".",0+16, "Command Warning")
+   return .f.
+endif
+if substr(mwritten,5,2) # right(mperiod,2)
+   if right(mperiod,2) # "13"
+      =MESSAGEBOX("Error entry: invalid MONTH entered. The month should be " + right(mperiod,2) +".",0+16, "Command Warning")
+      return .f.
+   endif
+endif
+return .t.
+ENDPROC
+MWRITTEN
+THISFORM
+TXTWRITTEN
+VALUE
+TXTPERIOD
+GETPERIOD
+LostFocus,
+Valid
+textbox
+textbox
+txtPeriod
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+InputMask = "9999-99"
+Left = 106
+MaxLength = 7
+TabIndex = 5
+Top = 54
+Width = 61
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtPeriod"
+`PROCEDURE When
+return not _pass[7]
+ENDPROC
+PROCEDURE Valid
+mperiod = thisform.txtPeriod.value
+if left(mperiod,4) # left(_apperiod,4)
+   =MESSAGEBOX("Error entry: invalid YEAR entered. The year should be " + left(_apperiod,4) + ".",0+16, "Command Warning")
+   return .f.
+endif
+if right(mperiod,2) < "01" or right(mperiod,2) > "13"
+   =MESSAGEBOX("Error entry: invalid MONTH entered.",0+16, "Command Warning")
+   return .f.
+endif
+if right(mperiod,2) = "13" and _pass[7]
+   =MESSAGEBOX("Error entry: invalid MONTH entered.",0+16, "Command Warning")
+   return .f.
+endif
+return .t.
+ENDPROC
+fGlvalid(
+MFIELD
+THISFORM
+TXTGLAP
+VALUE
+GLVALID
+FGLVALID
+REFRESH
+Valid,
+commandgroup
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 179
+TabIndex = 2
+Top = 12
+Width = 43
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtbranch"
+frmVinvoice
+txtbranch
+textbox
+frmVinvoice
+Line3
+line
+line
+frmVinvoice
+Line2
+line
+textbox
+textbox
+txtGlap
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 106
+MaxLength = 10
+TabIndex = 9
+Top = 103
+Width = 86
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtGlap"
+PROCEDURE Valid
+mfield = alltrim(thisform.txtGlap.value)
+if not Glvalid(mfield)
+   do form fGlvalid with mfield to thisform.txtGlap.value
+endif
+thisform.txtGlap.refresh
+ENDPROC
+BorderStyle = 1
+BorderWidth = 2
+Enabled = .T.
+Height = 0
+Left = 667
+Top = 345
+Width = 108
+ColorSource = 4
+BorderColor = 255,255,255
+Name = "Line3"
+BorderStyle = 1
+BorderWidth = 2
+Enabled = .T.
+Height = 0
+Left = 667
+Top = 288
+Width = 108
+ColorSource = 4
+BorderColor = 255,255,255
+Name = "Line2"
+textbox
+textbox
+txtValas
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Format = "!"
+Height = 24
+Left = 106
+MaxLength = 3
+TabIndex = 7
+Top = 79
+Width = 50
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtValas"
+OPROCEDURE LostFocus
+mfield = alltrim(thisform.txtValas.value)
+mvalas = Mvalid(mfield, 'valas','valas',"valas + ' ' + descript", 'valas')
+thisform.txtValas.value = mvalas
+thisform.txtRate.value  = valas.rate
+thisform.txtGlap.value  = valas.glap
+*thisform.txtValas.refresh
+*thisform.txtRate.refresh
+mamtpic = iif(mvalas=_valas, '999,999,999,999', '999,999,999.99')
+thisform.grdInvoice.colCost.inputmask   = mamtpic
+thisform.refresh
+ENDPROC
+PROCEDURE When
+select lineitem
+set order to invoice
+seek invoice.invoice
+if found()
+   return .f.
+else
+   return .t.
+endif
+ENDPROC
+valas
+valas
+valas + ' ' + descript
+valas
+999,999,999,999
+999,999,999.996
+MFIELD
+THISFORM
+TXTVALAS
+VALUE
+MVALAS
+MVALID
+TXTRATE
+VALAS
+RATE
+TXTGLAP
+GLAP
+MAMTPIC
+_VALAS
+GRDINVOICE
+COLCOST
+INPUTMASK
+REFRESHL
+invoice
+LINEITEM
+INVOICE
+LostFocus,
+When
+textbox
+textbox
+txtRate
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+InputMask = "999,999.99"
+Left = 156
+TabIndex = 8
+Top = 79
+Width = 84
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtRate"
+APROCEDURE When
+return thisform.txtValas.value # 'IDR'
+ENDPROC
+line
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "VAT :"
+Height = 20
+Left = 582
+Top = 262
+Width = 80
+TabIndex = 46
+Name = "Label25"
+frmVinvoice
+textbox
+textbox
+txtPrinted
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 693
+TabIndex = 19
+Top = 54
+Width = 80
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtPrinted"
+textbox
+textbox
+txtVoided
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 693
+TabIndex = 20
+Top = 79
+Width = 80
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtVoided"
+textbox
+textbox
+txtPosted
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 693
+TabIndex = 21
+Top = 104
+Width = 80
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtPosted"
+textbox
+textbox
+txtOutcome
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 22
+Top = 209
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtOutcome"
+textbox
+textbox
+txtTotal
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 25
+Top = 291
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtTotal"
+textbox
+textbox
+txtBalance
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 27
+Top = 348
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtBalance"
+label
+label
+Label2
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Invoice No.  :"
+Height = 20
+Left = 11
+Top = 14
+Width = 90
+TabIndex = 32
+Name = "Label2"
+label
+label
+Label3
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Date/Per.  :"
+Height = 20
+Left = 11
+Top = 57
+Width = 90
+TabIndex = 33
+Name = "Label3"
+label
+label
+Label4
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "GL AP  :"
+Height = 20
+Left = 11
+Top = 106
+Width = 90
+TabIndex = 34
+Name = "Label4"
+label
+label
+Label5
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Currency  :"
+Height = 20
+Left = 11
+Top = 81
+Width = 90
+TabIndex = 35
+Name = "Label5"
+label
+label
+Label7
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Sub Total :"
+Height = 20
+Left = 582
+Top = 213
+Width = 80
+TabIndex = 36
+Name = "Label7"
+label
+label
+Label8
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Total :"
+Height = 20
+Left = 582
+Top = 294
+Width = 80
+TabIndex = 37
+Name = "Label8"
+label
+label
+Label9
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Balance  :"
+Height = 20
+Left = 582
+Top = 349
+Width = 80
+TabIndex = 38
+Name = "Label9"
+label
+label
+Label10
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Printed  :"
+Height = 20
+Left = 629
+Top = 57
+Width = 60
+TabIndex = 41
+Name = "Label10"
+label
+label
+Label11
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Voided  :"
+Height = 20
+Left = 629
+Top = 82
+Width = 60
+TabIndex = 42
+Name = "Label11"
+label
+label
+Label12
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Payment  :"
+Height = 20
+Left = 582
+Top = 318
+Width = 80
+TabIndex = 43
+Name = "Label12"
+label
+label
+Label13
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Posted  :"
+Height = 20
+Left = 629
+Top = 107
+Width = 60
+TabIndex = 44
+Name = "Label13"
+textbox
+textbox
+txtPph
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 23
+Top = 234
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtPph"
+textbox
+textbox
+txtPayment
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 26
+Top = 316
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtPayment"
+label
+label
+Label16
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "PPH 23 :"
+Height = 20
+Left = 582
+Top = 237
+Width = 80
+TabIndex = 45
+Name = "Label16"
+textbox
+textbox
+txtVendcode
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Format = "!"
+Height = 24
+Left = 365
+MaxLength = 4
+TabIndex = 4
+Top = 12
+Width = 60
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtVendcode"
+PROCEDURE LostFocus
+thisform.txtCompany.value  = vendor.company
+thisform.txtAddress1.value = vendor.address1
+thisform.txtAddress2.value = vendor.address2
+thisform.txtAddress3.value = vendor.address3
+thisform.txtAddress4.value = vendor.address4
+thisform.txtCompany.refresh
+thisform.txtAddress1.refresh
+thisform.txtAddress2.refresh
+thisform.txtAddress3.refresh
+thisform.txtAddress4.refresh
+ENDPROC
+PROCEDURE Valid
+mfield = padr(alltrim(thisform.txtVendcode.value), 4, ' ')
+select vendor
+seek mfield
+if not found()
+   do form fVenvalid.scx with mfield to mfield
+   if empty(mfield)
+      return .f.
+   endif
+   thisform.txtVendcode.value = mfield
+   thisform.txtVendcode.refresh
+endif
+return .t.
+ENDPROC
+THISFORM
+TXTCOMPANY
+VALUE
+VENDOR
+COMPANY
+TXTADDRESS1
+ADDRESS1
+TXTADDRESS2
+ADDRESS2
+TXTADDRESS3
+ADDRESS3
+TXTADDRESS4
+ADDRESS4
+REFRESH
+fVenvalid.scx(
+MFIELD
+THISFORM
+TXTVENDCODE
+VALUE
+VENDOR
+FVENVALID
+REFRESH
+LostFocus,
+Validu
+textbox
+textbox
+txtAddress1
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 300
+TabIndex = 14
+Top = 79
+Width = 289
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtAddress1"
+textbox
+textbox
+txtAddress2
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 300
+TabIndex = 15
+Top = 104
+Width = 289
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtAddress2"
+textbox
+textbox
+txtAddress3
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 300
+TabIndex = 16
+Top = 129
+Width = 289
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtAddress3"
+textbox
+textbox
+txtAddress4
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 300
+TabIndex = 17
+Top = 154
+Width = 289
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtAddress4"
+line
+line
+Line1
+frmVinvoice
+BorderStyle = 1
+BorderWidth = 2
+Enabled = .T.
+Height = 0
+Left = 10
+Top = 428
+Width = 764
+ColorSource = 4
+BorderColor = 255,255,255
+Name = "Line1"
+textbox
+textbox
+txtTermofpay
+frmVinvoice
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+InputMask = "999"
+Left = 106
+TabIndex = 10
+Top = 129
+Width = 50
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtTermofpay"
+label
+label
+Label1
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Terms  :"
+Height = 20
+Left = 11
+Top = 131
+Width = 90
+TabIndex = 47
+Name = "Label1"
+label
+label
+Label14
+frmVinvoice
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "days"
+Height = 20
+Left = 160
+Top = 132
+Width = 29
+TabIndex = 48
+DisabledForeColor = 64,0,64
+DisabledBackColor = 10,210,245
+Name = "Label14"
+textbox
+textbox
+txtTaxno
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 106
+MaxLength = 16
+TabIndex = 11
+Top = 154
+Width = 134
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtTaxno"
+label
+label
+Label19
+frmVinvoice
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Vat No.  :"
+Height = 20
+Left = 11
+Top = 157
+Width = 90
+TabIndex = 49
+Name = "Label19"
+grid
+grid
+grdInvoice
+frmVinvoice
+ColumnCount = 7
+FontName = "Times New Roman"
+FontSize = 11
+DeleteMark = .F.
+Enabled = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 21
+Height = 211
+Left = 12
+Panel = 1
+RecordMark = .F.
+RecordSource = "lineitem"
+RowHeight = 21
+ScrollBars = 3
+TabIndex = 28
+Top = 209
+Width = 573
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdInvoice"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "lineitem.order"
+Column1.Enabled = .F.
+Column1.Width = 62
+Column1.Visible = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "colSo"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "lineitem.itemcode"
+Column2.Enabled = .F.
+Column2.Width = 42
+Column2.Visible = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "colItem"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.Alignment = 0
+Column3.ControlSource = "lineitem.descript"
+Column3.Enabled = .F.
+Column3.Width = 183
+Column3.Visible = .T.
+Column3.DynamicBackColor = ""
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "colDescript"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.Alignment = 0
+Column4.ControlSource = "lineitem.glcogs"
+Column4.Enabled = .F.
+Column4.Width = 60
+Column4.Visible = .T.
+Column4.DynamicBackColor = ""
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "colGlcogs"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.ControlSource = "lineitem.cost"
+Column5.Enabled = .F.
+Column5.Width = 79
+Column5.Visible = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "colCost"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.ControlSource = "lineitem.rate"
+Column6.Enabled = .F.
+Column6.Width = 56
+Column6.Visible = .T.
+Column6.DynamicBackColor = ""
+Column6.InputMask = "999,999.99"
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "colRate"
+Column7.FontName = "Times New Roman"
+Column7.FontSize = 8
+Column7.ControlSource = "lineitem.npiud"
+Column7.Enabled = .F.
+Column7.Width = 64
+Column7.ForeColor = 0,0,0
+Column7.BackColor = 255,255,255
+Column7.Name = "Column1"
+header
+header
+Header1
+frmVinvoice.grdInvoice.colSo
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "SO No."
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmVinvoice.grdInvoice.colSo
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+PROCEDURE Valid
+mfield = padr(alltrim(thisform.grdInvoice.colso.text1.value), 9, ' ')
+if empty(mfield)
+   thisform.grdInvoice.colItem.text1.value = ""
+   return .t.
+endif
+select sohdr
+set order to order
+seek mfield
+if found()
+   thisform.grdInvoice.colso.text1.value = sohdr.order
+else
+   do form fSovalid with mfield to thisform.grdInvoice.colso.text1.value
+endif
+select lineitem
+replace npiud with sohdr.npiud
+thisform.grdInvoice.colso.text1.refresh
+return .t.
+ENDPROC
+PROCEDURE When
+return alltrim(thisform.txtDivisi.value) # "*" ;
+   and empty(lineitem.itemcode)
+ENDPROC
+PROCEDURE RightClick
+mfield = padr(alltrim(thisform.grdInvoice.colso.text1.value), 9, ' ')
+select sohdr
+set order to refno
+do form fSosearch1 with mfield to mfield
+if not empty(mfield)
+   thisform.grdInvoice.colso.text1.value = mfield
+endif
+select lineitem
+replace npiud with sohdr.npiud
+thisform.grdInvoice.colso.text1.refresh
+return .t.
+ENDPROC
+order
+fSovalid(
+MFIELD
+THISFORM
+GRDINVOICE
+COLSO
+TEXT1
+VALUE
+COLITEM
+SOHDR
+ORDER
+FSOVALID
+LINEITEM
+NPIUD
+REFRESH%
+THISFORM
+TXTDIVISI
+VALUE
+LINEITEM
+ITEMCODE
+refno
+fSosearch1(
+MFIELD
+THISFORM
+GRDINVOICE
+COLSO
+TEXT1
+VALUE
+SOHDR
+REFNO
+FSOSEARCH1
+LINEITEM
+NPIUD
+REFRESH
+Valid,
+When
+RightClick
+header
+header
+Header1
+frmVinvoice.grdInvoice.colItem
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Item"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmVinvoice.grdInvoice.colItem
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Format = "!"
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+PROCEDURE Valid
+fitem  = padr(alltrim(thisform.grdInvoice.colItem.text1.value), 6, ' ')
+if empty(fitem)
+   return .t.
+endif
+xinv   = invoice.invoice
+fdiv   = invoice.divisi
+forder = lineitem.order   && padr(alltrim(thisform.grdInvoice.colSo.text1.value), 9, ' ')
+select lineitem
+set order to lns_ord
+store recno() to mlastrec
+seek fdiv + forder + fitem
+if found() 
+   locate while fdiv+forder+fitem=lineitem.divisi+lineitem.order+lineitem.itemcode;
+   for recno() # mlastrec
+   if found()
+      =MESSAGEBOX('Item exists in invoice # '+ lineitem.invoice + '.',0+16, "Command Warning")
+      select lineitem
+      go mlastrec
+      return .f.
+   endif
+endif
+select lineitem
+set order to invoice
+set key to xinv
+go mlastrec
+mvalas = thisform.txtValas.value
+select sodtl
+set order to order
+seek forder + fitem
+if not found()
+   select sodtl
+   seek forder
+   if not found()
+      wait 'SO number '+forder + ' cost has not been defined.' window timeout 10
+      select lineitem
+      return .f.
+   endif
+   do form fSoitem_ap.scx with forder, mvalas to fitem
+else
+   fitem = sodtl.itemcode
+endif
+select sodtl
+if sodtl.valas # mvalas
+   =MESSAGEBOX("Currency doesn't match !!! You should select item of " + mvalas + '.',0+16, "Command Warning")
+   select lineitem
+   return .f.
+endif
+select sodtl
+if not empty(sodtl.ntr)
+   =MESSAGEBOX('Item '+ sodtl.itemcode + ' exists in TR #' + sodtl.ntr + '.',0+16, "Command Warning")
+   select lineitem
+   return .f.
+endif
+if not empty(sodtl.pv)
+   =MESSAGEBOX('Item '+ sodtl.itemcode + ' exists in PV #' + sodtl.pv + '.',0+16, "Command Warning")
+   select lineitem
+   return .f.
+endif
+if not empty(sodtl.vinvoice) and sodtl.vinvoice # invoice.invoice
+   =MESSAGEBOX('Item '+ sodtl.itemcode + ' exists in vendor invoice #' + sodtl.vinvoice + '.',0+16, "Command Warning")
+   select lineitem
+   return .f.
+endif
+select lineitem
+set order to lns_ord
+seek fdiv + sodtl.order + sodtl.itemcode
+if found()
+   locate while fdiv+forder+fitem = lineitem.divisi+lineitem.order+lineitem.itemcode ;
+      for recno() # mlastrec
+   if found()
+      =MESSAGEBOX('Item exists in vendor invoice # '+ lineitem.invoice + '.',0+16, "Command Warning")
+      select lineitem
+      set order to invoice
+      set key to xinv
+      go mlastrec
+      return .f.
+   endif
+endif
+select lineitem
+set order to invoice
+set key to xinv
+go mlastrec
+thisform.grdInvoice.colItem.text1.value     = sodtl.itemcode
+thisform.grdInvoice.colDescript.text1.value = sodtl.descript
+thisform.grdInvoice.colCost.text1.value     = sodtl.cost
+thisform.grdInvoice.colRate.text1.value     = thisform.txtRate.value
+thisform.grdInvoice.colGlcogs.text1.value   = sodtl.glcogs
+thisform.grdInvoice.refresh
+return .t.
+ENDPROC
+PROCEDURE When
+* return alltrim(thisform.txtDivisi.value) # "*" 
+return empty(lineitem.cost) and not empty(lineitem.order)
+ENDPROC
+_PASS
+Error entry: invalid YEAR entered. The year should be C
+Command Warning
+Error entry: invalid MONTH entered.
+Command Warning
+Error entry: invalid MONTH entered.
+Command Warning
+MPERIOD
+THISFORM
+TXTPERIOD
+VALUE
+_APPERIOD
+_PASS
+When,
+ValidH
+Label25
+label
+label
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 667
+TabIndex = 24
+Top = 259
+Width = 108
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtVat"
+frmVinvoice
+txtVat
+textbox
+textbox
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Vendor Id. :"
+Height = 20
+Left = 276
+Top = 14
+Width = 84
+TabIndex = 40
+Name = "Label6"
+frmVinvoice
+Label6
+label
+label
+AutoSize = .F.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Inv. Supp.  :"
+Height = 20
+Left = 11
+Top = 181
+Width = 90
+TabIndex = 50
+Name = "Label24"
+frmVinvoice
+Label24
+label
+label
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 106
+MaxLength = 16
+TabIndex = 12
+Top = 178
+Width = 134
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtRefno"
+frmVinvoice
+txtRefno
+textbox
+textbox
+wPROCEDURE When
+select lineitem
+set order to invoice
+seek invoice.invoice
+if found()
+   return .f.
+else
+   return .t.
+endif
+ENDPROC
+PROCEDURE LostFocus
+mfield = thisform.txtDivisi.value
+thisform.txtDivisi.value = Mvalid(mfield, 'divisi','divisi',"divisi + ' ' + descript", 'divisi')
+thisform.so_open    &&order.divisi
+thisform.txtVendcode.setfocus
+ENDPROC
+frmVinvoice
+txtDivisi
+textbox
+textbox
+header
+header
+Header1
+"frmVinvoice.grdInvoice.colDescript
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Description"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+"frmVinvoice.grdInvoice.colDescript
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+`PROCEDURE When
+return thisform.txtDivisi.value = "*" or not empty(lineitem.itemcode)
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Format = "!"
+Height = 24
+Left = 222
+MaxLength = 2
+TabIndex = 3
+Top = 12
+Width = 41
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtDivisi"
+frmVinvoice
+header
+header
+Header1
+ frmVinvoice.grdInvoice.colGlcogs
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Glcogs"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+ frmVinvoice.grdInvoice.colGlcogs
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+PROCEDURE Valid
+*mfield = padr(alltrim(thisform.grdOut.column1.text1.value), 10, ' ')
+select lineitem
+mfield = lineitem.glcogs
+if not Glvalid(mfield)
+   do form fGlvalid.scx with mfield to mfield
+   if empty(mfield)
+      store .f. to mretval
+   endif
+   select lineitem
+   replace glcogs with mfield
+   thisform.grdInvoice.refresh
+endif
+select lineitem
+return .t.
+ENDPROC
+PROCEDURE When
+return empty(thisform.grdInvoice.colItem.text1.value) and not empty(thisform.grdInvoice.colDescript.text1.value)
+ENDPROC
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 1
+BackStyle = 0
+Caption = "Operator  :"
+Height = 20
+Left = 614
+Top = 12
+Width = 75
+TabIndex = 39
+Name = "Label23"
+Label23
+label
+label
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 693
+TabIndex = 18
+Top = 12
+Width = 80
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtOperator"
+frmVinvoice
+txtOperator
+textbox
+textbox
+,Top = 12
+Left = 541
+Name = "Autoresize1"
+header
+header
+Header1
+frmVinvoice.grdInvoice.colCost
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Cost"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmVinvoice.grdInvoice.colCost
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+pPROCEDURE When
+return not empty(thisform.grdInvoice.colDescript.text1.value) && or not _pass[7]
+ENDPROC
+frmVinvoice
+Autoresize1
+timer
+..\myclass\autoresize.vcx
+autoresize
+aPROCEDURE cmddone.Click
+thisform.status_on
+thisform.commandgroup1.cmdview.setfocus
+ENDPROC
+frmVinvoice
+Commandgroup2
+label
+header
+header
+Header1
+frmVinvoice.grdInvoice.colRate
+FontBold = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "Rate"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmVinvoice.grdInvoice.colRate
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+%PROCEDURE When
+return .f.
+ENDPROC
+commandgroup
+commandgroup
+frmVinvoice
+Cmd_ok_new_del1
+commandgroup
+..\myclass\cmd_ok_new_del.vcx
+cmd_ok_new_del
+frmVinvoice
+header
+header
+Header1
+frmVinvoice.grdInvoice.Column1
+FontItalic = .F.
+FontName = "Times New Roman"
+FontSize = 11
+Alignment = 2
+Caption = "BC 23"
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmVinvoice.grdInvoice.Column1
+FontSize = 8
+BorderStyle = 0
+ControlSource = "lineitem.npiud"
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+%PROCEDURE When
+return .f.
+ENDPROC
+Label22
+label
+frmVinvoice
+Label21
+label
+label
+frmVinvoice
+Label20
+label
+label
+frmVinvoice
+Label18
+textbox
+textbox
+txtCompany
+frmVinvoice
+FontName = "Times New Roman"
+FontSize = 11
+Enabled = .F.
+Height = 24
+Left = 300
+TabIndex = 13
+Top = 54
+Width = 289
+DisabledBackColor = 10,210,245
+DisabledForeColor = 64,0,64
+Name = "txtCompany"
+label
+label
+Label15
+frmVinvoice
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "V"
+Height = 20
+Left = 281
+Top = 59
+Width = 12
+TabIndex = 51
+Name = "Label15"
+label
+label
+Label17
+frmVinvoice
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "E"
+Height = 20
+Left = 281
+Top = 78
+Width = 12
+TabIndex = 52
+Name = "Label17"
+label
+label
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "N"
+Height = 20
+Left = 281
+Top = 97
+Width = 13
+TabIndex = 53
+Name = "Label18"
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "D"
+Height = 20
+Left = 281
+Top = 116
+Width = 13
+TabIndex = 54
+Name = "Label20"
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "O"
+Height = 20
+Left = 281
+Top = 135
+Width = 14
+TabIndex = 55
+Name = "Label21"
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 11
+BackStyle = 0
+Caption = "R"
+Height = 20
+Left = 281
+Top = 154
+Width = 13
+TabIndex = 56
+Name = "Label22"
+Left = 576
+Top = 437
+TabIndex = 30
+Name = "Cmd_ok_new_del1"
+cmdok.Top = 6
+cmdok.Left = 7
+cmdok.Name = "cmdok"
+cmdNew.Top = 6
+cmdNew.Left = 63
+cmdNew.Name = "cmdNew"
+cmdDel.Top = 6
+cmdDel.Left = 119
+cmdDel.Name = "cmdDel"
+PROCEDURE cmdok.Click
+if editable  && for command ADD and EDIT
+   thisform.dbf_update
+   thisform.so_match
+   thisform.so_close
+else
+   thisform.grdInvoice.readonly = .f.  && for command VIEW
+endif
+select invoice
+editable = .f.
+thisform.txt_update
+thisform.txt_disable
+thisform.status_on
+thisform.refresh
+ENDPROC
+PROCEDURE cmdNew.Click
+m.valrate = thisform.txtRate.value
+select lineitem
+append blank
+replace;
+   lineitem.invoice  with invoice.invoice,;
+   lineitem.divisi   with invoice.divisi,;
+   lineitem.vendcode with invoice.vendcode,;
+   lineitem.rate     with m.valrate
+if alltrim(thisform.txtDivisi.value) # '*'
+   thisform.grdInvoice.colSo.setfocus
+else
+   thisform.grdInvoice.colDescript.setfocus
+endif
+thisform.refresh
+ENDPROC
+PROCEDURE cmdDel.Click
+select lineitem
+if eof() or lineitem.invoice # invoice.invoice
+   return
+endif
+delete next 1
+thisform.refresh
+thisform.grdInvoice.setfocus
+ENDPROC
+{AutoSize = .F.
+ButtonCount = 1
+Value = 1
+Height = 37
+Left = 696
+Top = 437
+Width = 60
+TabIndex = 31
+BackColor = 37,109,218
+Name = "Commandgroup2"
+Command1.AutoSize = .F.
+Command1.Top = 6
+Command1.Left = 7
+Command1.Height = 27
+Command1.Width = 48
+Command1.FontName = "Times New Roman"
+Command1.FontSize = 11
+Command1.Caption = "\<Done"
+Command1.Name = "cmddone"
+@AutoSize = .T.
+ButtonCount = 15
+Value = 1
+Height = 37
+Left = 22
+Top = 437
+Width = 744
+TabIndex = 29
+BackColor = 37,109,218
+Name = "Commandgroup1"
+Command1.AutoSize = .F.
+Command1.Top = 5
+Command1.Left = 5
+Command1.Height = 27
+Command1.Width = 48
+Command1.FontName = "Times New Roman"
+Command1.FontSize = 11
+Command1.Caption = "\<Top"
+Command1.TabIndex = 1
+Command1.Name = "cmdtop"
+Command2.AutoSize = .F.
+Command2.Top = 5
+Command2.Left = 53
+Command2.Height = 27
+Command2.Width = 50
+Command2.FontName = "Times New Roman"
+Command2.FontSize = 11
+Command2.Caption = "\<Bottom"
+Command2.TabIndex = 2
+Command2.Name = "cmdbottom"
+Command3.AutoSize = .F.
+Command3.Top = 5
+Command3.Left = 103
+Command3.Height = 27
+Command3.Width = 50
+Command3.FontName = "Times New Roman"
+Command3.FontSize = 11
+Command3.Caption = "\<Next"
+Command3.TabIndex = 3
+Command3.Name = "cmdnext"
+Command4.AutoSize = .F.
+Command4.Top = 5
+Command4.Left = 153
+Command4.Height = 27
+Command4.Width = 50
+Command4.FontName = "Times New Roman"
+Command4.FontSize = 11
+Command4.Caption = "\<Prev"
+Command4.TabIndex = 4
+Command4.Name = "cmdprev"
+Command5.AutoSize = .F.
+Command5.Top = 5
+Command5.Left = 203
+Command5.Height = 27
+Command5.Width = 50
+Command5.FontName = "Times New Roman"
+Command5.FontSize = 11
+Command5.Caption = "\<Search"
+Command5.TabIndex = 5
+Command5.Name = "cmdsearch"
+Command6.AutoSize = .F.
+Command6.Top = 5
+Command6.Left = 253
+Command6.Height = 27
+Command6.Width = 48
+Command6.FontName = "Times New Roman"
+Command6.FontSize = 11
+Command6.Caption = "\<Add"
+Command6.TabIndex = 6
+Command6.Name = "cmdadd"
+Command7.AutoSize = .F.
+Command7.Top = 5
+Command7.Left = 301
+Command7.Height = 27
+Command7.Width = 48
+Command7.FontName = "Times New Roman"
+Command7.FontSize = 11
+Command7.Caption = "\<Edit"
+Command7.TabIndex = 7
+Command7.Name = "cmdedit"
+Command8.AutoSize = .F.
+Command8.Top = 5
+Command8.Left = 349
+Command8.Height = 27
+Command8.Width = 48
+Command8.FontName = "Times New Roman"
+Command8.FontSize = 11
+Command8.Caption = "Vie\<w"
+Command8.TabIndex = 8
+Command8.Name = "cmdview"
+Command9.AutoSize = .F.
+Command9.Top = 5
+Command9.Left = 397
+Command9.Height = 27
+Command9.Width = 48
+Command9.FontName = "Times New Roman"
+Command9.FontSize = 11
+Command9.Caption = "\<Void"
+Command9.TabIndex = 9
+Command9.Name = "cmdvoid"
+Command10.AutoSize = .F.
+Command10.Top = 5
+Command10.Left = 445
+Command10.Height = 27
+Command10.Width = 50
+Command10.FontName = "Times New Roman"
+Command10.FontSize = 11
+Command10.Caption = "\<Zoom"
+Command10.TabIndex = 10
+Command10.Name = "cmdzoom"
+Command11.AutoSize = .F.
+Command11.Top = 5
+Command11.Left = 495
+Command11.Height = 27
+Command11.Width = 50
+Command11.FontName = "Times New Roman"
+Command11.FontSize = 11
+Command11.Caption = "P\<ost"
+Command11.TabIndex = 11
+Command11.Name = "cmdpost"
+Command12.AutoSize = .F.
+Command12.Top = 5
+Command12.Left = 545
+Command12.Height = 27
+Command12.Width = 50
+Command12.FontName = "Times New Roman"
+Command12.FontSize = 11
+Command12.Caption = "\<Print"
+Command12.TabIndex = 12
+Command12.Name = "cmdprint"
+Command13.AutoSize = .F.
+Command13.Top = 5
+Command13.Left = 691
+Command13.Height = 27
+Command13.Width = 48
+Command13.FontName = "Times New Roman"
+Command13.FontSize = 11
+Command13.Caption = "E\<xit"
+Command13.TabIndex = 15
+Command13.Name = "cmdexit"
+Command14.Top = 5
+Command14.Left = 595
+Command14.Height = 27
+Command14.Width = 48
+Command14.FontName = "Times New Roman"
+Command14.FontSize = 11
+Command14.Caption = "Pa\<y"
+Command14.TabIndex = 13
+Command14.Name = "cmdPay"
+Command15.Top = 5
+Command15.Left = 643
+Command15.Height = 27
+Command15.Width = 48
+Command15.FontName = "Times New Roman"
+Command15.FontSize = 11
+Command15.Caption = "\<Log"
+Command15.TabIndex = 14
+Command15.Name = "cmdLog"
+ `PROCEDURE cmdtop.Click
+select invoice
+go top
+thisform.txt_update
+ENDPROC
+PROCEDURE cmdbottom.Click
+select invoice
+go bottom
+thisform.txt_update
+ENDPROC
+PROCEDURE cmdnext.Click
+select invoice
+skip 1
+if eof()
+   =MESSAGEBOX("End of file, there is no next record.",0+16, "Command Warning")
+   go bottom
+endif
+thisform.txt_update
+ENDPROC
+PROCEDURE cmdprev.Click
+select invoice
+skip -1
+if bof()
+   =MESSAGEBOX("Beginning of file, there is no previous record.",0+16, "Command Warning")
+   go top
+endif
+thisform.txt_update
+ENDPROC
+PROCEDURE cmdsearch.Click
+thisform.status_off
+select invoice
+store invoice.invoice to minvoice, msearch
+do form fVinSearch with msearch to minvoice
+if not empty(minvoice)
+   msearch = minvoice
+endif
+select invoice
+set order to invoice
+seek msearch
+thisform.txt_update
+thisform.status_on
+ENDPROC
+PROCEDURE cmdadd.Click
+select invoice
+set order to invoice
+do while .t.
+   minvoice = Nextnum('VINVOICE NUMBER')
+   select invoice
+   seek minvoice
+   if not found()
+      exit
+   endif
+enddo
+select invoice
+append blank
+replace ;
+   invoice.divisi   with "",;
+   invoice.branch   with "JHO",;
+   invoice.invoice  with minvoice, ;
+   invoice.period   with _apperiod, ;
+   invoice.written  with date(), ;
+   invoice.valas    with _valas,;
+   invoice.valrate  with 1,;
+   invoice.glap
+with _glap,;
+   invoice.dept     with _dept,;
+   invoice.operator with left(_userid,10)
+= fLogs_add('vinvoice_log.dbf', invoice.invoice, 'ADD', '')
+thisform.status_off
+thisform.txt_update
+thisform.txt_enable
+thisform.txtDivisi.setfocus
+editable = .t.
+ENDPROC
+PROCEDURE cmdedit.Click
+thisform.check_editable
+if editable
+   = fLogs_add('vinvoice_log.dbf', invoice.invoice, 'EDIT', '')
+   thisform.status_off
+   if empty(invoice.divisi)
+      thisform.txt_enable
+      thisform.txtDivisi.setfocus
+   else
+      thisform.so_open    &&order.divisi
+      thisform.txt_enable
+      thisform.txtWritten.setfocus
+   endif
+   thisform.txtOperator.value = left(_userid,10)
+   select invoice
+endif
+ENDPROC
+PROCEDURE cmdview.Click
+select lineitem
+if eof() or bof()
+   =MESSAGEBOX("Invoice file is empty.",0+16, "Command Warning")
+else
+   thisform.status_off
+   thisform.commandgroup2.visible = .t.
+   thisform.grdInvoice.enabled   = .t.
+   thisform.grdInvoice.readonly  = .t.
+   if alltrim(thisform.txtDivisi.value) # '*'
+      thisform.grdInvoice.colSo.text1.setfocus
+   else
+      thisform.grdInvoice.colDescript.text1.setfocus
+   endif
+endif
+select invoice
+ENDPROC
+PROCEDURE cmdvoid.Click
+select invoice
+if eof() or bof()
+   return
+endif
+if not empty(voided)
+   =MESSAGEBOX("Can't VOID: it has been VOIDED.",0+48, "Command Warning")
+   return
+endif
+if not empty(posted)
+   =MESSAGEBOX("Can't VOID: it has been POSTED.",0+48, "Command Warning")
+   return
+endif
+if not empty(Vinvpay())
+   =MESSAGEBOX("Can't VOID: payments exist.",0+48, "Command Warning")
+   return
+endif
+if _pass[7]
+   =MESSAGEBOX("Can't VOID: You don't have access/right.",0+48, "Command Warning")
+   return
+endif
+nAnswer = MESSAGEBOX("Void invoice no. " + invoice.invoice + ", now ?",4+32, "Command Warning")
+if nAnswer = 6
+   thisform.status_off
+   store _apperiod to newperiod
+   store date()    to newvoidate
+   store 'REVERSE AP INVOICE'  to posttype
+   * Updating SO detail.
+   if invoice.divisi # '*'
+      select 0
+      use lineitem alias ar_line
+      set order to lns_itm
+      select 0
+      use invoice.divisi + 'line' alias sodtl
+      set order to vinvoice
+      seek invoice.invoice
+      do while found()
+         if not empty(sodtl.invoice)
+            select ar_line
+            seek sodtl.invoice + sodtl.itemcode
+            if found()
+               replace;
+                  ar_line.cost  with 0,;
+                  ar_line.rate  with 1,;
+                  ar_line.vinvoice with ''
+            endif
+         endif
+         select sodtl
+         replace vinvoice with '', cost with 0, rate with 1
+         seek invoice.invoice
+      enddo
+      select sodtl
+      use
+      select ar_line
+      use
+   endif
+   select invoice
+   if not empty(invoice.posted)
+      = Post2Gl (posttype)
+   endif
+   thisform.txtVoided.value = newvoidate
+   select invoice
+   replace ;
+     invoice.voided  with newvoidate,;
+     invoice.vperiod with newperiod,;
+     invoice.printed with {  /  /  }
+   select lineitem
+   seek invoice.invoice
+   replace lineitem.order with '' while lineitem.invoice = invoice.invoice
+   *delete while lineitem.invoice = invoice.invoice
+   = fLogs_add('vinvoice_log.dbf', invoice.invoice, 'VOID', '')
+   =MESSAGEBOX("Invoice has been voided.",0+48,"Command Warning")
+   thisform.status_on
+   thisform.txt_update
+endif
+thisform.refresh
+ENDPROC
+PROCEDURE cmdzoom.Click
+thisform.status_off
+thisform.check_editable
+do form fVinNote.scx with editable
+thisform.status_on
+ENDPROC
+PROCEDURE cmdpost.Click
+select invoice
+if eof() or bof()
+   return
+endif
+if not empty(invoice.voided)
+   =MESSAGEBOX("Can't void invoice: it has been voided.",0+48, "Command Warning")
+   return
+endif
+if invoice.period < _glperiod  && cannot unapply because period gl has been closed
+   =MESSAGEBOX("Error: ACCOUNTING PERIOD is now " + _glperiod + " !!! Please, contact your system manager.",0+48, "Command Warning")
+   return
+endif
+if not empty(invoice.posted) and _pass[12]
+   =MESSAGEBOX("Can't UNPOST: You don't have access/right.",0+48, "Command Warning")
+   return
+endif
+if Vinvpay() # 0
+   =MESSAGEBOX("Can't UNPOST: Invoice has been payment.",0+48, "Command Warning")
+   return
+endif
+maction = iif(empty(invoice.posted), 'POST', 'UN-POST')
+mauthorized = .f.
+no_variance = .t.
+mright = 9
+if not empty(invoice.posted)
+   no_variance = .f.
+   mright = 12
+endif
+if no_variance
+   do form Authorize with 'vinvoice_log.dbf','invoice', maction, invoice.invoice, "INVOICE" to mauthorized
+else
+   do form Authorize_ex with 'vinvoice_log.dbf','invoice', maction, invoice.invoice, "INVOICE", maction + " AP", mright  to mauthorized 
+endif   
+*nAnswer=MESSAGEBOX("Do you want to " + maction + ", now ?",4+32, "Command Warning")
+*if nAnswer # 6
+*   =MESSAGEBOX("Can't " + maction + " : you have cancelled the procedure.",0+16, "Command Warning")
+*   return
+*endif
+if mauthorized
+   thisform.status_off
+   wait "Please wait, updating ledger..." window nowait
+   select invoice
+   minvoice = invoice.invoice
+   if maction = 'POST'
+      if GetPeriod(invoice.written) # invoice.period
+         =MESSAGEBOX("Error: Wrong Period !!! Please check your PERIOD and DATE first.",0+48, "Command Warning")
+         return
+      endif
+      = Post2Gl ('POST AP INVOICE')
+      *= fLogs_add('vinvoice_log.dbf', invoice.invoice, 'POST', '')
+   else
+      = Post2Gl('REVERSE AP INVOICE')
+      *= fLogs_add('vinvoice_log.dbf', invoice.invoice, 'POST', '')
+   endif
+   select invoice
+   seek minvoice
+   if maction = 'POST'
+      replace invoice.posted with date()
+   else
+      replace invoice.posted with ctod("  /  /    ")
+   endif
+   =MESSAGEBOX("AP Invoice has been " + maction + "ED.",0+48, "Command Warning")
+   thisform.status_on
+endif   
+thisform.txt_update
+thisform.refresh
+ENDPROC
+PROCEDURE cmdprint.Click
+thisform.status_off
+if not empty(invoice.printed) and _pass[7]
+   =MESSAGEBOX("Invoice has been printed.Contact your manager",0+16, "Command Warning")
+   return
+endif
+select invoice
+store invoice.invoice to moldinv
+do form fVinprint.scx
+select invoice
+set order to invoice
+seek moldinv
+thisform.txt_update
+thisform.status_on
+ENDPROC
+PROCEDURE cmdexit.Click
+thisform.release
+ENDPROC
+PROCEDURE cmdPay.Click
+thisform.status_off
+do form fVinpay with invoice.invoice
+thisform.txt_update
+thisform.status_on
+ENDPROC
+PROCEDURE cmdLog.Click
+thisform.status_off
+select 0
+use vinvoice_log again alias fdbf
+set order to invoice
+seek invoice.invoice
+set key to invoice.invoice
+do form View_Log.scx with 'fdbf', "View Payable Log"
+select fdbf
+select invoice
+thisform.txt_update
+thisform.status_on
+ENDPROC
+THISFORM
+CLOSABLE
+COMMANDGROUP1
+ENABLED
+CMDADD
+_PASS
+CMDEDIT
+CMDVOID
+CMDPOST
+VISIBLE
+CMD_OK_NEW_DEL1
+COMMANDGROUP23
+THISFORM
+CLOSABLE
+COMMANDGROUP1
+ENABLED
+VISIBLE
+THISFORM
+TXTINVOICE
+ENABLED
+TXTBRANCH
+TXTDIVISI
+TXTWRITTEN
+TXTPERIOD
+TXTGLAP
+TXTVALAS
+TXTRATE
+TXTTAXNO
+TXTREFNO
+TXTTERMOFPAY
+TXTVENDCODE
+TXTOPERATOR
+GRDINVOICE
+CMD_OK_NEW_DEL1
+VISIBLE'
+THISFORM
+TXTINVOICE
+ENABLED
+TXTBRANCH
+TXTDIVISI
+TXTVENDCODE
+TXTWRITTEN
+TXTPERIOD
+TXTGLAP
+TXTVALAS
+TXTRATE
+TXTTAXNO
+TXTREFNO
+TXTTERMOFPAY
+TXTOPERATOR
+GRDINVOICE
+COLRATE
+CMD_OK_NEW_DEL1
+VISIBLE?
+invoice
+PPH 23
+PPH23
+999,999,999,999
+999,999,999.996
+LINEITEM
+VENDOR
+INVOICE
+VENDCODE
+MINVPAY
+VINVPAY
+AMOUNT_SUB
+AMOUNT_TOT
+AMOUNT_BAL
+AMOUNT_PAY
+MSUB
+MPPH
+MVAT
+MTOT
+DESCRIPT
+COST
+AMOUNT_PPH
+AMOUNT_VAT
+MAMTPIC
+VALAS
+_VALAS
+MINVOICE
+THISFORM
+TXTTERMOFPAY
+VALUE
+TERMOFPAY
+TXTINVOICE
+TXTBRANCH
+BRANCH
+TXTDIVISI
+DIVISI
+TXTWRITTEN
+WRITTEN
+TXTPERIOD
+PERIOD
+TXTGLAP
+GLAP
+TXTVALAS
+TXTRATE
+VALRATE
+TXTTAXNO
+TAXNO
+TXTREFNO
+REFNO
+TXTPRINTED
+PRINTED
+TXTVOIDED
+VOIDED
+TXTPOSTED
+POSTED
+TXTVENDCODE
+TXTCOMPANY
+COMPANY
+TXTADDRESS1
+ADDRESS1
+TXTADDRESS2
+ADDRESS2
+TXTADDRESS3
+ADDRESS3
+TXTADDRESS4
+ADDRESS4
+TXTOPERATOR
+OPERATOR
+TXTOUTCOME
+TXTPPH
+TXTVAT
+TXTTOTAL
+TXTPAYMENT
+TXTBALANCE
+GRDINVOICE
+COLCOST
+INPUTMASK
+REFRESH
+Invoice file is empty.
+Command Warning
+Invoice has been voided.
+Command Warning
+Invoice has been posted.
+Command Warning
+Invoice has been printed.
+Command Warning
+Invoice has payment.
+Command Warning
+EDITABLE
+INVOICE
+VOIDED
+POSTED
+PRINTED
+_PASS
+VINVPAY
+Opening SO dbf...
+sohdr
+sodtl
+AEHDR
+AELINE
+AXHDR
+AXLINE
+AIHDR
+AILINE
+ACHDR
+ACLINE
+SEHDR
+SELINE
+SIHDR
+SILINE
+SCHDR
+SCLINE
+CEHDR
+CELINE
+CIHDR
+CILINE
+DIHDR
+DILINE
+DEHDR
+DELINE
+LCHDR
+LC_LINE
+TCHDR
+TCLINE
+Non Order Invoice !
+Error passing parameter !
+AEHDR_SUB
+AELINE_SUB
+AIHDR_SUB
+AILINE_SUB
+ACHDR_SUB
+ACLINE_SUB
+SEHDR_SUB
+SELINE_SUB
+SIHDR_SUB
+SILINE_SUB
+SCHDR_SUB
+SCLINE_SUB
+CEHDR_SUB
+CELINE_SUB
+CIHDR_SUB
+CILINE_SUB
+DIHDR_SUB
+DILINE_SUB
+DEHDR_SUB
+DELINE_SUB
+LCHDR_SUB
+LC_LINE_SUB
+TCHDR_SUB
+TCLINE_SUB
+Non Order Invoice !
+Error passing parameter !
+AEHDR_SMR
+AELINE_SMR
+AIHDR_SMR
+AILINE_SMR
+ACHDR_SMR
+ACLINE_SMR
+SEHDR_SMR
+SELINE_SMR
+SIHDR_SMR
+SILINE_SMR
+SCHDR_SMR
+SCLINE_SMR
+CEHDR_SMR
+CELINE_SMR
+CIHDR_SMR
+CILINE_SMR
+DIHDR_SMR
+DILINE_SMR
+DEHDR_SMR
+DELINE_SMR
+LCHDR_SMR
+LC_LINE_SMR
+TCHDR_SMR
+TCLINE_SMR
+Non Order Invoice !
+Error passing parameter !
+order
+order
+PBRANCH
+THISFORM
+TXTBRANCH
+VALUE
+PFDIV
+TXTDIVISI
+SOHDR
+SODTL
+PITEM
+PSOHF
+PSODF
+ORDER
+POSTED
+VOIDED
+Closing SO file ...
+sohdr
+sodtl
+INVOICE
+DIVISI
+OLDAREA
+SOHDR
+SODTL~
+Matching data to SO ...
+lineitem
+lns_itm
+Deleting existing invoice no 
+vinvoice
+order
+SO No.
+ doesn't exists.
+INVOICE
+DIVISI
+LINEITEM
+AR_LINE
+LNS_ITM
+SODTL
+VINVOICE
+COST
+RATE
+VENDCODE
+ORDER
+ITEMCODE
+Updating dbf..
+invoice
+PPH 23
+PPH23
+MSUB
+MPPH
+MVAT
+MTOT
+LINEITEM
+INVOICE
+DESCRIPT
+COST
+DIVISI
+THISFORM
+TXTDIVISI
+VALUE
+BRANCH
+TXTBRANCH
+VENDCODE
+TXTVENDCODE
+OPERATOR
+TXTOPERATOR
+WRITTEN
+TXTWRITTEN
+PERIOD
+TXTPERIOD
+GLAP
+TXTGLAP
+VALAS
+TXTVALAS
+VALRATE
+TXTRATE
+TERMOFPAY
+TXTTERMOFPAY
+TAXNO
+TXTTAXNO
+REFNO
+TXTREFNO
+AMOUNT_SUB
+AMOUNT_PPH
+AMOUNT_VAT
+AMOUNT_TOT
+AMOUNT_BAL
+AMOUNT_PAY
+RATEZ
+THISFORM
+TXTTERMOFPAY
+VALUE
+TXTINVOICE
+TXTBRANCH
+TXTDIVISI
+TXTWRITTEN
+TXTPERIOD
+_APPERIOD
+TXTGLAP
+_GLAP
+TXTVALAS
+_VALAS
+TXTRATE
+TXTTAXNO
+TXTREFNO
+TXTPRINTED
+TXTVOIDED
+TXTPOSTED
+TXTVENDCODE
+TXTCOMPANY
+TXTADDRESS1
+TXTADDRESS2
+TXTADDRESS3
+TXTADDRESS4
+TXTOPERATOR
+_USERID
+TXTOUTCOME
+TXTPPH
+TXTVAT
+TXTTOTAL
+TXTPAYMENT
+TXTBALANCE
+MINVOICE
+LINEITEM
+INVOICE
+REFRESH
+_LMENU
+FSOMENUh
+EDITABLE
+_LMENU
+FSOMENU
+THISFORM
+TXTGLAP
+INPUTMASK
+_ACCTFORMAT
+GRDINVOICE
+COLGLCOGS
+TXT_UPDATE
+STATUS_ONw
+Please wait, setting the working environment ...
+account
+number
+divisi
+divisi
+valas
+valas
+item
+itemcode
+vendor
+ven_ven
+check
+pay_ven
+vline
+invoice
+vinvoice
+invoice
+ACCOUNT
+NUMBER
+DIVISI
+VALAS
+ITEM
+ITEMCODE
+VENDOR
+VEN_VEN
+CHECK
+PAYMENT
+PAY_VEN
+VLINE
+LINEITEM
+INVOICE
+VINVOICE
+status_on,
+status_off
+txt_disable
+txt_enable
+txt_update
+check_editable
+so_open
+so_close
+so_match
+dbf_update
+txt_init'&
+Unload
+InitC*
+Load#+

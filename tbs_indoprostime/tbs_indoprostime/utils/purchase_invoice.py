@@ -113,13 +113,19 @@ def make_purchase_invoice(source_name, target_doc=None, args=None):
 				"custom_total_cost": rate,
 				"custom_customer_order": source.name,
 				"custom_so_detail": row.name,
+				"custom_valas": source.custom_valas,
+				"custom_kurs": source.custom_kurs or 1,
 			},
 		)
 
-	# Ambil branch/division dari SO pertama kalau target masih kosong
+	# Ambil branch/division/currency dari SO pertama kalau target masih kosong
 	if not target.get("custom_branch"):
 		target.custom_branch = source.custom_branch
 	if not target.get("custom_division"):
 		target.custom_division = source.custom_division
+	if not target.get("currency"):
+		target.currency = source.custom_valas or "IDR"
+	if not target.get("exchange_rate"):
+		target.exchange_rate = source.custom_kurs or 1
 
 	return target

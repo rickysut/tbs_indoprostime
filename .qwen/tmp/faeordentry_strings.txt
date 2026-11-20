@@ -1,0 +1,6644 @@
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+_Top = 220
+Left = 1
+Width = 520
+Height = 200
+DataSource = .NULL.
+Name = "Dataenvironment"
+form
+form
+FAEORDENTRY
+Height = 470
+Width = 815
+ShowWindow = 1
+DoCreate = .T.
+AutoCenter = .T.
+Caption = "Air Export Order Entry"
+MinHeight = 470
+MinWidth = 740
+KeyPreview = .T.
+TitleBar = 1
+BackColor = 43,170,213
+Themes = .F.
+Name = "FAEORDENTRY"
+PROCEDURE matikanfield
+THISFORM.PAGEFRAME1.Hal1.SETALL('ENABLED',.F.,'TEXTBOX')
+THISFORM.PAGEFRAME1.Hal1.SETALL('ENABLED',.F.,'COMBOBOX')
+THISFORM.PAGEFRAME1.Hal2.SETALL('ENABLED',.F.,'TEXTBOX')
+THISFORM.PAGEFRAME1.Hal2.SETALL('ENABLED',.F.,'EDITBOX')
+ENDPROC
+PROCEDURE hidupkanfield
+THISFORM.PAGEFRAME1.Hal1.SETALL('ENABLED',.T.,'TEXTBOX')
+THISFORM.PAGEFRAME1.Hal1.SETALL('ENABLED',.T.,'COMBOBOX')
+THISFORM.PAGEFRAME1.Hal2.SETALL('ENABLED',.T.,'TEXTBOX')
+WITH THISFORM.PAGEFRAME1.Hal1
+     .m_Sono.      ENABLED = .F.
+     .m_Customer  .ENABLED = .F.
+     .m_custcode  .enabled = .F.
+     .m_from_order.enabled = .F.
+     .m_ref_order.enabled  = .f.
+     .m_nopol    .enabled = .f.
+     ._Exporter. ENABLED = .F.
+     ._Consignee.ENABLED = .F.
+     ._Notified. ENABLED = .F.
+     ._Ovragent. ENABLED = .F.
+     .m_Voided.  ENABLED = .F.
+     .m_Posted.  ENABLED = .F.
+     .c_postedby.enabled = .f.
+     .c_voidedby.enabled = .f.
+     * .m_Written. ENABLED = .F.
+ENDWITH     
+THISFORM.PAGEFRAME1.Hal2.SETALL('ENABLED',.T.,'EDITBOX')
+ENDPROC
+PROCEDURE matikansemuatombolgroup1
+THISFORM.GroupTmbPilihan1.SETALL('ENABLED',.F.,'COMMANDBUTTON')
+ENDPROC
+PROCEDURE hidupkansemuatombolgroup1
+THISFORM.GroupTmbPilihan1.SETALL('ENABLED',.T.,'COMMANDBUTTON')
+thisform.GroupTmbPilihan1.TmbAdd .enabled = iif(_pass[37], .t., .f.)
+thisform.GroupTmbPilihan1.TmbEdit.enabled = iif(_pass[37], .t., .f.)
+thisform.GroupTmbPilihan1.TmbTr  .enabled = iif(_pass[37], .t., .f.)
+thisform.GroupTmbPilihan1.TmbVinv.enabled = iif(_pass[37], .t., .f.)
+thisform.grouptmbpilihan1.tmbvoid.enabled = iif(_pass[1], .f., .t.)
+thisform.grouptmbpilihan1.tmbpost.enabled = iif(_pass[1], .f., .t.)
+thisform.grouptmbpilihan1.tmbitem.enabled = iif(_pass[1], .f., .t.)
+if xviewonly
+   thisform.GroupTmbPilihan1.TmbAdd .enabled = .f.
+   thisform.GroupTmbPilihan1.TmbEdit.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbCost.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbVoid.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbPost.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbItem.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbTr  .enabled = .f.
+   thisform.GroupTmbPilihan1.TmbVinv.enabled = .f.
+   thisform.GroupTmbPilihan1.TmbCus .enabled = .f.
+   thisform.GroupTmbPilihan1.TmbTc  .enabled = .f.
+   thisform.GroupTmbPilihan1.TmbPrint.enabled = .f.
+endif
+ENDPROC
+PROCEDURE tampilkandata
+SELECT ae_order
+SCATTER MEMVAR MEMO
+WITH THISFORM.PAGEFRAME1.Hal1
+     .m_custcode. VALUE  = m.custcode     
+ .m_sono.     VALUE  = m.dept+m.divisi+m.custcode+'-'+m.order
+ .m_from_order.value = m.from_order
+ .m_written.  VALUE = m.written
+ .m_refno.    VALUE = m.refno
+ .coxSource.  VALUE = m.source
+ .m_ref_order.value = m.ref_order
+ .m_nopol.    value = m.nopol
+ .m_exporter. VALUE = m.exporter
+ .m_consignee.VALUE = m.consignee
+ .m_notified. VALUE = m.notified
+ .m_ovragent. VALUE = m.ovragent
+ .m_mawb.     VALUE = m.mawb
+ .m_hawb.     VALUE = m.hawb
+ .m_etd.      VALUE = m.etd
+ .m_eta.      VALUE = m.eta
+ .m_issued.   VALUE = m.issued
+ .m_dt2cons.  VALUE = m.dt2cons
+ .m_qty.      VALUE = m.qty
+ .m_unit.     VALUE = m.unit
+ .m_grs_wgt.  VALUE = m.grs_wgt
+ .m_chg_wgt.  VALUE = m.chg_wgt
+ .m_valas.    VALUE = m.valas
+ .m_valrate.  VALUE = m.valrate
+ .m_freight.  VALUE = m.freight
+ .m_cost_kg.  VALUE = m.cost_kg
+ .m_voided.   VALUE = m.voided
+ .m_posted.   VALUE = m.posted
+ .c_postedby. value = m.postedby
+ .c_voidedby. value = m.voidedby
+ .m_origin.   VALUE = m.origin
+ .m_destin.   VALUE = m.destin
+ .m_remark.   VALUE = m.remark
+ .m_declared. VALUE = m.declared
+ .m_insurance.VALUE = m.insurance
+ .m_quotation.value = m.quotation
+ENDWITH
+WITH THISFORM.PAGEFRAME1.HAL2
+ .m_mgoods.   VALUE = m.mgoods
+ .m_mhandling.VALUE = m.mhandling 
+ .m_mship.    VALUE = m.mship
+ .m_carrier1. VALUE = m.carrier_1
+ .m_carrier2. VALUE = m.carrier_2
+ .m_carrier3. VALUE = m.carrier_3
+ .m_to1.      VALUE = m.to_1
+ .m_to2.      VALUE = m.to_2
+ .m_to3.      VALUE = m.to_3
+ .m_mflight.  VALUE = m.mflight
+ .m_other1.   VALUE = m.other_1
+ .m_other2.   VALUE = m.other_2
+ .m_other3.   VALUE = m.other_3
+ .m_other_chg.VALUE = m.other_chg
+ .m_carr_chg. VALUE = m.carr_chg
+ENDWITH
+ae_noorder = m.order
+SELECT ae_customer
+LOCATE FOR custcode = m.custcode
+*SEEK m.Custcode
+IF FOUND()
+   THISFORM.PAGEFRAME1.Hal1.m_Customer.VALUE = company
+ELSE
+   THISFORM.PAGEFRAME1.Hal1.m_Customer.VALUE = ''
+ENDIF
+SELECT ae_notify
+LOCATE FOR code = m.Exporter
+*SEEK m.exporter
+IF FOUND()
+   THISFORM.PAGEFRAME1.Hal1._Exporter.VALUE = company
+ELSE
+   THISFORM.PAGEFRAME1.Hal1._Exporter.VALUE = ''
+ENDIF
+LOCATE FOR code = m.Consignee
+*SEEK m.consignee
+IF FOUND()
+   THISFORM.PAGEFRAME1.Hal1._Consignee.VALUE = company
+ELSE
+   THISFORM.PAGEFRAME1.Hal1._Consignee.VALUE = ''
+ENDIF
+LOCATE FOR code = m.Notified
+*SEEK m.notified
+IF FOUND()
+   THISFORM.PAGEFRAME1.Hal1._Notified.VALUE = company
+ELSE
+   THISFORM.PAGEFRAME1.Hal1._Notified.VALUE = ''
+ENDIF
+LOCATE FOR code = m.Ovragent
+*SEEK m.ovragent
+IF FOUND()
+   THISFORM.PAGEFRAME1.Hal1._ovragent.VALUE = company
+ELSE
+   THISFORM.PAGEFRAME1.Hal1._ovragent.VALUE = ''
+ENDIF
+SELECT ae_order
+ENDPROC
+PROCEDURE hilangkansemuatombolgroup1
+THISFORM.GroupTmbPilihan1.VISIBLE = .F.
+ENDPROC
+PROCEDURE tampilkansemuatombolgroup2
+THISFORM.GroupTmbPilihan2.VISIBLE = .T.
+ENDPROC
+PROCEDURE hilangkansemuatombolgroup2
+THISFORM.GroupTmbPilihan2.VISIBLE = .F.
+ENDPROC
+PROCEDURE tampilkansemuatombolgroup1
+THISFORM.GroupTmbPilihan1.VISIBLE = .T.
+ENDPROC
+PROCEDURE kosongkansemuafield
+THISFORM.PAGEFRAME1.Hal1.SETALL('VALUE','','TEXTBOX')
+THISFORM.PAGEFRAME1.Hal1.SETALL('VALUE','','COMBOBOX')
+THISFORM.PAGEFRAME1.Hal2.SETALL('VALUE','','TEXTBOX')
+THISFORM.PAGEFRAME1.Hal2.SETALL('VALUE','','EDITBOX')
+ENDPROC
+PROCEDURE append_item
+select ae_ordline
+set order to order
+seek ae_order.order
+if not found()
+   select ae_item
+   set order to itemcode
+   go top
+   scan
+      if ae_item.divisi = ae_pitem
+         SELECT ae_ordline
+         APPEND BLANK
+         replace ;
+               ae_ordline.itemcode with ae_item.itemcode,;
+               ae_ordline.descript with ae_item.descript,;
+               ae_ordline.order    with ae_noorder,;
+               ae_ordline.glrev    with ae_item.glrev,;
+               ae_ordline.glcogs   with ae_item.glcogs,;
+               ae_ordline.amount   with ae_item.price,;
+               ae_ordline.valas    with ae_item.valas,;
+               ae_ordline.taxable  with ae_item.taxable,;
+               ae_ordline.cost     with 0,;
+               ae_ordline.rate     with iif(ae_item.valas = _valas, 1, FRate(ae_item.valas)),;
+               ae_ordline.arate    with iif(ae_item.valas = _valas, 1, FRate(ae_item.valas)),;
+               ae_ordline.posted   with .f.
+         SELECT ae_item
+      ENDIF 
+   endscan
+endif
+ENDPROC
+PROCEDURE update_detail
+*******************update cost**********
+select 0
+use trdtl again alias ftrdtl
+set order to order
+select 0
+use dndtl
+set order to order
+if used('lineitem')
+   select lineitem
+   linopen = .t.
+else
+   SELECT 0
+   USE lineitem
+   linopen = .f.
+endif
+if used('vline')
+   select vline
+   vinopen = .t.
+else
+   SELECT 0
+   USE vline
+   vinopen = .f.
+endif
+fpvfile = ae_pflag + 'pv.dbf'
+wait fpvfile window timeout 3
+select 0
+use (fpvfile) alias fpv
+set order to order
+select ae_order
+morder_  = order
+mdivisi_ = divisi
+select ae_ordline
+seek morder_
+scan while order = morder_
+   wait "Please wait, update cost..." window nowait
+   select ae_ordline
+   mitem = itemcode
+   replace cost with 0, amount with 0, pv with '', invoice with '', ntr with '', vinvoice with '', posted with .f.
+   select ftrdtl
+   set order to order
+   seek mdivisi_ + morder_ + mitem
+   if found()
+      xtr   = iif(ftrdtl.lcancel, '', ftrdtl.ntr)
+      xcost = iif(ftrdtl.lcancel, 0, ftrdtl.tr_cost)
+      
+      select ae_ordline
+      replace ntr with iif(ftrdtl.lposted, '', xtr), cost with iif(ftrdtl.lposted, 0, xcost)
+   endif
+   select fpv
+   set order to order
+   seek morder_ + mitem
+   if found() and not empty(posted)
+      mcost = fpv.cost
+      xpv   = fpv.number
+      xrate = fpv.rate
+      xntr  = fpv.ntr
+      
+      select ae_ordline
+      replace cost with mcost, pv with xpv, rate with xrate, ntr  with xntr
+      if fpv.itemcode = 'SI020' or fpv.itemcode = 'SI034' or fpv.itemcode = 'SE020' or fpv.itemcode = 'SE034' or fpv.itemcode = 'SC020' or fpv.itemcode = 'SC034'  &&Deposit containter cost dihilangkan
+         select ae_ordline
+         replace amount with mcost
+      endif
+      if fpv.itemcode = 'SI520' or fpv.itemcode = 'SI534' or fpv.itemcode = 'SE520' or fpv.itemcode = 'SE534' or fpv.itemcode = 'SC520' or fpv.itemcode = 'SC534'  &&Deposit containter cost dihilangkan
+         select ae_ordline
+         replace amount with mcost
+      endif
+   endif
+   select lineitem
+   set order to LNS_ORD
+   seek mdivisi_ + morder_ + mitem
+   if found()
+      mamount  = lineitem.amt_orig
+      xinvoice = lineitem.invoice
+      mrate
+   = lineitem.rate_job
+      
+      select ae_ordline
+      replace invoice with xinvoice, amount with mamount, arate with mrate, posted with .t.
+   endif
+   select vline
+   set order to LNS_ORD
+   seek mdivisi_ + morder_ + mitem
+   if found()
+      mcost = vline.cost
+      xpv   = vline.invoice
+      xrate = vline.rate
+      
+      select ae_ordline
+      replace cost with mcost, vinvoice with xpv, rate with xrate 
+   endif
+   select dndtl
+   set order to order
+   seek mdivisi_ + morder_ + mitem
+   if found()
+      mamount = dndtl.debit
+      mcost   = dndtl.credit
+      xpv     = dndtl.batch
+      xrate   = dndtl.rate
+      
+      select ae_ordline
+      replace amount with mamount, cost with mcost, dn with xpv, arate with xrate, rate with xrate 
+   endif
+   select ae_ordline
+endscan
+select fpv
+select ftrdtl
+select dndtl
+if not linopen
+   select lineitem
+   use
+endif
+if not vinopen
+   select vline
+   use
+endif
+ENDPROC
+PROCEDURE Init
+parameter mzoomorder
+public xviewonly
+if type('mzoomorder') # 'C'
+   * wait 'No parameter passed. ' window nowait
+   mzoomorder = ''
+   thisform.windowtype = 0   && modeless
+   xviewonly = .f.
+else
+   thisform.windowtype = 1  && modal
+   xviewonly = .t.
+endif
+if _syscaption = 'KL'
+   thisform.pageframe1.hal1.label28.caption = 'Copy To :'
+endif
+*thisform.pageframe1.hal1.label28.visible 
+  = .f.
+*thisform.pageframe1.hal1.m_from_order.visible = .f.
+store 0 to startqty, minprice_
+store ae_order.order to m.order
+store len(sysval(ae_pmgr)) to morderlen
+store '-1' to oldorder
+select ae_order
+if empty(mzoomorder)
+   go bottom
+else
+   seek mzoomorder
+endif
+select ae_customer
+seek ae_order.custcode
+select ae_order
+if ae_order.order # oldorder
+   store ae_order.order to oldorder
+   select ae_ordline
+   seek ae_order.order
+endif
+thisform.hidupkansemuatombolgroup1
+thisform.tampilkansemuatombolgroup1
+ENDPROC
+PROCEDURE Load
+_lMenu = .T.
+_somenu[1] = .t.
+* AEORDER.PRG
+PUBLIC ae_ltmbadd, ae_ltmbedit, ae_ltmbsearch, ae_ltmbcust, ae_noorder,;
+       ae_pflag, ae_pitem, ae_pmgr, ae_phdrf, ae_pdtlf, ae_ppvf, ae_papf,;
+       ae_lbatal, ae_lawal, ae_ldataada, ae_lcaridata
+ae_ltmbadd    = .F.
+ae_ltmbedit   = .F.
+ae_ltmbsearch = .F.
+ae_ltmbcust   = .F.
+ae_ldataada   = .F.
+ae_lawal      = .T.
+ae_lbatal     = .F.
+ae_lcaridata  = .F.
+ae_noorder = ''
+ae_pflag = 'AE'
+ae_pitem = 'AE'
+ae_pmgr  = IIF(EMPTY(_dept),'',_dept+' ') +'AE NUMBER'
+ae_phdrf = 'AEHDR'
+ae_pdtlf = 'AELINE'
+ae_ppvf  = 'AEPV'
+ae_papf  = 'AEAP'
+SELECT 0
+USE source again alias ae_source
+SET ORDER TO src_src
+SELECT 0
+USE staff again alias ae_staff
+SET ORDER TO staff
+SELECT 0
+USE item again alias ae_item
+SET ORDER TO itemcode
+select 0
+use lc
+set order to lc
+select 0
+use lcline
+set order to lc
+SELECT 0
+USE vendor again alias ae_vendor
+SET ORDER TO ven_ven
+SELECT 0
+USE customer again alias ae_customer
+SET ORDER TO cus_cus
+SELECT 0
+USE notified again alias ae_notify
+SET ORDER TO code
+SELECT 0
+USE aehdr again alias ae_order
+SET ORDER TO order
+SELECT 0
+USE aeline again alias ae_ordline
+SET ORDER TO order
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+IF nKeyCode = -1
+   THISFORM.PAGEFRAME1.ACTIVEPAGE = 1      
+ENDIF
+IF nKeyCode = -2
+   THISFORM.PAGEFRAME1.ACTIVEPAGE = 2      
+ENDIF
+IF nKeyCode = 27
+   ae_lbatal = .T.
+   IF !EMPTY(THISFORM.PAGEFRAME1.Hal1.m_custcode.VALUE)
+      THISFORM.GroupTmbPilihan2.TmbOK.ENABLED = .T.
+      THISFORM.GroupTmbPilihan2.TmbOK.SETFOCUS
+   ELSE
+      THISFORM.GroupTmbPilihan2.TmbCancel.SETFOCUS
+   ENDIF
+ENDIF
+ENDPROC
+PROCEDURE Unload
+RELE ae_ltmbadd, ae_ltmbedit, ae_ltmbsearch, ae_noorder;
+     ae_pflag, ae_pitem, ae_pmgr, ae_phdrf, ae_pdtlf, ae_ppvf, ae_papf,;
+     oldorderno, ae_lbatal, ae_lawal, ae_ldataada, ae_lcaridata
+release m.period, m.invoice, m.written, m.billto, qtax, qval, qrate, qnotes, xviewonly
+     
+select ae_customer
+select ae_notify
+select ae_item
+select ae_order
+select ae_ordline
+select ae_source
+select ae_staff
+select ae_vendor
+select lc
+select lcline
+_somenu[1] =.f.
+if _somenu[1] or _somenu[2] or _somenu[3] or _somenu[4] or _somenu[5] or _somenu[6]
+   _lMenu = .t.
+else
+   _lmenu = .f.
+endif
+ENDPROC
+PROCEDURE Activate
+IF ae_lawal = .T.
+   SELECT ae_order
+   THISFORM.TampilkanData
+   THISFORM.HilangkanSemuaTombolGroup2
+   THISFORM.GroupTmbPilihan1.TmbAdd.SETFOCUS
+   ae_lawal = .F.
+ENDIF
+IF ae_lcaridata = .T.
+   THISFORM.TampilkanData
+   ae_lcaridata = .F.
+ENDIF
+ENDPROC
+PROCEDURE RightClick
+RETURN
+lFocusTetap = .T.
+lCustcode = .T.
+lExporter = .T.
+lConsignee = .T.
+lNotified = .T.
+lOvragent = .T.
+ae_lbatal = .T.
+THISFORM.DataAwal
+THISFORM.PAGEFRAME1.Hal1.m_Sono.VALUE = oldorderno
+THISFORM.MatikanField
+THISFORM.HilangkanSemuaTombolGroup2
+THISFORM.TampilkanSemuaTombolGroup1
+ENDPROC
+AE_ORDER
+VALAS
+THISFORM
+PAGEFRAME1
+HAL1
+M_VALAS
+VALUE
+VALRATE
+M_VALRATE
+REFNO
+M_REFNO
+SOURCE
+COXSOURCE
+EXPORTER
+M_EXPORTER
+CONSIGNEE
+M_CONSIGNEE
+NOTIFIED
+M_NOTIFIED
+OVRAGENT
+M_OVRAGENT
+MAWB
+M_MAWB
+HAWB
+M_HAWB
+M_ETD
+M_ETA
+ISSUED
+M_ISSUED
+DT2CONS
+M_DT2CONS
+M_QTY
+UNIT
+M_UNIT
+GRS_WGT
+M_GRS_WGT
+CHG_WGT
+M_CHG_WGT
+FREIGHT
+M_FREIGHT
+COST_KG
+M_COST_KG
+VOIDED
+M_VOIDED
+POSTED
+M_POSTED
+POSTEDBY
+C_POSTEDBY
+VOIDEDBY
+C_VOIDEDBY
+ORIGIN
+M_ORIGIN
+DESTIN
+M_DESTIN
+REMARK
+M_REMARK
+DECLARED
+M_DECLARED
+INSURANCE
+M_INSURANCE
+WRITTEN
+M_WRITTEN
+QUOTATION
+M_QUOTATION
+MGOODS
+HAL2
+M_MGOODS
+MHANDLING
+M_MHANDLING
+MSHIP
+M_MSHIP
+CARRIER_1
+M_CARRIER1
+CARRIER_2
+M_CARRIER2
+CARRIER_3
+M_CARRIER3
+TO_1
+M_TO1
+TO_2
+M_TO2
+TO_3
+M_TO3
+MFLIGHT
+M_MFLIGHT
+OTHER_1
+M_OTHER1
+OTHER_2
+M_OTHER2
+OTHER_3
+M_OTHER3
+OTHER_CHG
+M_OTHER_CHG
+CARR_CHG
+M_CARR_CHG
+MATIKANFIELD
+TAMPILKANDATA
+HILANGKANSEMUATOMBOLGROUP2
+TAMPILKANSEMUATOMBOLGROUP16
+AE_LBATAL
+THISFORM
+TAMPILKANDATA
+MATIKANFIELD
+HILANGKANSEMUATOMBOLGROUP2
+TAMPILKANSEMUATOMBOLGROUP1
+TmbOK.Click,
+TmbCancel.Click=
+port
+port
+fDatCom.scx
+PORT
+ae_port
+MLASTDBF
+PORT
+AE_PORT
+_VALUE
+THISFORM
+PAGEFRAME1
+HAL2
+M_TO3
+VALUE
+FDATCOM
+LostFocus,
+port
+port
+fDatCom.scx
+PORT
+ae_port
+MLASTDBF
+PORT
+AE_PORT
+_VALUE
+THISFORM
+PAGEFRAME1
+HAL2
+M_TO2
+VALUE
+FDATCOM
+LostFocus,
+port
+port
+fDatCom.scx
+PORT
+ae_port
+MLASTDBF
+PORT
+AE_PORT
+_VALUE
+THISFORM
+PAGEFRAME1
+HAL2
+M_TO1
+VALUE
+FDATCOM
+LostFocus,
+THISFORM
+PAGEFRAME1
+ACTIVEPAGE
+HAL1
+COXSOURCE
+SETFOCUS
+LostFocus,
+aiq_dtl
+q_no
+aiq_hdr
+EXPORT
+q_no
+faiq_Entry_Search(
+q_no
+q_no
+ae_item
+glrev
+itemcode
+ae_item
+glcogs
+itemcode
+AE_ORDER
+XORDER
+ORDER
+THISFORM
+PAGEFRAME1
+HAL1
+M_QUOTATION
+VALUE
+MORDER
+MSEARCH
+AIQ_DTL
+Q_NO
+AIQ_HDR
+TYPES
+POSTED
+VOIDED
+FAIQ_ENTRY_SEARCH
+AE_ORDLINE
+ITEMCODE
+DESCRIPT
+VALAS
+AMOUNT
+COST
+ARATE
+FRATE_DATE
+RATE
+GLREV
+FSHOWFIELD
+GLCOGS
+M_SONO
+DEPT
+DIVISI
+M_CUSTCODE
+AE_NOORDER
+HIDUPKANFIELD
+GROUPTMBPILIHAN2
+TMBOK
+ENABLEDc
+order
+AE_ORDLINE
+ORDER
+AE_ORDER
+RETVAL
+LostFocus,
+When
+order
+SI_ORDLINE
+ORDER
+SI_ORDER
+RETVAL
+sea_line
+order
+sea_hdr
+order
+fSoValid2.scx(
+order
+order
+  /  /    #
+  /  /    #
+order
+order
+SI_ORDER
+XORDER
+ORDER
+THISFORM
+PAGEFRAME1
+HAL1
+M_FROM_ORDER
+VALUE
+MORDER
+MSEARCH
+SEA_LINE
+SOLINE
+SEA_HDR
+SOHDR
+DIVISI
+SI_PFLAG
+POSTED
+CLOSED
+FSOVALID2
+REFNO
+DEPT
+_DEPT
+FROM_ORDER
+WRITTEN
+ISSUED
+POSTEDBY
+PRINTED
+SOLDBY
+_USERID
+SI_ORDLINE
+TAMPILKANDATA
+M_SONO
+M_CUSTCODE
+SI_NOORDER
+HIDUPKANFIELD
+GROUPTMBPILIHAN2
+TMBOK
+ENABLED
+When,
+LostFocus
+sea_line
+order
+sea_hdr
+order
+fSoValid2.scx(
+order
+order
+  /  /    #
+  /  /    #
+order
+order
+SI_ORDER
+XORDER
+ORDER
+THISFORM
+PAGEFRAME1
+HAL1
+M_FROM_ORDER
+VALUE
+MORDER
+MSEARCH
+SEA_LINE
+SOLINE
+SEA_HDR
+SOHDR
+DIVISI
+SI_PFLAG
+POSTED
+CLOSED
+FSOVALID2
+REFNO
+DEPT
+_DEPT
+FROM_ORDER
+WRITTEN
+ISSUED
+POSTEDBY
+PRINTED
+SOLDBY
+_USERID
+SI_ORDLINE
+TAMPILKANDATA
+M_SONO
+M_CUSTCODE
+SI_NOORDER
+HIDUPKANFIELD
+GROUPTMBPILIHAN2
+TMBOK
+ENABLEDc
+order
+SI_ORDLINE
+ORDER
+SI_ORDER
+RETVAL
+LostFocus,
+When
+aehdr
+order
+fSoValid(
+THISFORM
+PAGEFRAME1
+HAL1
+M_FROM_ORDER
+VALUE
+AE_ORDER
+MORDER
+MSEARCH
+AEHDR
+SOHDR
+ORDER
+FSOVALID
+NEXTNUM
+AE_PMGR
+AE_NOORDER
+DEPT
+_DEPT
+FROM_ORDER
+SOLDBY
+_USERID
+TAMPILKANDATA
+M_SONO
+DIVISI
+M_CUSTCODE
+HIDUPKANFIELD
+GROUPTMBPILIHAN2
+TMBOK
+ENABLED
+Valid,
+fPesan.scx
+This field value should be: C or E or P !!
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_FREIGHT
+VALUE
+FPESAN
+Valid,
+THISFORM
+PAGEFRAME1
+ACTIVEPAGE
+HAL2
+M_MGOODS
+SETFOCUS
+LostFocus,
+valas
+valas
+fDatCom.scx
+VALAS
+ae_valas
+MLASTDBF
+VALAS
+AE_VALAS
+_VALUE
+THISFORM
+PAGEFRAME1
+HAL1
+M_VALAS
+VALUE
+FDATCOM
+M_VALRATE
+RATE
+LostFocus,
+LostFocus,
+yArial, 0, 9, 5, 15, 12, 32, 3, 0
+Times New Roman, 0, 10, 5, 16, 12, 34, 3, 1
+Times New Roman, 0, 11, 6, 18, 13, 39, 4, 1
+FAEORDENTRY
+GroupTmbPilihan1
+commandgroup
+commandgroup
+*matikanfield 
+*hidupkanfield 
+*matikansemuatombolgroup1 
+*hidupkansemuatombolgroup1 
+*tampilkandata 
+*hilangkansemuatombolgroup1 
+*tampilkansemuatombolgroup2 
+*hilangkansemuatombolgroup2 
+*tampilkansemuatombolgroup1 
+*kosongkansemuafield 
+*append_item 
+*update_detail 
+pageframe
+pageframe
+Pageframe1
+FAEORDENTRY
+!ErasePage = .T.
+PageCount = 2
+ActivePage = 1
+Top = 7
+Left = 7
+Width = 799
+Height = 412
+TabIndex = 1
+Name = "Pageframe1"
+Page1.FontBold = .T.
+Page1.FontName = "Times New Roman"
+Page1.FontSize = 16
+Page1.Caption = "Page 1"
+Page1.PageOrder = 1
+Page1.BackColor = 37,109,218
+Page1.ForeColor = 255,255,255
+Page1.Name = "Hal1"
+Page2.FontBold = .T.
+Page2.FontName = "Times New Roman"
+Page2.FontSize = 16
+Page2.Caption = "Page 2"
+Page2.PageOrder = 2
+Page2.BackColor = 95,150,233
+Page2.ForeColor = 255,255,255
+Page2.Name = "Hal2"
+MPROCEDURE Hal2.Click
+THISFORM.PAGEFRAME1.Hal2.m_mGoods.SETFOCUS
+ENDPROC
+THISFORM
+PAGEFRAME1
+HAL2
+M_MGOODS
+SETFOCUS
+Hal2.Click,
+shape
+shape
+Shape1
+FAEORDENTRY.Pageframe1.Hal1
+yTop = 6
+Left = 9
+Height = 352
+Width = 773
+BackStyle = 1
+SpecialEffect = 0
+BackColor = 10,210,245
+Name = "Shape1"
+shape
+shape
+Shape10
+FAEORDENTRY.Pageframe1.Hal1
+eTop = 268
+Left = 572
+Height = 54
+Width = 200
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape10"
+shape
+shape
+Shape2
+FAEORDENTRY.Pageframe1.Hal1
+bTop = 12
+Left = 22
+Height = 34
+Width = 751
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape2"
+shape
+shape
+Shape3
+FAEORDENTRY.Pageframe1.Hal1
+cTop = 81
+Left = 22
+Height = 108
+Width = 496
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape3"
+label
+label
+Label5
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Overseas Agent :"
+Height = 23
+Left = 7
+Top = 161
+Width = 140
+TabIndex = 41
+Name = "Label5"
+label
+label
+Label4
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Importer / Consignee :"
+Height = 23
+Left = 7
+Top = 113
+Width = 140
+TabIndex = 42
+Name = "Label4"
+label
+label
+Label3
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Exporter / Shipper :"
+Height = 23
+Left = 7
+Top = 89
+Width = 140
+TabIndex = 44
+Name = "Label3"
+label
+label
+Label1
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Notify Party :"
+Height = 23
+Left = 7
+Top = 137
+Width = 140
+TabIndex = 46
+Name = "Label1"
+shape
+shape
+Shape4
+FAEORDENTRY.Pageframe1.Hal1
+dTop = 191
+Left = 22
+Height = 101
+Width = 303
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape4"
+label
+label
+Label8
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Remark :"
+Height = 23
+Left = 22
+Top = 265
+Width = 75
+TabIndex = 47
+Name = "Label8"
+label
+label
+Label7
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Destination :"
+Height = 23
+Left = 22
+Top = 225
+Width = 75
+TabIndex = 48
+Name = "Label7"
+label
+label
+Label6
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Origin :"
+Height = 23
+Left = 22
+Top = 201
+Width = 75
+TabIndex = 49
+Name = "Label6"
+shape
+shape
+Shape5
+FAEORDENTRY.Pageframe1.Hal1
+cTop = 295
+Left = 22
+Height = 58
+Width = 303
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape5"
+label
+label
+Label15
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Date2Con :"
+Height = 23
+Left = 22
+Top = 326
+Width = 75
+TabIndex = 52
+Name = "Label15"
+label
+label
+Label14
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Issued :"
+Height = 23
+Left = 22
+Top = 302
+Width = 75
+TabIndex = 53
+Name = "Label14"
+shape
+shape
+Shape6
+FAEORDENTRY.Pageframe1.Hal1
+dTop = 81
+Left = 522
+Height = 108
+Width = 250
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape6"
+label
+label
+Label13
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "ETA :"
+Height = 23
+Left = 518
+Top = 160
+Width = 60
+TabIndex = 54
+Name = "Label13"
+label
+label
+Label12
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "ETD :"
+Height = 23
+Left = 518
+Top = 136
+Width = 60
+TabIndex = 55
+Name = "Label12"
+label
+label
+Label11
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "HAWB :"
+Height = 23
+Left = 518
+Top = 112
+Width = 60
+TabIndex = 56
+Name = "Label11"
+label
+label
+Label10
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "MAWB :"
+Height = 23
+Left = 518
+Top = 88
+Width = 60
+TabIndex = 57
+Name = "Label10"
+shape
+shape
+Shape7
+FAEORDENTRY.Pageframe1.Hal1
+eTop = 191
+Left = 329
+Height = 130
+Width = 239
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape7"
+label
+label
+Label22
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Chgbl Weight :"
+Height = 23
+Left = 323
+Top = 296
+Width = 95
+TabIndex = 61
+Name = "Label22"
+label
+label
+Label21
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Gross Weight :"
+Height = 23
+Left = 323
+Top = 272
+Width = 95
+TabIndex = 62
+Name = "Label21"
+label
+label
+Label19
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Quantity :"
+Height = 23
+Left = 323
+Top = 248
+Width = 95
+TabIndex = 64
+Name = "Label19"
+textbox
+textbox
+m_qty
+FAEORDENTRY.Pageframe1.Hal1
+8FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "9,999,999,999.999"
+Left = 420
+Margin = 1
+MaxLength = 0
+TabIndex = 25
+Top = 246
+Width = 100
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_qty"
+textbox
+textbox
+m_grs_wgt
+FAEORDENTRY.Pageframe1.Hal1
+#FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "9,999,999,999.999"
+Left = 420
+Margin = 1
+MaxLength = 0
+TabIndex = 27
+Top = 270
+Width = 100
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_grs_wgt"
+textbox
+textbox
+m_chg_wgt
+FAEORDENTRY.Pageframe1.Hal1
+#FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "9,999,999,999.999"
+Left = 420
+Margin = 1
+MaxLength = 0
+TabIndex = 28
+Top = 294
+Width = 100
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_chg_wgt"
+textbox
+textbox
+m_mawb
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 580
+Margin = 1
+MaxLength = 25
+TabIndex = 14
+Top = 86
+Width = 184
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_mawb"
+PROCEDURE When
+if _pass[7]
+   select ae_ordline
+   set order to order
+   seek ae_order.order
+   locate for not empty(invoice) while ae_ordline.order = ae_noorder
+   if found()
+      return .f.
+   endif
+endif
+return .t.
+ENDPROC
+order
+_PASS
+AE_ORDLINE
+ORDER
+AE_ORDER
+INVOICE
+AE_NOORDER
+When,
+textbox
+textbox
+m_hawb
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 580
+Margin = 1
+MaxLength = 25
+TabIndex = 15
+Top = 110
+Width = 184
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_hawb"
+PROCEDURE When
+if _pass[7]
+   select ae_ordline
+   set order to order
+   seek ae_order.order
+   locate for not empty(invoice) while ae_ordline.order = ae_noorder
+   if found()
+      return .f.
+   endif
+endif
+return .t.
+ENDPROC
+PROCEDURE LostFocus
+mfield = alltrim(thisform.PAGEFRAME1.Hal1.m_hawb.VALUE)
+morder = ae_order.order
+if empty(mfield)
+   return .t.
+endif
+select 0
+use aehdr again alias fhawbfile
+set order to hawb
+seek mfield
+if found()
+   locate for order # morder while hawb = mfield
+   if found()
+      DO FORM fPesan.scx WITH "Nomor HAWB sudah ada di SO nomor " + fhawbfile.order + ".",14,.T.
+   endif
+endif
+select fhawbfile
+select ae_order
+ENDPROC
+aehdr
+refno
+fPesan.scx
+Nomor JOB sudah ada di SO nomor 
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_REFNO
+VALUE
+MORDER
+AE_ORDER
+ORDER
+RETVAL
+AEHDR
+FREFFILE
+REFNO
+FPESAN
+Valid,
+-Top = 438
+Left = 713
+Name = "Autoresize1"
+FAEORDENTRY
+Autoresize1
+timer
+..\myclass\autoresize.vcx
+autoresize
+FAEORDENTRY
+m_mflight
+textbox
+textbox
+m_etd
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 580
+Margin = 1
+TabIndex = 16
+Top = 134
+Width = 65
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_etd"
+textbox
+textbox
+m_eta
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 580
+Margin = 1
+TabIndex = 17
+Top = 158
+Width = 65
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_eta"
+textbox
+textbox
+m_issued
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 99
+Margin = 1
+TabIndex = 21
+Top = 300
+Width = 65
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_issued"
+textbox
+textbox
+m_dt2cons
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 99
+Margin = 1
+TabIndex = 22
+Top = 324
+Width = 65
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_dt2cons"
+textbox
+textbox
+m_declared
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 420
+Margin = 1
+MaxLength = 10
+TabIndex = 23
+Top = 198
+Width = 100
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_declared"
+textbox
+textbox
+m_insurance
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 420
+Margin = 1
+MaxLength = 10
+TabIndex = 24
+Top = 222
+Width = 100
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_insurance"
+textbox
+textbox
+m_exporter
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 149
+Margin = 1
+MaxLength = 4
+TabIndex = 8
+Top = 87
+Width = 52
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_exporter"
+PPROCEDURE DblClick
+mfield = padr(alltrim(thisform.pageframe1.hal1.m_Exporter.value), 4, ' ')
+xcode  = ""
+*if not empty(mfield)
+   do form fNotify.scx with mfield to xcode
+   if not empty(xcode)
+      thisform.pageframe1.hal1.m_Exporter.value = xcode
+   endif
+   select ae_order
+   thisform.refresh
+*endif
+ENDPROC
+PROCEDURE LostFocus
+IF ae_lbatal = .F.
+   mfield = thisform.pageframe1.hal1.m_exporter.value
+   IF not EMPTY(mfield)
+      SELECT ae_notify
+      SET ORDER TO code
+      IF EOF() AND BOF()
+         DO FORM fPesan.scx WITH 'Database is empty',20,.T.
+         RETURN
+      ENDIF
+      seek mfield
+      IF FOUND()
+         THISFORM.PAGEFRAME1.Hal1._Exporter.VALUE = ae_notify.company      
+      ELSE
+         mreturn  = ""
+         mcompany = ""
+         do form fNotified_valid.scx with mfield to mreturn
+         if not empty(mreturn)
+            select ae_notify
+            set order to code
+            seek mreturn
+            if found()
+               mcompany = ae_notify.company
+            endif
+         endif
+         THISFORM.PAGEFRAME1.Hal1.m_Exporter.VALUE = mreturn  && ae_notify.code
+         THISFORM.PAGEFRAME1.Hal1._Exporter.VALUE  = mcompany && ae_notify.company
+      ENDIF
+   ELSE
+      THISFORM.PAGEFRAME1.Hal1._Exporter.VALUE = ''
+   ENDIF
+   SELECT ae_order
+ENDIF
+ENDPROC
+fNotify.scx(
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_OVRAGENT
+VALUE
+XCODE
+FNOTIFY
+AE_ORDER
+REFRESH
+code
+fPesan.scx
+Database is empty
+fNotified_valid.scx(
+code
+AE_LBATAL
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_OVRAGENT
+VALUE
+AE_NOTIFY
+CODE
+FPESAN
+_OVRAGENT
+COMPANY
+MRETURN
+MCOMPANY
+FNOTIFIED_VALID
+AE_ORDER
+DblClick,
+LostFocus
+textbox
+textbox
+m_consignee
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 149
+Margin = 1
+MaxLength = 4
+TabIndex = 10
+Top = 111
+Width = 52
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_consignee"
+\PROCEDURE DblClick
+mfield = padr(alltrim(thisform.pageframe1.hal1.m_consignee.value), 4, ' ')
+xcode  = ""
+*if not empty(mfield)
+   do form fNotify.scx with mfield to xcode
+   if not empty(xcode)
+      thisform.pageframe1.hal1.m_consignee.value = xcode
+   endif
+   select ae_order
+   thisform.refresh
+*endif
+ENDPROC
+PROCEDURE LostFocus
+IF ae_lbatal = .F.
+   mfield = THISFORM.PAGEFRAME1.Hal1.m_Consignee.VALUE
+   IF not empty(mfield)
+      SELECT ae_notify
+      SET ORDER TO code
+      IF EOF() AND BOF()
+         DO FORM fPesan.scx WITH 'Database is empty',20,.T.
+         RETURN
+      ENDIF
+      seek mfield
+      IF FOUND()
+         THISFORM.PAGEFRAME1.Hal1._Consignee.VALUE = ae_notify.company      
+      ELSE
+         mreturn  = ""
+         mcompany = ""
+         do form fNotified_valid.scx with mfield to mreturn
+         if not empty(mreturn)
+            select ae_notify
+            set order to code
+            seek mreturn
+            if found()
+               mcompany = ae_notify.company
+            endif
+         endif
+         THISFORM.PAGEFRAME1.Hal1.m_Consignee.VALUE = mreturn  && ae_notify.code
+         THISFORM.PAGEFRAME1.Hal1._Consignee.VALUE  = mcompany && ae_notify.company
+      ENDIF
+   ELSE
+      THISFORM.PAGEFRAME1.Hal1._Consignee.VALUE = ''
+   ENDIF
+   SELECT ae_order
+ENDIF
+ENDPROC
+fNotify.scx(
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_NOTIFIED
+VALUE
+XCODE
+FNOTIFY
+AE_ORDER
+REFRESH
+code
+fPesan.scx
+Database is empty
+fNotified_valid.scx(
+code
+AE_LBATAL
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_NOTIFIED
+VALUE
+AE_NOTIFY
+CODE
+FPESAN
+_NOTIFIED
+COMPANY
+MRETURN
+MCOMPANY
+FNOTIFIED_VALID
+AE_ORDER
+DblClick,
+LostFocus
+textbox
+textbox
+m_notified
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 149
+Margin = 1
+MaxLength = 4
+TabIndex = 12
+Top = 135
+Width = 52
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_notified"
+QPROCEDURE DblClick
+mfield = padr(alltrim(thisform.pageframe1.hal1.m_notified.value), 4, ' ')
+xcode  = ""
+*if not empty(mfield)
+   do form fNotify.scx with mfield to xcode
+   if not empty(xcode)
+      thisform.pageframe1.hal1.m_notified.value = xcode
+   endif
+   select ae_order
+   thisform.refresh
+*endif
+ENDPROC
+PROCEDURE LostFocus
+IF ae_lbatal = .F.
+   mfield = THISFORM.PAGEFRAME1.Hal1.m_Notified.VALUE
+   IF not empty(mfield)
+      SELECT ae_notify
+      SET ORDER TO code
+      IF EOF() AND BOF()
+         DO FORM fPesan.scx WITH 'Database is empty',20,.T.
+         RETURN
+      ENDIF
+      seek mfield
+      IF FOUND()
+         THISFORM.PAGEFRAME1.Hal1._Notified.VALUE = ae_notify.company      
+      ELSE
+         mreturn  = ""
+         mcompany = ""
+         do form fNotified_valid.scx with mfield to mreturn
+         if not empty(mreturn)
+            select ae_notify
+            set order to code
+            seek mreturn
+            if found()
+               mcompany = ae_notify.company
+            endif
+         endif
+         THISFORM.PAGEFRAME1.Hal1.m_Notified.VALUE = mreturn  &&ae_notify.code
+         THISFORM.PAGEFRAME1.Hal1._Notified.VALUE  = mcompany &&ae_notify.company
+      ENDIF
+   ELSE
+      THISFORM.PAGEFRAME1.Hal1._Notified.VALUE = ''
+   ENDIF
+   SELECT ae_order
+ENDIF
+ENDPROC
+fNotify.scx(
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_CONSIGNEE
+VALUE
+XCODE
+FNOTIFY
+AE_ORDER
+REFRESH
+code
+fPesan.scx
+Database is empty
+fNotified_valid.scx(
+code
+AE_LBATAL
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_CONSIGNEE
+VALUE
+AE_NOTIFY
+CODE
+FPESAN
+_CONSIGNEE
+COMPANY
+MRETURN
+MCOMPANY
+FNOTIFIED_VALID
+AE_ORDER
+DblClick,
+LostFocus
+textbox
+textbox
+m_ovragent
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 149
+Margin = 1
+MaxLength = 4
+TabIndex = 13
+Top = 159
+Width = 52
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_ovragent"
+VPROCEDURE DblClick
+mfield = padr(alltrim(thisform.pageframe1.hal1.m_ovragent.value), 4, ' ')
+xcode  = ""
+*if not empty(mfield)
+   do form fNotify.scx with mfield to xcode
+   if not empty(xcode)
+      thisform.pageframe1.hal1.m_ovragent.value = xcode
+   endif
+   select ae_order
+   thisform.refresh
+*endif
+ENDPROC
+PROCEDURE LostFocus
+IF ae_lbatal = .F.
+   mfield = THISFORM.PAGEFRAME1.Hal1.m_Ovragent.VALUE
+   if not empty(mfield)
+      SELECT ae_notify
+      SET ORDER TO code
+      IF EOF() AND BOF()
+         DO FORM fPesan.scx WITH 'Database is empty',20,.T.
+         RETURN
+      ENDIF
+      seek mfield
+      IF FOUND()
+         THISFORM.PAGEFRAME1.Hal1._Ovragent.VALUE = ae_notify.company      
+      ELSE
+         mreturn  = ""
+         mcompany = ""
+         do form fNotified_valid.scx with mfield to mreturn
+         if not empty(mreturn)
+            select ae_notify
+            set order to code
+            seek mreturn
+            if found()
+               mcompany = ae_notify.company
+            endif
+         endif
+         THISFORM.PAGEFRAME1.Hal1.m_Ovragent.VALUE = mreturn  && ae_notify.code
+         THISFORM.PAGEFRAME1.Hal1._Ovragent.VALUE  = mcompany && ae_notify.company
+      ENDIF
+   ELSE
+      THISFORM.PAGEFRAME1.Hal1._Ovragent.VALUE = ''
+      SELECT ae_order
+   ENDIF
+ENDIF
+ENDPROC
+fNotify.scx(
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_EXPORTER
+VALUE
+XCODE
+FNOTIFY
+AE_ORDER
+REFRESH
+code
+fPesan.scx
+Database is empty
+fNotified_valid.scx(
+code
+AE_LBATAL
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_EXPORTER
+VALUE
+AE_NOTIFY
+CODE
+FPESAN
+_EXPORTER
+COMPANY
+MRETURN
+MCOMPANY
+FNOTIFIED_VALID
+AE_ORDER
+DblClick,
+LostFocus
+textbox
+textbox
+m_origin
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 99
+Margin = 1
+MaxLength = 40
+TabIndex = 18
+Top = 199
+Width = 216
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_origin"
+textbox
+textbox
+m_destin
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 99
+Margin = 1
+MaxLength = 40
+TabIndex = 19
+Top = 223
+Width = 216
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_destin"
+"PROCEDURE LostFocus
+ENDPROC
+GroupTmbPilihan2
+commandgroup
+commandgroup
+FAEORDENTRY.Pageframe1.Hal2
+editbox
+editbox
+FAEORDENTRY.Pageframe1.Hal2
+editbox
+textbox
+textbox
+m_remark
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 99
+Margin = 1
+MaxLength = 20
+TabIndex = 20
+Top = 263
+Width = 216
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_remark"
+textbox
+textbox
+_Consignee
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 202
+Margin = 1
+TabIndex = 66
+Top = 111
+Width = 306
+ForeColor = 0,0,0
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "_Consignee"
+textbox
+textbox
+_Exporter
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 202
+Margin = 1
+TabIndex = 67
+Top = 87
+Width = 306
+ForeColor = 0,0,0
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "_Exporter"
+textbox
+textbox
+_Notified
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 202
+Margin = 1
+TabIndex = 68
+Top = 135
+Width = 306
+ForeColor = 0,0,0
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "_Notified"
+textbox
+textbox
+_Ovragent
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 202
+Margin = 1
+TabIndex = 69
+Top = 159
+Width = 306
+ForeColor = 0,0,0
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "_Ovragent"
+textbox
+textbox
+m_unit
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 521
+Margin = 1
+MaxLength = 4
+TabIndex = 26
+Top = 246
+Width = 40
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_unit"
+label
+label
+Label26
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Customer Id. :"
+Height = 23
+Left = 7
+Top = 19
+Width = 96
+TabIndex = 37
+Name = "Label26"
+textbox
+textbox
+m_custcode
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 105
+Margin = 1
+MaxLength = 4
+TabIndex = 3
+Top = 17
+Width = 52
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_custcode"
+gPROCEDURE LostFocus
+IF ae_lbatal = .F.
+   ae_ldataada = .F.
+   IF !EMPTY(THISFORM.PAGEFRAME1.Hal1.m_CustCode.VALUE)
+      SELECT ae_customer
+      GO TOP
+      SET ORDER TO cus_cus
+      IF EOF() AND BOF()
+         DO FORM fPesan.scx WITH 'Database is empty',20,.T.
+         RETURN
+      ENDIF
+      _value = THISFORM.PAGEFRAME1.Hal1.m_CustCode.VALUE
+      LOCATE FOR custcode = THISFORM.PAGEFRAME1.Hal1.m_CustCode.VALUE
+      IF FOUND()
+         ae_ldataada = .T.
+         THISFORM.PAGEFRAME1.Hal1.m_Customer.VALUE = ae_customer.company
+      ELSE
+         set order to cus_com
+         SET NEAR ON
+         SEEK _value
+         DO FORM fDatCom.scx WITH 'CUSTOMER', "ae_customer"
+         SET NEAR OFF
+         SELECT ae_customer
+         set order to cus_cus
+         THISFORM.PAGEFRAME1.Hal1.m_Custcode.VALUE = ae_customer.custcode
+         THISFORM.PAGEFRAME1.Hal1.m_Customer.VALUE = ae_customer.company
+         ae_ldataada = .T.
+      ENDIF         
+      IF ae_ldataada = .T.
+         SELECT ae_order     
+         SET ORDER TO order
+         IF ae_ltmbadd = .T.
+            do while .t.
+               STORE Nextnum(ae_pmgr) TO ae_noorder
+               seek ae_noorder
+               if not found()
+                  exit
+               endif
+            enddo
+            
+            APPEND BLANK 
+            REPL NEXT 1;
+            ae_order.order WITH ae_noorder,;
+            ae_order.dept WITH _dept,;
+            ae_order.divisi WITH ae_pflag,;
+            ae_order.custcode WITH THISFORM.PAGEFRAME1.Hal1.m_custcode.VALUE,;
+            ae_order.written WITH DATE(),;
+            ae_order.valas WITH 'IDR',;
+            ae_order.valrate WITH 1,;
+            ae_order.origin with "SOEKARNO-HATTA INT'L AIRPORT JAKARTA",;
+            ae_order.insurance with "NIL",;
+            ae_order.declared with "NVD",;
+            ae_order.mhandling with "PLS CTC CNEE IMMY UPON ARRVL" + chr(13) + "DOC'S ATTCHD WITH MAWB",;
+            ae_order.soldby WITH _userid
+            = fLogs_add('ae_log.dbf', ae_order.order, 'ADD', '')
+            SELECT ae_order
+         ENDIF
+         IF ae_ltmbcust = .T.
+            REPL NEXT 1;
+            ae_order.custcode WITH ae_customer.custcode,;
+            ae_order.from_order with thisform.pageframe1.hal1.m_from_order.value,;
+            ae_order.soldby WITH _userid
+            SELECT ae_order
+         ENDIF
+      
+         THISFORM.TampilkanData
+         THISFORM.PAGEFRAME1.Hal1.m_Sono.VALUE = ae_order.Dept+ae_order.Divisi+;
+         THISFORM.PAGEFRAME1.Hal1.m_Custcode.VALUE+'-'+ ae_noorder
+         THISFORM.HidupkanField
+         THISFORM.PAGEFRAME1.Hal1.m_CustCode.ENABLED = .F.
+         THISFORM.GroupTmbPilihan2.TmbOk.ENABLED = .T.
+         *THISFORM.PAGEFRAME1.Hal1.m_Refno.SETFOCUS 
+         THISFORM.PAGEFRAME1.Hal1.coxSource.SETFOCUS 
+      ENDIF  
+   ENDIF
+ENDIF
+ENDPROC
+cus_cus
+fPesan.scx
+Database is empty
+cus_com
+fDatCom.scx
+CUSTOMER
+ae_customer
+cus_cus
+order
+SOEKARNO-HATTA INT'L AIRPORT JAKARTA
+PLS CTC CNEE IMMY UPON ARRVLC
+DOC'S ATTCHD WITH MAWB
+ae_log.dbf
+AE_LBATAL
+AE_LDATAADA
+THISFORM
+PAGEFRAME1
+HAL1
+M_CUSTCODE
+VALUE
+AE_CUSTOMER
+CUS_CUS
+FPESAN
+_VALUE
+CUSTCODE
+M_CUSTOMER
+COMPANY
+CUS_COM
+FDATCOM
+AE_ORDER
+ORDER
+AE_LTMBADD
+NEXTNUM
+AE_PMGR
+AE_NOORDER
+NEXT
+DEPT
+_DEPT
+DIVISI
+AE_PFLAG
+WRITTEN
+VALAS
+VALRATE
+ORIGIN
+INSURANCE
+DECLARED
+MHANDLING
+SOLDBY
+_USERID
+FLOGS_ADD
+AE_LTMBCUST
+FROM_ORDER
+M_FROM_ORDER
+TAMPILKANDATA
+M_SONO
+HIDUPKANFIELD
+ENABLED
+GROUPTMBPILIHAN2
+TMBOK
+COXSOURCE
+SETFOCUS
+LostFocus,
+textbox
+textbox
+m_Customer
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 157
+Margin = 1
+TabIndex = 70
+Top = 17
+Width = 227
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_Customer"
+shape
+shape
+Shape8
+FAEORDENTRY.Pageframe1.Hal1
+bTop = 48
+Left = 22
+Height = 31
+Width = 751
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape8"
+textbox
+textbox
+m_sono
+FAEORDENTRY.Pageframe1.Hal1
+7FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Value = m.dept+m.divisi+m.custcode+'-'+m.order
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 544
+Margin = 1
+TabIndex = 6
+Top = 52
+Width = 145
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_sono"
+textbox
+textbox
+m_refno
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 105
+Margin = 1
+MaxLength = 15
+TabIndex = 5
+Top = 52
+Width = 144
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_refno"
+PROCEDURE Valid
+mfield = alltrim(thisform.PAGEFRAME1.Hal1.m_refno.VALUE)
+morder = ae_order.order
+if empty(mfield)
+   return .t.
+endif
+retval = .t.
+select 0
+use aehdr again alias freffile
+set order to refno
+seek mfield
+if found()
+   locate for order # morder while refno = mfield
+   if found()
+      DO FORM fPesan.scx WITH "Nomor JOB sudah ada di SO nomor " + freffile.order + ".",14,.T.
+      retval = .f.
+   endif
+endif
+select freffile
+select ae_order
+return retval
+ENDPROC
+CButtonCount = 2
+Height = 35
+Left = 587
+Top = 427
+Width = 190
+TabIndex = 3
+BackColor = 37,109,218
+Name = "GroupTmbPilihan2"
+Command1.Top = 6
+Command1.Left = 10
+Command1.Height = 25
+Command1.Width = 84
+Command1.FontName = "Times New Roman"
+Command1.FontSize = 11
+Command1.Caption = "\<OK"
+Command1.TabIndex = 49
+Command1.Name = "TmbOK"
+Command2.Top = 6
+Command2.Left = 96
+Command2.Height = 25
+Command2.Width = 84
+Command2.FontName = "Times New Roman"
+Command2.FontSize = 11
+Command2.Caption = "\<Cancel"
+Command2.TabIndex = 50
+Command2.Name = "TmbCancel"
+m_mHandling
+editbox
+m_mship
+textbox
+textbox
+m_written
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 690
+Margin = 1
+TabIndex = 7
+Top = 52
+Width = 72
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_written"
+label
+label
+Label9
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Job No. :"
+Height = 23
+Left = 51
+Top = 54
+Width = 52
+TabIndex = 40
+Name = "Label9"
+label
+label
+Label2
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "SO No. :"
+Height = 23
+Left = 482
+Top = 54
+Width = 60
+TabIndex = 38
+Name = "Label2"
+label
+label
+Label17
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Insurance :"
+Height = 23
+Left = 343
+Top = 224
+Width = 75
+TabIndex = 50
+Name = "Label17"
+label
+label
+Label16
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Declared :"
+Height = 23
+Left = 343
+Top = 200
+Width = 75
+TabIndex = 51
+Name = "Label16"
+shape
+shape
+Shape9
+FAEORDENTRY.Pageframe1.Hal1
+dTop = 191
+Left = 572
+Height = 76
+Width = 200
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape9"
+textbox
+textbox
+m_valas
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 637
+Margin = 1
+MaxLength = 3
+TabIndex = 29
+Top = 195
+Width = 37
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_valas"
+CPROCEDURE LostFocus
+store select() to mlastdbf
+SELECT 0
+USE valas again alias ae_valas
+SET ORDER TO valas
+_value = THISFORM.PAGEFRAME1.Hal1.m_valas.VALUE
+LOCATE FOR valas = THISFORM.PAGEFRAME1.Hal1.m_valas.VALUE
+IF !FOUND()
+   SET NEAR ON
+   SEEK _value
+   DO FORM fDatCom.scx WITH 'VALAS', "ae_valas"
+   SET NEAR OFF
+   THISFORM.PAGEFRAME1.Hal1.m_valas.VALUE   = ae_valas.valas
+   THISFORM.PAGEFRAME1.Hal1.m_valrate.VALUE = ae_valas.rate
+ELSE
+   THISFORM.PAGEFRAME1.Hal1.m_valrate.VALUE = ae_valas.rate
+ENDIF
+select ae_valas
+select (mlastdbf)
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 61
+Left = 579
+ScrollBars = 0
+TabIndex = 10
+Top = 138
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 64,0,64
+Name = "m_mflight"
+FontName = "Courier New"
+FontSize = 10
+Enabled = .F.
+Height = 56
+Left = 289
+Margin = 0
+ScrollBars = 0
+TabIndex = 2
+Top = 46
+Width = 226
+DisabledBackColor = 1,194,205
+DisabledForeColor = 64,0,64
+Name = "m_mHandling"
+FAEORDENTRY.Pageframe1.Hal2
+editbox
+editbox
+FAEORDENTRY.Pageframe1.Hal2
+m_mgoods
+editbox
+editbox
+Label9
+textbox
+textbox
+m_posted
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 630
+Margin = 1
+TabIndex = 35
+Top = 295
+Width = 60
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_posted"
+textbox
+textbox
+m_voided
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "D"
+Height = 23
+Left = 630
+Margin = 1
+TabIndex = 34
+Top = 271
+Width = 60
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_voided"
+textbox
+textbox
+m_cost_kg
+FAEORDENTRY.Pageframe1.Hal1
+8FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "99,999,999.99"
+Left = 637
+Margin = 1
+MaxLength = 10
+TabIndex = 32
+Top = 240
+Width = 90
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_cost_kg"
+rPROCEDURE LostFocus
+THISFORM.PAGEFRAME1.ACTIVEPAGE = 2
+THISFORM.PAGEFRAME1.Hal2.m_mGoods.SETFOCUS()
+ENDPROC
+FontName = "Courier New"
+FontSize = 10
+Enabled = .F.
+Height = 191
+Left = 289
+Margin = 0
+ScrollBars = 0
+TabIndex = 3
+Top = 139
+Width = 226
+DisabledBackColor = 1,194,205
+DisabledForeColor = 64,0,64
+Name = "m_mship"
+FAEORDENTRY.Pageframe1.Hal2
+label
+textbox
+textbox
+m_freight
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 637
+Margin = 1
+MaxLength = 1
+TabIndex = 31
+Top = 218
+Width = 20
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_freight"
+PROCEDURE Valid
+mfield = THISFORM.PAGEFRAME1.Hal1.m_Freight.VALUE
+if not mfield $ 'ECP'
+   DO FORM fPesan.scx WITH "This field value should be: C or E or P !!",14,.T.
+   return .f.
+endif
+return .t.
+*terus = IIF(THISFORM.PAGEFRAME1.Hal1.m_Freight.VALUE = 'P' ;
+*         OR THISFORM.PAGEFRAME1.Hal1.m_Freight.VALUE = 'C',1,0)
+*IF terus = 0
+*   DO FORM fPesan.scx WITH "Field ini hanya dapat diisi dengan 'P' atau 'C' saja",14,.T.
+*ENDIF
+*RETURN terus
+ENDPROC
+FontName = "Courier New"
+FontSize = 10
+Enabled = .F.
+Height = 284
+Left = 38
+Margin = 0
+ScrollBars = 0
+TabIndex = 1
+Top = 46
+Width = 226
+DisabledBackColor = 1,194,205
+DisabledForeColor = 64,0,64
+Name = "m_mgoods"
+label
+FAEORDENTRY.Pageframe1.Hal2
+m_other3
+textbox
+textbox
+FAEORDENTRY.Pageframe1.Hal2
+m_other2
+textbox
+m_to3
+textbox
+textbox
+m_valrate
+FAEORDENTRY.Pageframe1.Hal1
+8FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "99,999,999.99"
+Left = 676
+Margin = 1
+MaxLength = 10
+TabIndex = 30
+Top = 195
+Width = 90
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_valrate"
+label
+label
+Label18
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Voided :"
+Height = 23
+Left = 533
+Top = 273
+Width = 95
+TabIndex = 65
+Name = "Label18"
+label
+label
+Label20
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Posted :"
+Height = 23
+Left = 533
+Top = 297
+Width = 95
+TabIndex = 63
+Name = "Label20"
+label
+label
+Label23
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Valas :"
+Height = 23
+Left = 540
+Top = 197
+Width = 95
+TabIndex = 60
+Name = "Label23"
+label
+label
+Label24
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Freight :"
+Height = 23
+Left = 540
+Top = 220
+Width = 95
+TabIndex = 59
+Name = "Label24"
+label
+label
+Label25
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Cost / Kg :"
+Height = 23
+Left = 540
+Top = 242
+Width = 95
+TabIndex = 58
+Name = "Label25"
+label
+label
+Label27
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Sales:"
+Height = 23
+Left = 584
+Top = 19
+Width = 79
+TabIndex = 39
+Name = "Label27"
+combobox
+combobox
+coxSource
+FAEORDENTRY.Pageframe1.Hal1
+QFontName = "Times New Roman"
+FontSize = 11
+ColumnCount = 0
+ColumnWidths = ""
+RowSourceType = 6
+RowSource = "ae_source.source"
+Enabled = .F.
+FirstElement = 1
+Height = 23
+Left = 666
+NumberOfElements = 0
+Style = 2
+TabIndex = 4
+Top = 17
+Width = 97
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "coxSource"
+textbox
+textbox
+c_postedby
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 689
+Margin = 1
+TabIndex = 36
+Top = 295
+Width = 75
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "c_postedby"
+textbox
+textbox
+c_voidedby
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Enabled = .F.
+Height = 23
+Left = 689
+Margin = 1
+TabIndex = 33
+Top = 271
+Width = 75
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "c_voidedby"
+label
+label
+Label28
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Copy from :"
+Height = 23
+Left = 435
+Top = 20
+Width = 87
+TabIndex = 43
+Name = "Label28"
+textbox
+textbox
+m_from_order
+FAEORDENTRY.Pageframe1.Hal1
+>FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Value = m.dept+m.divisi+m.custcode+'-'+m.order
+Enabled = .F.
+Height = 23
+Left = 525
+Margin = 1
+MaxLength = 16
+TabIndex = 1
+Top = 17
+Width = 96
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_from_order"
+kPROCEDURE Valid
+if empty(thisform.pageframe1.hal1.m_from_order.value)
+   return .t.
+endif
+select ae_order
+store thisform.pageframe1.hal1.m_from_order.value to morder, msearch
+select 0
+use aehdr again alias sohdr
+set order to order
+*do form fSoSearch with msearch to morder
+do form fSoValid with msearch to morder
+if not empty(morder)
+   thisform.pageframe1.hal1.m_from_order.value = morder
+   select sohdr
+   seek morder
+   if found()
+      select sohdr
+      scatter memvar
+      
+      select ae_order
+      store Nextnum(ae_pmgr) to ae_noorder
+      append blank 
+      gather memvar
+      replace ;
+         ae_order.order     WITH ae_noorder,;
+         ae_order.dept      WITH _dept,;
+         ae_order.from_order with morder,;
+         ae_order.soldby    WITH _userid
+      select ae_order
+      thisform.TampilkanData
+      thisform.pageframe1.hal1.m_Sono.value = ae_order.Dept + ae_order.Divisi +;
+         thisform.pageframe1.hal1.m_Custcode.value+'-'+ ae_noorder
+      thisform.HidupkanField
+      * thisform.pageframe1.hal1.m_CustCode.enabled  = .F.
+      * thisform.pageframe1.hal1.m_from_order.enabled = .f.
+      thisform.GroupTmbPilihan2.TmbOk.enabled = .T.
+      * thisform.m_Refno.setfocus 
+   endif
+else
+   thisform.pageframe1.hal1.m_from_order.value = ""
+endif
+select sohdr
+select ae_order
+ENDPROC
+order
+_PASS
+AE_ORDLINE
+ORDER
+AE_ORDER
+INVOICE
+AE_NOORDER
+aehdr
+hawb
+fPesan.scx
+Nomor HAWB sudah ada di SO nomor 
+MFIELD
+THISFORM
+PAGEFRAME1
+HAL1
+M_HAWB
+VALUE
+MORDER
+AE_ORDER
+ORDER
+AEHDR
+FHAWBFILE
+HAWB
+FPESAN
+When,
+LostFocus
+textbox
+FAEORDENTRY.Pageframe1.Hal2
+m_other1
+textbox
+textbox
+FAEORDENTRY.Pageframe1.Hal2
+textbox
+textbox
+shape
+shape
+Shape11
+FAEORDENTRY.Pageframe1.Hal1
+eTop = 323
+Left = 329
+Height = 31
+Width = 443
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape11"
+label
+label
+Label38
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "To Trucking No :"
+Height = 23
+Left = 430
+Top = 329
+Width = 126
+TabIndex = 71
+Name = "Label38"
+textbox
+textbox
+m_ref_order
+FAEORDENTRY.Pageframe1.Hal1
+@FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Value = m.dept+m.divisi+m.custcode+'-'+m.order
+Enabled = .F.
+Height = 23
+Left = 560
+Margin = 1
+MaxLength = 12
+TabIndex = 11
+Top = 327
+Width = 106
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_ref_order"
+DPROCEDURE LostFocus
+select si_order
+xorder = si_order.order
+if empty(thisform.pageframe1.hal1.m_from_order.value)
+   return .t.
+endif
+select si_order
+store thisform.pageframe1.hal1.m_from_order.value to morder, msearch
+*ffile = Sysval('COPY SO DIRECTORY') + "SIHDR.DBF"
+ffile = "SEA_HDR.DBF"
+if not file(ffile)
+    =MESSAGEBOX("Can't Copy: " + " file " + ffile + " does not exist.",0+48, "Command Warning")
+    thisform.pageframe1.hal1.m_from_order.value = ""
+    return .f.
+endif
+select 0
+use sea_line again alias soline
+set order to order
+select 0
+use sea_hdr again alias sohdr
+set filter to divisi = si_pflag and not empty(posted) and empty(closed)
+set order to order
+seek msearch
+if found()
+   morder = sohdr.order
+else
+   do form fSoValid2.scx with msearch to morder
+endif
+if not empty(morder)
+   thisform.pageframe1.hal1.m_from_order.value = morder
+   select sohdr
+   set order to order
+   seek morder
+   if found()
+      select sohdr
+      scatter memvar && memo
+      
+      select si_order
+      set order to order
+      
+      gather memvar && memo
+      replace ;
+         si_order.order      WITH xorder,;
+         si_order.refno      with 'SL' + si_pflag + '-' + xorder,;
+         si_order.dept       WITH _dept,;
+         si_order.from_order with morder,;
+         si_order.written    with date(),;
+         si_order.issued     with date(),;
+         si_order.posted
+ with ctod('  /  /    '),;
+         si_order.postedby
+ with '',;
+         si_order.printed
+ with ctod('  /  /    '),;
+         si_order.soldby     WITH _userid
+  select soline
+      set order to order
+      seek morder
+      scan while soline.order = morder
+         select soline
+         scatter memvar
+         select si_ordline
+         set order to order
+         append blank
+         gather memvar 
+         replace ;
+            si_ordline.order
+with xorder,;
+            si_ordline.posted  with .f.
+      
+         select soline
+      endscan
+      *select sohdr
+      *replace from_order with si_noorder
+      select si_order
+      thisform.TampilkanData
+      thisform.pageframe1.hal1.m_Sono.value = si_order.Dept + si_order.Divisi +;
+         thisform.pageframe1.hal1.m_Custcode.value+'-'+ si_noorder
+      thisform.HidupkanField
+      * thisform.pageframe1.hal1.m_CustCode.enabled  = .F.
+      * thisform.pageframe1.hal1.m_from_order.enabled = .f.
+      thisform.GroupTmbPilihan2.TmbOk.enabled = .T.
+      * thisform.m_Shipcode.setfocus 
+   endif
+else
+   thisform.pageframe1.hal1.m_from_order.value = ""
+endif
+select sohdr
+select soline
+select si_order
+ENDPROC
+PROCEDURE When
+select si_ordline
+set order to order
+seek si_order.order
+if not found()
+   retval = .t.
+else
+   retval = .f.
+endif
+select si_order
+return retval
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Other :"
+Height = 23
+Left = 524
+Top = 209
+Width = 53
+TabIndex = 24
+Name = "Label9"
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 30
+TabIndex = 13
+Top = 256
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_other3"
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 30
+TabIndex = 12
+Top = 232
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_other2"
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 30
+TabIndex = 11
+Top = 208
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_other1"
+PROCEDURE LostFocus
+store select() to mlastdbf
+SELECT 0
+USE port again alias ae_port
+SET ORDER TO port
+_value = THISFORM.PAGEFRAME1.Hal2.m_to3.VALUE
+LOCATE FOR port = THISFORM.PAGEFRAME1.Hal2.m_to3.VALUE
+IF !FOUND()
+   SET NEAR ON
+   SEEK _value
+   DO FORM fDatCom.scx WITH 'PORT', "ae_port"
+   SET NEAR OFF
+   THISFORM.PAGEFRAME1.Hal2.m_to3.VALUE = ae_port.port
+ENDIF
+*THISFORM.PAGEFRAME1.Hal2.m_mflight.SETFOCUS
+select ae_port
+select (mlastdbf)
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 665
+Margin = 0
+MaxLength = 3
+TabIndex = 9
+Top = 107
+Width = 40
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_to3"
+FAEORDENTRY.Pageframe1.Hal2
+m_to2
+textbox
+textbox
+FAEORDENTRY.Pageframe1.Hal2
+m_to1
+textbox
+textbox
+m_nopol
+FAEORDENTRY.Pageframe1.Hal1
+:FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Value = m.dept+m.divisi+m.custcode+'-'+m.order
+Enabled = .F.
+Height = 23
+Left = 667
+Margin = 1
+MaxLength = 10
+TabIndex = 9
+Top = 327
+Width = 97
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_nopol"
+DPROCEDURE When
+select si_ordline
+set order to order
+seek si_order.order
+if not found()
+   retval = .t.
+else
+   retval = .f.
+endif
+select si_order
+return retval
+ENDPROC
+PROCEDURE LostFocus
+select si_order
+xorder = si_order.order
+if empty(thisform.pageframe1.hal1.m_from_order.value)
+   return .t.
+endif
+select si_order
+store thisform.pageframe1.hal1.m_from_order.value to morder, msearch
+*ffile = Sysval('COPY SO DIRECTORY') + "SIHDR.DBF"
+ffile = "SEA_HDR.DBF"
+if not file(ffile)
+    =MESSAGEBOX("Can't Copy: " + " file " + ffile + " does not exist.",0+48, "Command Warning")
+    thisform.pageframe1.hal1.m_from_order.value = ""
+    return .f.
+endif
+select 0
+use sea_line again alias soline
+set order to order
+select 0
+use sea_hdr again alias sohdr
+set filter to divisi = si_pflag and not empty(posted) and empty(closed)
+set order to order
+seek msearch
+if found()
+   morder = sohdr.order
+else
+   do form fSoValid2.scx with msearch to morder
+endif
+if not empty(morder)
+   thisform.pageframe1.hal1.m_from_order.value = morder
+   select sohdr
+   set order to order
+   seek morder
+   if found()
+      select sohdr
+      scatter memvar && memo
+      
+      select si_order
+      set order to order
+      
+      gather memvar && memo
+      replace ;
+         si_order.order      WITH xorder,;
+         si_order.refno      with 'SL' + si_pflag + '-' + xorder,;
+         si_order.dept       WITH _dept,;
+         si_order.from_order with morder,;
+         si_order.written    with date(),;
+         si_order.issued     with date(),;
+         si_order.posted
+ with ctod('  /  /    '),;
+         si_order.postedby
+ with '',;
+         si_order.printed
+ with ctod('  /  /    '),;
+         si_order.soldby     WITH _userid
+  select soline
+      set order to order
+      seek morder
+      scan while soline.order = morder
+         select soline
+         scatter memvar
+         select si_ordline
+         set order to order
+         append blank
+         gather memvar 
+         replace ;
+            si_ordline.order
+with xorder,;
+            si_ordline.posted  with .f.
+      
+         select soline
+      endscan
+      *select sohdr
+      *replace from_order with si_noorder
+      select si_order
+      thisform.TampilkanData
+      thisform.pageframe1.hal1.m_Sono.value = si_order.Dept + si_order.Divisi +;
+         thisform.pageframe1.hal1.m_Custcode.value+'-'+ si_noorder
+      thisform.HidupkanField
+      * thisform.pageframe1.hal1.m_CustCode.enabled  = .F.
+      * thisform.pageframe1.hal1.m_from_order.enabled = .f.
+      thisform.GroupTmbPilihan2.TmbOk.enabled = .T.
+      * thisform.m_Shipcode.setfocus 
+   endif
+else
+   thisform.pageframe1.hal1.m_from_order.value = ""
+endif
+select sohdr
+select soline
+select si_order
+ENDPROC
+PROCEDURE LostFocus
+store select() to mlastdbf
+SELECT 0
+USE port again alias ae_port
+SET ORDER TO port
+_value = THISFORM.PAGEFRAME1.Hal2.m_to2.VALUE
+LOCATE FOR port = THISFORM.PAGEFRAME1.Hal2.m_to2.VALUE
+IF !FOUND()
+   SET NEAR ON
+   SEEK _value
+   DO FORM fDatCom.scx WITH 'PORT', "ae_port"
+   SET NEAR OFF
+   THISFORM.PAGEFRAME1.Hal2.m_to2.VALUE = ae_port.port
+ENDIF
+*THISFORM.PAGEFRAME1.Hal2.m_to3.SETFOCUS
+select ae_port
+select (mlastdbf)
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 622
+Margin = 0
+MaxLength = 3
+TabIndex = 8
+Top = 107
+Width = 40
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_to2"
+PROCEDURE LostFocus
+store select() to mlastdbf
+SELECT 0
+USE port again alias ae_port
+SET ORDER TO port
+_value = THISFORM.PAGEFRAME1.Hal2.m_to1.VALUE
+LOCATE FOR port = THISFORM.PAGEFRAME1.Hal2.m_to1.VALUE
+IF !FOUND()
+   SET NEAR ON
+   SEEK _value
+   DO FORM fDatCom.scx WITH 'PORT', "ae_port"
+   SET NEAR OFF
+   THISFORM.PAGEFRAME1.Hal2.m_to1.VALUE = ae_port.port
+ENDIF
+* THISFORM.PAGEFRAME1.Hal2.m_to2.SETFOCUS
+select ae_port
+select (mlastdbf)
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "!"
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 3
+TabIndex = 7
+Top = 107
+Width = 40
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_to1"
+textbox
+textbox
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 3
+TabIndex = 6
+Top = 76
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_carrier3"
+m_carrier3
+label
+label
+Label29
+FAEORDENTRY.Pageframe1.Hal1
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Quotation No :"
+Height = 23
+Left = 295
+Top = 55
+Width = 87
+TabIndex = 45
+Name = "Label29"
+textbox
+textbox
+m_quotation
+FAEORDENTRY.Pageframe1.Hal1
+=FontName = "Times New Roman"
+FontSize = 10
+Alignment = 0
+Value = m.dept+m.divisi+m.custcode+'-'+m.order
+Enabled = .F.
+Height = 23
+Left = 385
+Margin = 1
+MaxLength = 16
+TabIndex = 2
+Top = 52
+Width = 70
+BackColor = 255,255,255
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_quotation"
+PROCEDURE LostFocus
+select ae_order
+xorder = ae_order.order
+if empty(thisform.pageframe1.hal1.m_quotation.value)
+   return .t.
+endif
+select ae_order
+store alltrim(thisform.pageframe1.hal1.m_quotation.value) to morder, msearch
+select 0
+use aiq_dtl
+set order to q_no
+select 0
+use aiq_hdr 
+set filter to types = 'EXPORT' and not empty(posted) and empty(voided)
+set order to q_no
+do form faiq_Entry_Search with msearch to morder
+if not empty(morder)
+   thisform.pageframe1.hal1.m_quotation.value = morder
+   select aiq_dtl
+   set order to q_no
+   seek morder
+   if found()
+      
+      select aiq_dtl
+      set order to q_no
+      seek morder
+      scan while aiq_dtl.q_no = morder
+         select aiq_dtl
+         select ae_ordline
+         append blank
+         replace ;
+            ae_ordline.order
+with xorder,;
+            ae_ordline.itemcode with aiq_dtl.itemcode,;
+            ae_ordline.descript
+with aiq_dtl.descript,;
+            ae_ordline.valas
+with aiq_dtl.valas,;
+            ae_ordline.amount
+with aiq_dtl.cost,;
+            ae_ordline.arate
+with Frate_date(aiq_dtl.valas, date()),;
+            ae_ordline.cost
+with 0,;
+            ae_ordline.rate
+with Frate_date(aiq_dtl.valas, date()),;
+            ae_ordline.glrev
+with Fshowfield('ae_item', aiq_dtl.itemcode, 'glrev', 'itemcode'),;
+            ae_ordline.glcogs
+with Fshowfield('ae_item', aiq_dtl.itemcode, 'glcogs', 'itemcode'),;
+            ae_ordline.posted   with .f.
+         select aiq_dtl
+      endscan
+      
+      select ae_order
+      *thisform.TampilkanData
+      thisform.pageframe1.hal1.m_Sono.value = ae_order.Dept + ae_order.Divisi + thisform.pageframe1.hal1.m_Custcode.value+'-'+ ae_noorder
+      thisform.HidupkanField
+      *thisform.m_CustCode.enabled  = .F.
+      *thisform.m_from_order.enabled = .f.
+      thisform.GroupTmbPilihan2.TmbOk.enabled = .T.
+      * thisform.m_Refno.setfocus 
+   endif
+else
+   thisform.pageframe1.hal1.m_quotation.value = ""
+endif
+select aiq_dtl
+select aiq_hdr
+select ae_order
+ENDPROC
+PROCEDURE When
+select ae_ordline
+set order to order
+seek ae_order.order
+if not found()
+   retval = .t.
+else
+   retval = .f.
+endif
+select ae_order
+return retval
+ENDPROC
+FAEORDENTRY.Pageframe1.Hal2
+textbox
+textbox
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 3
+TabIndex = 5
+Top = 52
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_carrier2"
+FAEORDENTRY.Pageframe1.Hal2
+m_carrier2
+textbox
+textbox
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Height = 23
+Left = 579
+Margin = 0
+MaxLength = 20
+TabIndex = 4
+Top = 28
+Width = 170
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_carrier1"
+FAEORDENTRY.Pageframe1.Hal2
+m_carrier1
+textbox
+textbox
+PROCEDURE LostFocus
+THISFORM.PAGEFRAME1.ACTIVEPAGE = 1
+*THISFORM.PAGEFRAME1.Hal1.m_refno.SETFOCUS()
+THISFORM.PAGEFRAME1.Hal1.coxSource.SETFOCUS()
+ENDPROC
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "99,999,999.99"
+Left = 648
+Margin = 0
+MaxLength = 10
+TabIndex = 15
+Top = 309
+Width = 100
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_carr_chg"
+FAEORDENTRY.Pageframe1.Hal2
+m_carr_chg
+textbox
+textbox
+FontName = "Times New Roman"
+FontSize = 10
+Enabled = .F.
+Format = "R"
+Height = 23
+InputMask = "99,999,999.99"
+Left = 648
+Margin = 0
+MaxLength = 10
+TabIndex = 14
+Top = 285
+Width = 100
+DisabledBackColor = 1,194,205
+DisabledForeColor = 0,0,0
+Name = "m_other_chg"
+FAEORDENTRY.Pageframe1.Hal2
+m_other_chg
+textbox
+textbox
+FAEORDENTRY.Pageframe1.Hal2
+shape
+shape
+Shape1
+FAEORDENTRY.Pageframe1.Hal2
+{Top = 15
+Left = 24
+Height = 333
+Width = 745
+BackStyle = 1
+SpecialEffect = 0
+BackColor = 10,210,245
+Name = "Shape1"
+shape
+shape
+Shape2
+FAEORDENTRY.Pageframe1.Hal2
+cTop = 22
+Left = 31
+Height = 318
+Width = 243
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape2"
+shape
+shape
+Shape3
+FAEORDENTRY.Pageframe1.Hal2
+cTop = 22
+Left = 282
+Height = 87
+Width = 240
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape3"
+shape
+shape
+Shape4
+FAEORDENTRY.Pageframe1.Hal2
+eTop = 114
+Left = 282
+Height = 226
+Width = 241
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape4"
+label
+label
+Label2
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+BackStyle = 0
+Caption = "Shipping Marks"
+Height = 23
+Left = 291
+Top = 120
+Width = 102
+TabIndex = 16
+Name = "Label2"
+label
+label
+Label1
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+BackStyle = 0
+Caption = "Handling Information"
+Height = 23
+Left = 291
+Top = 28
+Width = 128
+TabIndex = 17
+Name = "Label1"
+label
+label
+Label8
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+BackStyle = 0
+Caption = "Good Description"
+Height = 23
+Left = 41
+Top = 28
+Width = 114
+TabIndex = 18
+Name = "Label8"
+shape
+shape
+Shape5
+FAEORDENTRY.Pageframe1.Hal2
+dTop = 22
+Left = 529
+Height = 318
+Width = 227
+BackStyle = 0
+SpecialEffect = 0
+Name = "Shape5"
+label
+label
+Label7
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Flight :"
+Height = 23
+Left = 524
+Top = 142
+Width = 53
+TabIndex = 19
+Name = "Label7"
+label
+label
+Label4
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "To :"
+Height = 23
+Left = 524
+Top = 109
+Width = 53
+TabIndex = 20
+Name = "Label4"
+label
+label
+Label3
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Carrier :"
+Height = 23
+Left = 524
+Top = 30
+Width = 53
+TabIndex = 21
+Name = "Label3"
+label
+label
+Label5
+FAEORDENTRY.Pageframe1.Hal2
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Carrier Charge :"
+Height = 23
+Left = 545
+Top = 311
+Width = 101
+TabIndex = 22
+Name = "Label5"
+label
+label
+Label6
+FontName = "Times New Roman"
+FontSize = 10
+Alignment = 1
+BackStyle = 0
+Caption = "Agent Charge :"
+Height = 23
+Left = 545
+Top = 287
+Width = 101
+TabIndex = 23
+Name = "Label6"
+XAutoSize = .T.
+ButtonCount = 18
+BackStyle = 1
+Value = 3
+Height = 35
+Left = 4
+Top = 428
+Width = 806
+TabIndex = 2
+BackColor = 37,109,218
+Name = "GroupTmbPilihan1"
+Command1.Top = 5
+Command1.Left = 712
+Command1.Height = 25
+Command1.Width = 44
+Command1.FontName = "Times New Roman"
+Command1.FontSize = 11
+Command1.Caption = "\<Log"
+Command1.TabIndex = 13
+Command1.Name = "cmdLog"
+Command2.Top = 5
+Command2.Left = 318
+Command2.Height = 25
+Command2.Width = 44
+Command2.FontName = "Times New Roman"
+Command2.FontSize = 11
+Command2.Caption = "\<Inv."
+Command2.TabIndex = 8
+Command2.Name = "TmbItem"
+Command3.Top = 5
+Command3.Left = 5
+Command3.Height = 25
+Command3.Width = 47
+Command3.FontName = "Times New Roman"
+Command3.FontSize = 11
+Command3.Caption = "\<Search"
+Command3.TabIndex = 1
+Command3.Name = "TmbSearch"
+Command4.Top = 5
+Command4.Left = 52
+Command4.Height = 25
+Command4.Width = 45
+Command4.FontName = "Times New Roman"
+Command4.FontSize = 11
+Command4.Caption = "\<Next"
+Command4.TabIndex = 2
+Command4.Name = "TmbNext"
+Command5.Top = 5
+Command5.Left = 97
+Command5.Height = 25
+Command5.Width = 45
+Command5.FontName = "Times New Roman"
+Command5.FontSize = 11
+Command5.Caption = "\<Prev"
+Command5.TabIndex = 3
+Command5.Name = "TmbPrev"
+Command6.Top = 5
+Command6.Left = 142
+Command6.Height = 25
+Command6.Width = 44
+Command6.FontName = "Times New Roman"
+Command6.FontSize = 11
+Command6.Caption = "\<Add"
+Command6.TabIndex = 4
+Command6.Name = "TmbAdd"
+Command7.Top = 5
+Command7.Left = 186
+Command7.Height = 25
+Command7.Width = 44
+Command7.FontName = "Times New Roman"
+Command7.FontSize = 11
+Command7.Caption = "\<Edit"
+Command7.TabIndex = 5
+Command7.Name = "TmbEdit"
+Command8.Top = 5
+Command8.Left = 230
+Command8.Height = 25
+Command8.Width = 44
+Command8.FontName = "Times New Roman"
+Command8.FontSize = 11
+Command8.Caption = "\<Cost"
+Command8.TabIndex = 6
+Command8.Name = "TmbCost"
+Command9.Top = 5
+Command9.Left = 274
+Command9.Height = 25
+Command9.Width = 44
+Command9.FontName = "Times New Roman"
+Command9.FontSize = 11
+Command9.Caption = "S\<heet"
+Command9.TabIndex = 7
+Command9.Name = "TmbView"
+Command10.Top = 5
+Command10.Left = 450
+Command10.Height = 25
+Command10.Width = 44
+Command10.FontName = "Times New Roman"
+Command10.FontSize = 11
+Command10.Caption = "V\<oid"
+Command10.TabIndex = 9
+Command10.Name = "TmbVoid"
+Command11.Top = 5
+Command11.Left = 494
+Command11.Height = 25
+Command11.Width = 44
+Command11.FontName = "Times New Roman"
+Command11.FontSize = 11
+Command11.Caption = "Pos\<t"
+Command11.TabIndex = 10
+Command11.Name = "TmbPost"
+Command12.Top = 5
+Command12.Left = 625
+Command12.Height = 25
+Command12.Width = 44
+Command12.FontName = "Times New Roman"
+Command12.FontSize = 11
+Command12.Caption = "P\<rint"
+Command12.TabIndex = 12
+Command12.Name = "TmbPrint"
+Command13.Top = 5
+Command13.Left = 538
+Command13.Height = 25
+Command13.Width = 44
+Command13.FontName = "Times New Roman"
+Command13.FontSize = 11
+Command13.Caption = "C\<ust"
+Command13.TabIndex = 11
+Command13.Name = "TmbCus"
+Command14.Top = 5
+Command14.Left = 756
+Command14.Height = 25
+Command14.Width = 45
+Command14.FontName = "Times New Roman"
+Command14.FontSize = 11
+Command14.Caption = "E\<xit"
+Command14.TabIndex = 14
+Command14.Name = "TmbExit"
+Command15.Top = 5
+Command15.Left = 362
+Command15.Height = 25
+Command15.Width = 44
+Command15.FontName = "Times New Roman"
+Command15.FontSize = 11
+Command15.Caption = "\<TR."
+Command15.Name = "tmbTR"
+Command16.Top = 5
+Command16.Left = 406
+Command16.Height = 25
+Command16.Width = 44
+Command16.FontName = "Times New Roman"
+Command16.FontSize = 11
+Command16.Caption = "IP\<M"
+Command16.Name = "tmbVinv"
+Command17.Top = 5
+Command17.Left = 582
+Command17.Height = 25
+Command17.Width = 43
+Command17.FontName = "Times New Roman"
+Command17.FontSize = 11
+Command17.Caption = "TC."
+Command17.Name = "TmbTc"
+Command18.Top = 5
+Command18.Left = 669
+Command18.Height = 25
+Command18.Width = 43
+Command18.FontName = "Times New Roman"
+Command18.FontSize = 11
+Command18.Caption = "\<View"
+Command18.Name = "Command1"
+PROCEDURE TmbOK.Click
+SELECT ae_order
+SCATTER MEMVAR MEMO
+m.valas     = THISFORM.PAGEFRAME1.Hal1.m_valas.VALUE
+m.valrate   = THISFORM.PAGEFRAME1.Hal1.m_valrate.VALUE
+m.refno     = THISFORM.PAGEFRAME1.Hal1.m_refno.VALUE
+m.source    = THISFORM.PAGEFRAME1.Hal1.coxSource.VALUE
+m.exporter  = THISFORM.PAGEFRAME1.Hal1.m_exporter.VALUE
+m.consignee = THISFORM.PAGEFRAME1.Hal1.m_consignee.VALUE
+m.notified  = THISFORM.PAGEFRAME1.Hal1.m_notified.VALUE
+m.ovragent  = THISFORM.PAGEFRAME1.Hal1.m_ovragent.VALUE
+m.mawb      = THISFORM.PAGEFRAME1.Hal1.m_mawb.VALUE
+m.hawb      = THISFORM.PAGEFRAME1.Hal1.m_hawb.VALUE
+m.etd       = THISFORM.PAGEFRAME1.Hal1.m_etd.VALUE
+m.eta       = THISFORM.PAGEFRAME1.Hal1.m_eta.VALUE
+m.issued    = THISFORM.PAGEFRAME1.Hal1.m_issued.VALUE
+m.dt2cons   = THISFORM.PAGEFRAME1.Hal1.m_dt2cons.VALUE
+m.qty       = THISFORM.PAGEFRAME1.Hal1.m_qty.VALUE
+m.unit      = THISFORM.PAGEFRAME1.Hal1.m_unit.VALUE
+m.grs_wgt   = THISFORM.PAGEFRAME1.Hal1.m_grs_wgt.VALUE
+m.chg_wgt   = THISFORM.PAGEFRAME1.Hal1.m_chg_wgt.VALUE
+m.freight   = THISFORM.PAGEFRAME1.Hal1.m_freight.VALUE
+m.cost_kg   = THISFORM.PAGEFRAME1.Hal1.m_cost_kg.VALUE
+m.voided    = THISFORM.PAGEFRAME1.Hal1.m_voided.VALUE
+m.posted    = THISFORM.PAGEFRAME1.Hal1.m_posted.VALUE
+m.postedby  = thisform.pageframe1.hal1.c_postedby.value
+m.voidedby  = thisform.pageframe1.hal1.c_voidedby.value
+m.origin    = THISFORM.PAGEFRAME1.Hal1.m_origin.VALUE
+m.destin    = THISFORM.PAGEFRAME1.Hal1.m_destin.VALUE
+m.remark    = THISFORM.PAGEFRAME1.Hal1.m_remark.VALUE
+m.declared  = THISFORM.PAGEFRAME1.Hal1.m_declared.VALUE
+m.insurance = THISFORM.PAGEFRAME1.Hal1.m_insurance.VALUE
+m.written   = THISFORM.PAGEFRAME1.Hal1.m_written.VALUE
+m.quotation = THISFORM.PAGEFRAME1.Hal1.m_quotation.VALUE
+m.mgoods    = THISFORM.PAGEFRAME1.Hal2.m_mgoods.VALUE
+m.mhandling = THISFORM.PAGEFRAME1.Hal2.m_mhandling.VALUE
+m.mship     = THISFORM.PAGEFRAME1.Hal2.m_mship.VALUE
+m.carrier_1 = THISFORM.PAGEFRAME1.Hal2.m_carrier1.VALUE
+m.carrier_2 = THISFORM.PAGEFRAME1.Hal2.m_carrier2.VALUE
+m.carrier_3 = THISFORM.PAGEFRAME1.Hal2.m_carrier3.VALUE
+m.to_1      = THISFORM.PAGEFRAME1.Hal2.m_to1.VALUE
+m.to_2      = THISFORM.PAGEFRAME1.Hal2.m_to2.VALUE
+m.to_3      = THISFORM.PAGEFRAME1.Hal2.m_to3.VALUE
+m.mflight   = THISFORM.PAGEFRAME1.Hal2.m_mflight.VALUE
+m.other_1   = THISFORM.PAGEFRAME1.Hal2.m_other1.VALUE
+m.other_2   = THISFORM.PAGEFRAME1.Hal2.m_other2.VALUE
+m.other_3   = THISFORM.PAGEFRAME1.Hal2.m_other3.VALUE
+m.other_chg = THISFORM.PAGEFRAME1.Hal2.m_other_chg.VALUE
+m.carr_chg  = THISFORM.PAGEFRAME1.Hal2.m_carr_chg.VALUE
+GATHER MEMVAR MEMO
+*** thisform.append_item
+THISFORM.MatikanField
+THISFORM.TampilkanData
+THISFORM.HilangkanSemuaTombolGroup2
+THISFORM.TampilkanSemuaTombolGroup1
+SELECT ae_order
+ENDPROC
+PROCEDURE TmbCancel.Click
+ae_lbatal = .T.
+THISFORM.TampilkanData
+THISFORM.MatikanField
+THISFORM.HilangkanSemuaTombolGroup2
+THISFORM.TampilkanSemuaTombolGroup1
+ENDPROC
+PROCEDURE cmdLog.Click
+select ae_order
+if eof() or bof()
+   DO FORM fPesan.scx WITH 'File belum ada data.',20,.T.
+   return
+endif
+select 0
+use ae_log again alias fdbf
+set order to order
+seek ae_order.order
+set key to ae_order.order
+do form View_Log.scx with 'fdbf', "View AE Log"
+select fdbf
+select ae_order
+ENDPROC
+PROCEDURE TmbItem.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't INVOICE: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not editable('ORDER')
+   return
+endif
+      
+select ae_ordline
+set order to order
+seek ae_order.order
+*seek ae_noorder
+if not found()
+   =MESSAGEBOX("Can't INVOICE: Detail cost has not been defined.",0+48, "Command Warning")
+   SELECT ae_order
+   return
+else
+   locate for ae_ordline.posted=.f. while ae_ordline.order = ae_order.order
+   if not found()
+      =MESSAGEBOX("Can't INVOICE: No detail cost available to be invoiced.",0+48, "Command Warning")
+      SELECT ae_order
+      return
+   endif
+endif
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+lJawab = .T.
+*DO FORM fYatidak.scx WITH 'Siap untuk memposting order ini per item. Posting sekarang ?',12 TO lJawab
+*IF !lJawab
+*   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+*   return
+*ENDIF
+* ADD BILL TO
+select ae_customer
+if eof() and bof()
+   =MESSAGEBOX("Can't INVOICE: Customer code doesn't exist.",0+48, "Command Warning")
+   select ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   return
+endif
+set order to cus_cus
+PUBLIC m.period, m.invoice, qwritten, m.billto, qtax, qtaxrate, qval, qrate, qnotes
+select ae_order
+m.billto  = ae_order.custcode
+m.glar1   = _glar
+m.period  = getperiod(date())
+m.invoice = space(6)
+qwritten  = date() &&ae_order.etd  &&iif(empty(ae_order.etd), date(), ae_order.etd)
+qval      = ae_order.valas
+qrate     = FRate(ae_order.valas)
+*qrate    = ae_order.valrate
+qtax      = 'T'
+qnotes    = ""
+qtaxrate  = 0
+lJawab = .T.
+DO FORM fBuatFaktur.scx with ae_pflag, ae_order.order TO lJawab
+IF !lJawab
+   RELE m.period, m.invoice, qwritten, m.billto, qtax, qtaxrate, qval, qrate, qnotes
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, m.invoice, qwritten, m.billto, qtax, qtaxrate, qval, qrate, qnotes
+   RETURN
+ENDIF
+select ae_customer
+seek m.billto
+if found()
+   *m.glar1 = iif(empty(ae_customer.glar), _glar, ae_customer.glar)
+   m.glar1 = iif(qval = _valas, ae_customer.glar, ae_customer.glar1)
+   m.glar1 = iif(empty(m.glar1), _glar, m.glar1)
+endif
+mnewinv = iif(empty(m.invoice), .t., .f.)
+* SELECT LINE
+select ae_ordline
+seek ae_noorder
+*seek ae_order.order
+tempfile = tempfile()
+do case
+   case qtax = 'T'
+      COPY TO (tempfile) WHILE ae_ordline.order = ae_noorder FOR ae_ordline.valas = qval and taxable and NOT posted
+   case qtax = 'D'
+      COPY TO (tempfile) WHILE ae_ordline.order = ae_noorder FOR ae_ordline.valas = qval and reimbust and NOT posted
+   case qtax = 'C'   
+      COPY TO (tempfile) WHILE ae_ordline.order = ae_noorder FOR ae_ordline.valas = qval and (not taxable) and NOT posted
+   case qtax = 'H'
+      COPY TO (tempfile) WHILE ae_ordline.order = ae_noorder FOR ae_ordline.valas = qval and NOT posted
+endcase
+SELECT 0
+USE (tempfile) EXCL alias tempfile
+repl all arate with qrate, posted with .t.
+SELECT tempfile
+GO TOP
+ae_lbatal = .F.
+DO FORM fDaftar.scx with qtax TO ae_lbatal
+IF ae_lbatal
+   select tempfile
+   USE
+   DO eraser WITH tempfile
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, m.invoice, qwritten, m.billto, qtax, qval, qrate, qnotes
+   RETURN
+ENDIF
+locate for posted
+IF !FOUND()
+   =MESSAGEBOX("Can't INVOICE: no item is selected.",0+48, "Command Warning")
+   USE
+   DO eraser WITH tempfile
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, m.invoice, qwritten, m.billto, qtax, qval, qrate, qnotes
+   RETURN
+ENDIF
+select tempfile
+delete for not posted
+select tempfile
+locate for freight and posted
+IF FOUND()
+   mvatrate = _taxfreight
+ELSE
+   mvatrate = _taxrate
+ENDIF      
+* INVOICE HEADER
+if used('invoice')
+   select invoice
+   invopen = .t.
+else
+   SELECT 0
+   USE invoice
+   invopen = .f.
+endif
+if used('lineitem')
+   select lineitem
+   linopen = .t.
+else
+   SELECT 0
+   USE lineitem
+   linopen = .f.
+endif
+select ae_ordline
+set order to order
+select ae_order
+scatter memvar
+mcontinue = .t.
+if mnewinv 
+   mprefix = left(Sysval('INVOICE PREFIX'), 1)
+   mprefix = iif(empty(mprefix), 'N', mprefix)
+   select 0
+   use divisi again alias ae_divisi
+   set order to divisi
+   seek m.divisi
+   m.glrefund = ae_divisi.glrefund
+   use
+   do Case
+      Case qtax = 'T'
+         m.types   = 'T' + mprefix
+         m.tax
+   = setnum("PREFIX TAX")
+         m.taxrate = qtaxratee
+         IF _taxtype = 'EFAKTUR'
+            xgolongan = iif(qtaxrate < 10, '9050', '9040')
+            xtaxno    = NextNum('TAX NUMBER')
+            m.taxno   = xgolongan+m.tax+right(alltrim(str(year(qwritten))), 2)+alltrim(xtaxno)
+         ELSE
+            m.taxno   = ""
+         endif
+         m.bookno  = m.types + '-' + NextNum('INVOICE TN NUMBER')
+      Case qtax = 'D'
+         m.types   = 'D' + mprefix  &&'DL'
+         m.tax
+   = ''
+         m.taxrate = 0
+         m.taxno   = ''
+         m.bookno  = m.types + '-' + NextNum('INVOICE DN NUMBER')
+      Case qtax = 'H'
+         m.types   = 'H' + mprefix
+         m.tax
+   = setnum("PREFIX TAX")
+         m.taxrate = qtaxrate
+         IF _taxtype = 'EFAKTUR'
+            xgolongan = iif(qtaxrate < 10, '9050', '9040')
+            xtaxno    = NextNum('TAX NUMBER')
+            m.taxno   = xgolongan+m.tax+right(alltrim(str(year(qwritten))), 2)+alltrim(xtaxno)
+         ELSE
+            m.taxno   = ""
+         endif
+         m.bookno  = m.types + '-' + NextNum('INVOICE HN NUMBER')   
+      Otherwise
+         m.types   = 'C' + mprefix  &&'CL'
+         m.tax
+   = ''
+         m.taxrate = 0
+         m.taxno   = ''
+         m.bookno  = m.types + '-' + NextNum('INVOICE CN NUMBER')
+   endcase
+   m.termofpay = 0
+   select ae_customer
+   seek m.billto
+   if found()
+      m.termofpay = ae_customer.termofpay
+      m.lmaterai  = ae_customer.lmaterai
+   endif
+   select invoice
+   store nextnum('INVOICE NUMBER') to minvoice
+   DO FORM fPesan.scx WITH 'Membuat faktur jual no : '+minvoice,18,.T.
+   append blank
+   gather memvar
+   replace ;
+      invoice.invoice  with minvoice,;
+      invoice.branch   with 'JHO',;
+      invoice.printed  with ctod("  /  /    "),;
+      invoice.taxno    with m.taxno,;
+      invoice.period   with getperiod(qwritten),;
+      invoice.printed  with ctod("  /  /  "),;
+      invoice.glrefund with m.glrefund,;
+      invoice.written  with qwritten,;
+      invoice.valas    with qval,;
+      invoice.valrate  with qrate,;
+      invoice.val_job  with qval,;
+      invoice.rate_job with qrate,;
+      invoice.rate_inv with qrate,;
+      invoice.lmaterai with m.lmaterai,;
+      invoice.bc_no
+   with '',;
+      invoice.inv_no   with '',;
+      invoice.goods
+   with ae_order.mgoods,;
+      invoice.glar     with m.glar1,;
+      invoice.notes    with qnotes,;
+      invoice.desc_1   with padr('MAWB        : ' +m.mawb,40,' ') + 'QUANTITY    : '+ transform(m.qty,    '999999.99') + ' '+m.unit,;
+      invoice.desc_2   with padr('HAWB        : ' +m.hawb,40,' ') + 'WEIGHT /KGS : '+ transform(m.chg_wgt,'999999.99'),;
+      invoice.desc_3   with      'ORIGIN      : ' + trim(m.origin),;
+      invoice.desc_4   with      'DESTINATION : ' + trim(m.destin),;
+      invoice.desc_5   with      'SHIPPER     : ' + FNotified (exporter,'company')
+   = fLogs_add('invoice_log.dbf', minvoice, 'ADD', 'Created from AE Entry')
+else
+   select invoice
+   set order to invoice
+   seek m.invoice
+   minvoice = m.invoice
+   if invoice.order # ae_order.order
+      DO FORM fPesan.scx WITH 'Tidak dapat diposting. No order tidak sama.',14,.T.
+      mcontinue = .f.
+   else
+      = fLogs_add('invoice_log.dbf', minvoice, 'ADD', 'Appended from AE Entry')
+   endif
+endif
+* LINE ITEMS
+if mcontinue
+   if qtax = 'C'
+      select tempfile
+      replace all amount with -1* amount
+   endif
+   select tempfile
+   set relation to itemcode into ae_item
+   go top
+   scan while order = ae_order.order
+      scatter memvar
+      select lineitem
+      set order to lns_itm
+      seek minvoice+tempfile.itemcode+tempfile.order
+      if found()
+         select tempfile
+         DO FORM fPesan.scx WITH tempfile.itemcode +' sudah ada. Tidak diposting.',16,.T.
+         loop
+      endif
+      append blank
+      gather memvar
+      replace ;
+        invoice  with invoice.invoice,;
+        dept     with invoice.dept,;
+        branch
+ with 'JHO',;
+        divisi   with invoice.divisi,;
+        custcode with invoice.custcode,;
+        arate
+ with qrate,;
+        rate_job with qrate,;
+        amount   with tempfile.amount,;
+        amt_orig with tempfile.amount,;
+        glrev    with iif(qtax='C', tempfile.glcogs, glrev),;
+        taxable  with iif(qtax='C', .f., tempfile.taxable)  &&iif(ae_item.taxable, .t., .f.))
+      select ae_ordline
+      seek tempfile.order + tempfile.itemcode
+      if found()
+         *do while order+itemcode=tempfile.order+itemcode
+         *   if not posted
+         *      exit
+         *   endif
+         *   skip
+         *enddo
+         *if order+itemcode=tempfile.order+tempfile.itemcode
+            replace posted with .t., invoice with invoice.invoice, arate with qrate, amount WITH tempfile.amount
+         *endif
+      else
+         DO FORM fPesan.scx WITH 'Ada kesalahan untuk kode '+tempfile.itemcode,16,.T.
+      endif
+   endscan
+   select invoice
+   minvsub  = InvSub('VAL')
+   minvtax  = InvTax('VAL')
+   minvpph
+= InvPph('VAL')
+   minvMat  = InvMaterai('VAL')
+   minvpay  = Invpay('VAL')
+   minvbal  = Invbal('VAL')
+   select invoice
+   replace;
+      invoice.amount_sub with minvsub,;
+      invoice.amount_vat with minvtax,;
+      invoice.amount_pph with minvpph,;
+      invoice.amount_mat with minvMat,;
+      invoice.amount_tot with (minvsub + minvtax + minvMat)-minvpph,;
+      invoice.amount_pay with minvpay,;
+      invoice.amount_bal with minvbal
+endif
+if not invopen
+   select invoice
+   use
+endif
+if not linopen
+   select lineitem
+   use
+endif
+select tempfile
+DO eraser WITH tempfile
+= fLogs_add('ae_log.dbf', ae_order.order, 'INV', 'Invoice : ' + minvoice)
+release m.period, m.invoice, qwritten, m.billto, qtax, qtaxrate, qval, qrate, qnotes
+select ae_ordline
+set order to order
+select ae_order
+*replace order.posted with date()
+store '-1' to oldorder
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+* eof ITEM.PRG      
+ENDPROC
+PROCEDURE TmbSearch.Click
+ae_ltmbadd = .F.
+ae_ltmbedit = .F.
+ae_ltmbsearch = .T.
+ae_lbatal = .F.
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+select ae_order
+store ae_order.order to morder, msearch
+select 0
+use aehdr again alias order_
+set order to order
+do form fSoSearch with msearch to morder
+select order_
+if not empty(morder)
+   msearch = morder
+endif
+select ae_order
+set order to order
+seek msearch
+* DO FORM fCariDataNoOrder.scx WITH 'AE'
+THISFORM.TampilkanData
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbNext.Click
+SELECT ae_order
+IF !EOF()
+   SKIP
+   IF EOF()
+      GO BOTTOM
+      DO FORM fPesan.scx WITH 'Akhir dari file, tidak ada pesanan berikutnya',14,.T.
+   ENDIF
+ELSE
+   GO BOTTOM
+   DO FORM fPesan.scx WITH 'Akhir dari file, tidak ada pesanan berikutnya',14,.T.
+ENDIF
+THISFORM.TampilkanData
+ENDPROC
+PROCEDURE TmbPrev.Click
+SELECT ae_order
+IF !BOF()
+   SKIP -1
+   IF BOF()
+      GO TOP
+      DO FORM fPesan.scx WITH 'Awal dari file, tidak ada pesanan sebelumnya',14,.T.
+   ENDIF
+ELSE
+   GO TOP
+   DO FORM fPesan.scx WITH 'Awal dari file, tidak ada pesanan sebelumnya',14,.T.
+ENDIF
+THISFORM.TampilkanData
+ENDPROC
+PROCEDURE TmbAdd.Click
+mmax = val(_max_ae)
+select ae_order
+count to mjumlah for empty(posted) and empty(voided) and written => ctod("01/07/2019") 
+if mmax # 0
+   mtambah = iif(mjumlah <= mmax, .t., .f.)
+else
+   mtambah = .t.
+endif
+if not mtambah
+   =MESSAGEBOX("Can't Add: SO Open = "+alltrim(transform(mjumlah,"999,999"))+" Max = "+alltrim(_max_ae)+". Please Posted your other SO to open Limit.",0+48, "Command Warning")
+   return 
+endif
+ae_ltmbadd = .T.
+ae_ltmbedit = .F.
+ae_ltmbsearch = .F.
+ae_lbatal = .F.
+THISFORM.PAGEFRAME1.ACTIVEPAGE = 1
+THISFORM.PAGEFRAME1.Hal1.m_CustCode.ENABLED = .T.
+* thisform.pageframe1.hal1.m_from_order.enabled = iif(_syscaption = 'KL', .f.,.t.)
+THISFORM.HilangkanSemuaTombolGroup1
+THISFORM.TampilkanSemuaTombolGroup2
+THISFORM.GroupTmbPilihan2.TmbOk.ENABLED = .F.
+WITH THISFORM.PAGEFRAME1.Hal1
+     .m_custcode.  VALUE = ''
+     .m_Customer.  VALUE = ''
+     .m_from_order.value = ""
+     .m_sono.     VALUE = ''
+     .m_written.  VALUE = {  /  /    }
+     .m_refno.    VALUE = ''
+     .m_exporter. VALUE = ''
+     .m_consignee.VALUE = ''
+     .m_notified. VALUE = ''
+     .m_ovragent. VALUE = ''
+     .m_mawb.     VALUE = ''
+     .m_hawb.     VALUE = ''
+     .m_etd.      VALUE = {  /  /    }
+     .m_eta.      VALUE = {  /  /    }
+     .m_issued.   VALUE = {  /  /    }
+     .m_dt2cons.  VALUE = {  /  /    }
+     .m_qty.      VALUE = 0
+     .m_unit.     VALUE = ''
+     .m_grs_wgt.  VALUE = 0
+     .m_chg_wgt.  VALUE = 0
+     .m_valas.    VALUE = ''
+     .m_valrate.  VALUE = 0
+     .m_freight.  VALUE = ''
+     .m_cost_kg.  VALUE = 0
+     .m_voided.   VALUE = {  /  /    }
+     .m_posted.   VALUE = {  /  /    }
+     .c_postedby. value = ''
+     .c_voidedby. value = ''
+     .m_origin.   VALUE = ''
+     .m_destin.   VALUE = ''
+     .m_remark.   VALUE = ''
+     .m_declared. VALUE = ''
+     .m_insurance.VALUE = ''
+     .m_origin.   VALUE = ""
+     ._Exporter.  VALUE = ''
+     ._Consignee. VALUE = ''
+     ._Notified.  VALUE = ''
+     ._Ovragent.  VALUE = ''
+     .coxSource.  VALUE = ''
+ENDWITH
+WITH THISFORM.PAGEFRAME1.Hal2
+     .m_mgoods.
+  VALUE = ''
+     .m_mhandling.VALUE = ''
+     .m_mship.
+  VALUE = ''
+     .m_carrier1.VALUE = ''
+     .m_carrier2.VALUE = ''
+     .m_carrier3.VALUE = ''
+     .m_to1.VALUE = ''
+     .m_to2.VALUE = ''
+     .m_to3.VALUE = ''
+     
+     .m_mflight.VALUE = ''
+     
+     .m_other1.VALUE = ''
+     .m_other2.VALUE = ''
+     .m_other3.VALUE = ''
+     
+     .m_other_chg.VALUE = ''
+     .m_carr_chg. VALUE = ''
+ENDWITH
+*if _syscaption = 'KL'
+   THISFORM.PAGEFRAME1.Hal1.m_from_order.enabled = .f.
+   THISFORM.PAGEFRAME1.Hal1.m_custcode.SETFOCUS
+*else
+*   THISFORM.PAGEFRAME1.Hal1.m_from_order.enabled = .t.
+*   THISFORM.PAGEFRAME1.Hal1.m_from_order.SETFOCUS
+*endif
+ENDPROC
+PROCEDURE TmbEdit.Click
+ae_ltmbedit = .T.
+ae_ltmbadd = .F.
+ae_ltmbsearch = .F.
+ae_lbatal = .F.
+select ae_order
+if eof() and bof()
+   DO FORM fPesan.scx WITH 'Database belum ada data',20,.T.
+   return
+endif
+IF editable('ORDER')
+   = fLogs_add('ae_log.dbf', ae_order.order, 'EDIT', '')
+   THISFORM.HidupkanField
+   THISFORM.PAGEFRAME1.Hal1.m_Custcode.ENABLED = .F.
+   THISFORM.HilangkanSemuaTombolGroup1
+   THISFORM.TampilkanSemuaTombolGroup2
+   THISFORM.GroupTmbPilihan2.TmbOK.ENABLED = .T.
+   THISFORM.PAGEFRAME1.Hal1.m_Refno.SETFOCUS
+   *THISFORM.PAGEFRAME1.Hal1.coxSource.SETFOCUS
+ENDIF
+ENDPROC
+PROCEDURE TmbCost.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't VIEW: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not editable('ORDER')
+   return
+endif
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+*** thisform.append_item
+store '' to brow_opt
+mcustomer = thisform.pageframe1.hal1.m_customer.value
+msono     = thisform.pageframe1.hal1.m_sono.value
+*=Sf_ael('')
+SELECT ae_ordline
+SET ORDER TO order
+SET KEY TO ae_noorder
+GO TOP
+if empty(ae_order.posted)
+   DO FORM fBrow.scx WITH '', mcustomer, msono, "ae_order", "ae_ordline", ae_ppvf
+else
+   DO FORM fBrow.scx WITH 'NOMODIFY', mcustomer, msono, "ae_order", "ae_ordline", ae_ppvf
+endif
+SELECT ae_ordline
+SET KEY TO
+store 'NOWAIT' to brow_opt
+select ae_order
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbView.Click
+select ae_order
+if eof() or bof()
+   =MESSAGEBOX("Can't VIEW: File is empty.",0+48, "Command Warning")
+   return
+endif
+select ae_ordline
+seek ae_noorder
+if not found()
+   =MESSAGEBOX("Can't VIEW: No detail items for this order.",0+48, "Command Warning")
+   select ae_order
+   return
+endif
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+mcustomer = thisform.pageframe1.hal1.m_customer.value
+msono     = thisform.pageframe1.hal1.m_sono.value
+SELECT ae_ordline
+SET ORDER TO order
+SET KEY TO ae_noorder
+GO TOP
+DO FORM fBrow.scx WITH 'NOMODIFY', mcustomer, msono, "ae_order", "ae_ordline", ae_ppvf
+select ae_ordline
+SET KEY TO
+THISFORM.TampilkanData
+SELECT ae_order
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbVoid.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't VOID: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not empty(posted)
+   =MESSAGEBOX("Can't VOID: it has been POSTED.",0+48, "Command Warning")
+   return
+endif
+if not empty(voided) and _pass[25]
+   =MESSAGEBOX("Can't VOID: it has been VOIDED.",0+48, "Command Warning")
+   return
+endif
+maction = iif(empty(ae_order.voided), 'VOID', 'UN-VOID')
+nAnswer=MESSAGEBOX("Do you want to " + maction + ", now ?",4+32, "Command Warning")
+if nAnswer # 6
+   =MESSAGEBOX("Can't " + maction + " : you have cancelled the procedure.",0+16, "Command Warning")
+   return
+endif
+if maction = 'VOID'
+   select ae_ordline
+   set order to order
+   seek ae_noorder
+   if found()
+      * locate for not ae_ordline.posted while ae_ordline.order = ae_noorder 
+      locate for not empty(invoice + pv + vinvoice) while ae_ordline.order = ae_noorder 
+      if found()
+         =MESSAGEBOX("Can't VOID: Invoice/ PV/ IP exists.",0+48, "Command Warning")
+         return
+      endif
+   endif
+   select ae_ordline
+   seek ae_noorder
+   delete while ae_ordline.order = ae_noorder
+   select ae_order
+   replace ae_order.voided with date(), ae_order.voidedby with left(_userid,10)
+   = fLogs_add('ae_log.dbf', ae_order.order, 'VOID', '')
+   =MESSAGEBOX("Order has been VOIDED.",0+48, "Command Warning")
+else
+   *** thisform.append_item
+   select ae_order
+   replace ae_order.voided with ctod("  /  /  "), ae_order.voidedby with "X-" + left(_userid,8)
+   = fLogs_add('ae_log.dbf', ae_order.order, 'UN-VOID', '')
+   =MESSAGEBOX("Order has been UN-VOIDED.",0+48, "Command Warning")
+endif
+store '-1' to oldorder
+THISFORM.TampilkanData
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbPost.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't POST: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not empty (ae_order.voided)
+   =MESSAGEBOX("Can't POST: SO has been VOIDED.",0+48, "Command Warning")
+   return
+endif
+if (not empty (ae_order.posted) ) and _pass[12]
+   =MESSAGEBOX("Can't POST: SO has been POSTED.",0+48, "Command Warning")
+   return
+endif
+select ae_ordline
+seek ae_noorder
+locate for amount # 0 and empty(invoice) while ae_ordline.order = ae_noorder
+if found()
+   =MESSAGEBOX("Can't POST: there is selling amount that has not been INVOICED.",0+48, "Command Warning")
+   select ae_order
+   return
+endif
+select ae_ordline
+seek ae_noorder
+locate for cost # 0 and empty(vinvoice) and empty(ntr) and empty(pv) while ae_ordline.order = ae_noorder
+if found()
+   =MESSAGEBOX("Can't POST: there is buying cost that has not been IPM.",0+48, "Command Warning")
+   select ae_order
+   return
+endif
+select ae_ordline
+seek ae_noorder
+locate for cost # 0 and not empty(ntr) and empty(pv) while ae_ordline.order = ae_noorder
+if found()
+   =MESSAGEBOX("Can't POST: there is buying cost that has not been PV.",0+48, "Command Warning")
+   select ae_order
+   return
+endif
+if (empty(ae_order.posted)) and _pass[12]
+   mamount = 0
+   mcost   = 0
+   select ae_ordline
+   seek ae_noorder
+   scan while ae_ordline.order = ae_noorder
+      mamount = mamount + (ae_ordline.amount * ae_ordline.arate)
+      mcost   = mcost + (ae_ordline.cost * ae_ordline.rate)
+   endscan
+      
+   if (mamount - mcost) < 0
+      =MESSAGEBOX("Can't POST: this order is loss. Check Job Sheet first.",0+48, "Command Warning")
+      select ae_order
+      return
+   endif   
+endif
+select ae_order
+maction = iif(empty(ae_order.posted), 'POST', 'UN-POST')
+nAnswer=MESSAGEBOX("Do you want to " + maction + ", now ?",4+32, "Command Warning")
+if nAnswer # 6
+   =MESSAGEBOX("Can't " + maction + " : you have cancelled the procedure.",0+16, "Command Warning")
+   return
+endif
+if maction = 'POST'   && empty(ae_order.posted)
+   &&update
+   thisform.update_detail
+   select ae_ordline
+   seek ae_noorder
+   scan while ae_ordline.order = ae_noorder
+      select ae_ordline
+      *if empty(ae_ordline.invoice) and not empty(ae_ordline.amount)
+      *   replace amount with 0
+      *endif
+      *if empty(ae_ordline.pv + ae_ordline.vinvoice) and not empty(ae_ordline.cost)
+      *   replace cost with 0
+      *endif
+      if empty(amount) and empty(cost) and empty(invoice + pv + vinvoice) 
+         delete
+      endif
+   endscan
+   select ae_order
+   replace ae_order.posted with date(), ae_order.postedby with left(_userid, 10)
+   = fLogs_add('ae_log.dbf', ae_order.order, 'POST', '')
+   =MESSAGEBOX("Order has been POSTED.",0+48, "Command Warning")
+else
+   select ae_order
+   replace ae_order.posted with ctod("  /  /  "), ae_order.postedby with "X-" + left(_userid, 8)
+   = fLogs_add('ae_log.dbf', ae_order.order, 'UN-POST', '')
+   =MESSAGEBOX("Order has been UNPOSTED.",0+48, "Command Warning")
+endif
+store '-1' to oldorder
+THISFORM.TampilkanData
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbPrint.Click
+if not empty (ae_order.voided)
+   DO FORM fPesan.scx with 'Sales order sudah dibatalkan, tidak dapat dicetak',14,.T.
+else
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+   select 0
+   use aehdr again alias order_
+   set order to order
+   seek ae_noorder
+   select 0
+   use aeline again alias ordline
+   select 0
+   use customer again
+   set order to cus_cus
+   DO FORM fAEPrint.scx
+   select order_
+   use
+   select ordline
+   use
+   select customer
+   use
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+endif
+ENDPROC
+PROCEDURE TmbCus.Click
+ae_ltmbadd = .F.
+ae_ltmbedit = .F.
+ae_ltmbsearch = .F.
+ae_ltmbcust = .T.
+ae_lbatal = .F.
+SELECT ae_order
+IF EOF() AND BOF()
+   DO FORM fPesan.scx WITH 'Database belum ada data',20,.T.
+   RETURN
+ENDIF
+if !empty(ae_order.voided)
+   DO FORM fPesan.scx WITH 'Sales order sudah dibatalkan, tidak dapat diedit lagi.',13,.T.
+   return
+endif
+if !empty(ae_order.posted)
+   DO FORM fPesan.scx WITH 'Sales order sudah diposting, tidak dapat diedit lagi.',13,.T.
+   return
+endif
+select ae_customer
+if eof() and bof()
+   DO FORM fPesan.scx with 'Tidak ada nomor pelanggan di file.',14,.T.
+   select ae_order 
+   return
+endif
+set order to cus_cus
+THISFORM.PAGEFRAME1.ACTIVEPAGE = 1
+THISFORM.PAGEFRAME1.Hal1.m_CustCode.ENABLED = .T.
+THISFORM.HilangkanSemuaTombolGroup1
+THISFORM.TampilkanSemuaTombolGroup2
+THISFORM.GroupTmbPilihan2.TmbOk.ENABLED = .F.
+THISFORM.PAGEFRAME1.Hal1.m_Custcode.ENABLED = .T.
+if _syscaption = 'KL'
+   THISFORM.PAGEFRAME1.Hal1.m_from_order.enabled = .f.
+   THISFORM.PAGEFRAME1.Hal1.m_custcode.SETFOCUS
+else
+   THISFORM.PAGEFRAME1.Hal1.m_from_order.enabled = .t.
+   THISFORM.PAGEFRAME1.Hal1.m_from_order.SETFOCUS
+endif
+ENDPROC
+PROCEDURE TmbExit.Click
+THISFORM.RELEASE
+ENDPROC
+PROCEDURE tmbTR.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't TR: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not editable('ORDER')
+   return
+endif
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+lJawab = .T.
+      
+select ae_staff
+if eof() and bof()
+   =MESSAGEBOX("Can't TR: Staff code doesn't exist.",0+48, "Command Warning")
+   select ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   return
+endif
+set order to staff
+PUBLIC m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+select ae_order
+m.billto  = ''
+m.period  = getperiod(date())
+qwritten  = date() 
+qac_no
+  = ''
+qac_name  = ''
+qtypes
+  = 'Other'
+qval      = ae_order.valas
+qrate     = FRate(ae_order.valas)
+if used('trhdr')
+   select trhdr
+   tropen = .t.
+else
+   SELECT 0
+   USE trhdr
+   tropen = .f.
+endif
+if used('trdtl')
+   select trdtl
+   dtlopen = .t.
+else
+   SELECT 0
+   USE trdtl
+   dtlopen = .f.
+endif
+lJawab = .T.
+DO FORM fBuatTr.scx with ae_pflag, ae_order.order TO lJawab
+IF !lJawab
+   RELE m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+   if not tropen
+      select trhdr
+      use
+   endif
+   if not dtlopen
+      select trdtl
+      use
+   endif
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+   RETURN
+ENDIF
+mnewinv = .t.
+* SELECT LINE
+select ae_ordline
+seek ae_noorder
+*seek ae_order.order
+tempfile = tempfile()
+copy to (tempfile) while ae_ordline.order = ae_noorder for ae_ordline.valas = qval and empty(ntr) and empty(vinvoice)
+SELECT 0
+USE (tempfile) EXCL alias tempfile
+repl all arate with qrate
+SELECT tempfile
+GO TOP
+ae_lbatal = .F.
+DO FORM fDaftarTr.scx TO ae_lbatal
+IF ae_lbatal
+   select tempfile
+   USE
+   DO eraser WITH tempfile
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+   RETURN
+ENDIF
+locate for postemp
+IF !FOUND()
+   =MESSAGEBOX("Can't TR: no item is selected.",0+48, "Command Warning")
+   USE
+   DO eraser WITH tempfile
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+   RETURN
+ENDIF
+delete for not postemp
+* INVOICE HEADER
+select ae_ordline
+set order to order
+select ae_order
+mcontinue = .t.
+if mnewinv 
+   select 0
+   use valas again
+   set order to valas
+   seek qval
+   if found()
+      mglcash = valas.glcash
+      mgltr   = valas.gltr
+   else
+      mglcash = _glcash
+      mgltr   = _gltr
+   endif
+   select valas
+   use
+      
+   select trhdr
+   set order to ntr
+   do while .t.
+      store nextnum('TR NUMBER') to mtr_no
+      select trhdr
+      seek mtr_no
+      if not found()
+         exit
+      endif
+   enddo
+   DO FORM fPesan.scx WITH 'Membuat TR no : '+mtr_no,18,.T.
+   append blank
+   replace ;
+      trhdr.ntr       with mtr_no,;
+      trhdr.branch
+  with 'JHO',;
+      trhdr.divisi
+  with ae_order.divisi,;
+      trhdr.printed   with ctod("  /  /    "),;
+      trhdr.paid      with ctod("  /  /    "),;
+      trhdr.posted    with ctod("  /  /    "),;
+      trhdr.period    with getperiod(date()),;
+      trhdr.written   with qwritten,;
+      trhdr.valas     with qval,;
+      trhdr.valrate   with qrate,;
+      trhdr.ac_no
+  with qac_no,;
+      trhdr.ac_name
+  with qac_name,;
+      trhdr.gltr      with mgltr,;
+      trhdr.glcash    with mglcash,;
+      trhdr.staff
+  with m.billto,;
+      trhdr.types
+  WITH qtypes,;
+      trhdr.order
+  with ae_order.order,;
+      trhdr.refno
+  with ae_order.refno,;
+      trhdr.consignee with ae_order.consignee,;
+      trhdr.hawb
+  with ae_order.hawb,;
+      trhdr.mawb
+  with ae_order.mawb,;
+      trhdr.vessel
+  with ae_order.mflight,;
+      trhdr.eta
+      with ae_order.eta,;
+      trhdr.operator  with _userid
+      
+else
+   && NO ENTRY
+endif
+* LINE ITEMS
+if mcontinue
+   select tempfile
+   set relation to itemcode into ae_item
+   go top
+   scan while order = ae_order.order
+      scatter memvar
+      select trdtl
+      set order to ntr
+      seek mtr_no
+      if found()
+         locate rest for trdtl.ntr # mtr_no
+         skip -1
+         store Increment(trdtl.nu) to nextlineno
+      else
+         store '001' to nextlineno
+      endif
+      
+      select trdtl
+      append blank
+      gather memvar
+      replace ;
+        trdtl.ntr
+   with trhdr.ntr,;
+        trdtl.nu
+   with nextlineno,;
+        trdtl.divisi   with trhdr.divisi,;
+        trdtl.branch   with 'JHO',;
+        trdtl.order    with trhdr.order,;
+        trdtl.refno    with trhdr.refno,;
+        trdtl.valas    with trhdr.valas,;
+        trdtl.rate
+   with trhdr.valrate,;
+        trdtl.tr_cost  with tempfile.cost,;
+        trdtl.descript with tempfile.descript
+      
+      select ae_ordline
+      seek tempfile.order + tempfile.itemcode
+      if found()
+         replace ntr with trhdr.ntr, rate with qrate, cost WITH tempfile.cost  
+      else
+         DO FORM fPesan.scx WITH 'Ada kesalahan untuk kode '+tempfile.itemcode,16,.T.
+      endif
+   endscan
+    
+   select trhdr
+   store Tr_TrSub('VAL') to msubtr
+   store Tr_PvSub('VAL') to msubpv
+   select trhdr
+   replace trhdr.subtr with msubtr, trhdr.subpv with msubpv
+   = fLogs_add('trlog.dbf', mtr_no, 'ADD', 'Created from AE Entry')
+endif
+if not tropen
+   select trhdr
+   use
+endif
+if not dtlopen
+   select trdtl
+   use
+endif
+select tempfile
+DO eraser WITH tempfile
+release m.period, qwritten, m.billto, qval, qrate, qac_no, qac_name, qtypes
+select ae_ordline
+set order to order
+select ae_order
+store '-1' to oldorder
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE tmbVinv.Click
+select ae_order
+if eof() AND bof()
+   =MESSAGEBOX("Can't IPM: File is empty.",0+48, "Command Warning")
+   return
+endif
+if not editable('ORDER')
+   return
+endif
+      
+select ae_ordline
+set order to order
+seek ae_order.order
+*seek ae_noorder
+if not found()
+   =MESSAGEBOX("Can't IPM: Detail cost has not been defined.",0+48, "Command Warning")
+   SELECT ae_order
+   return
+else
+   locate for empty(ae_ordline.ntr) and empty(ae_ordline.vinvoice) while ae_ordline.order = ae_order.order
+   if not found()
+      =MESSAGEBOX("Can't IPM: No detail cost available to be IPM.",0+48, "Command Warning")
+      SELECT ae_order
+      return
+   endif
+endif
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .F.
+lJawab = .T.
+select ae_vendor
+if eof() and bof()
+   =MESSAGEBOX("Can't IPM: Vendor code doesn't exist.",0+48, "Command Warning")
+   select ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   return
+endif
+set order to ven_ven
+PUBLIC m.period, qwritten, m.billto, qval, qrate
+select ae_order
+m.billto  = ''
+m.period  = getperiod(date())
+qwritten  = date() 
+qval      = ae_order.valas
+qrate     = FRate(ae_order.valas)
+lJawab = .T.
+DO FORM fBuatAp.scx with ae_pflag, ae_order.order TO lJawab
+IF !lJawab
+   RELE m.period, qwritten, m.billto, qval, qrate
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate
+   RETURN
+ENDIF
+mglap = iif(qval = 'IDR', _glap, _glap_usd)
+mnewinv = .t.
+* SELECT LINE
+select ae_ordline
+seek ae_noorder
+*seek ae_order.order
+tempfile = tempfile()
+copy to (tempfile) while ae_ordline.order = ae_noorder for ae_ordline.valas = qval and empty(ntr) and empty(vinvoice)
+SELECT 0
+USE (tempfile) EXCL alias tempfile
+repl all arate with qrate
+SELECT tempfile
+GO TOP
+ae_lbatal = .F.
+DO FORM fDaftarTr.scx TO ae_lbatal
+IF ae_lbatal
+   select tempfile
+   USE
+   DO eraser WITH tempfile
+   SELECT ae_order
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate
+   RETURN
+ENDIF
+locate for postemp
+IF !FOUND()
+   =MESSAGEBOX("Can't TR: no item is selected.",0+48, "Command Warning")
+   USE
+   DO eraser WITH tempfile
+   THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+   release m.period, qwritten, m.billto, qval, qrate
+   RETURN
+ENDIF
+delete for not postemp
+* INVOICE HEADER
+if used('vinvoice')
+   select vinvoice
+   vinvopen = .t.
+else
+   SELECT 0
+   USE vinvoice
+   vinvopen = .f.
+endif
+if used('vline')
+   select vline
+   vlinopen = .t.
+else
+   SELECT 0
+   USE vline
+   vlinopen = .f.
+endif
+select ae_ordline
+set order to order
+select ae_order
+scatter memvar
+mcontinue = .t.
+if mnewinv 
+      
+   select vinvoice
+   store nextnum('VINVOICE NUMBER') to minvoice
+   DO FORM fPesan.scx WITH 'Membuat IPM no : '+minvoice,18,.T.
+   append blank
+   gather memvar
+   replace ;
+      vinvoice.invoice   with minvoice,;
+      vinvoice.branch
+ with 'JHO',;
+      vinvoice.divisi
+ with ae_order.divisi,;
+      vinvoice.printed   with ctod("  /  /    "),;
+      vinvoice.posted    with ctod("  /  /    "),;
+      vinvoice.period    with getperiod(qwritten),;
+      vinvoice.written   with qwritten,;
+      vinvoice.valas     with qval,;
+      vinvoice.valrate   with qrate,;
+      vinvoice.glap      with mglap,;
+      vinvoice.taxno     with '',;
+      vinvoice.refno
+ with '',;
+      vinvoice.vendcode  with m.billto,;
+      vinvoice.operator  with _userid
+      
+else
+   && NO ENTRY
+endif
+* LINE ITEMS
+if mcontinue
+   select tempfile
+   set relation to itemcode into ae_item
+   go top
+   scan while order = ae_order.order
+      scatter memvar
+            
+      select vline
+      append blank
+      gather memvar
+      replace ;
+        vline.invoice  with vinvoice.invoice,;
+        vline.divisi   with vinvoice.divisi,;
+        vline.branch   with 'JHO',;
+        vline.order
+   with ae_order.order,;
+        vline.vendcode with m.billto,;
+        vline.glcogs   with ae_item.glcogs,;
+        vline.rate
+   with vinvoice.valrate,;
+        vline.cost     with tempfile.cost
+         
+      select ae_ordline
+      seek tempfile.order + tempfile.itemcode
+      if found()
+         replace vinvoice with vinvoice.invoice, rate with qrate, cost WITH tempfile.cost
+      else
+         DO FORM fPesan.scx WITH 'Ada kesalahan untuk kode '+tempfile.itemcode,16,.T.
+      endif
+   endscan
+endif
+if not vinvopen
+   select vinvoice
+   use
+endif
+if not vlinopen
+   select vline
+   use
+endif
+select tempfile
+DO eraser WITH tempfile
+release m.period, qwritten, m.billto, qval, qrate
+select ae_ordline
+set order to order
+select ae_order
+store '-1' to oldorder
+THISFORM.GROUPTMBPILIHAN1.VISIBLE = .T.
+ENDPROC
+PROCEDURE TmbTc.Click
+nAnswer = MESSAGEBOX("Create an Trucking entry now ?",4+32, "MEMORY PROBLEM")
+if nAnswer # 6
+   =MESSAGEBOX("Can't create an Trucking entry: it has been cancelled.",0+16, "Command Warning")
+   return
+endif
+if not empty(ae_order.ref_order)
+   =MESSAGEBOX("Can't create Trucking: This AE has an Truck entry already.",0+16, "Command Warning")
+   return
+endif
+select ae_order
+scatter memvar
+m.refstr  = iif(empty(_dept),'',_dept +' ') +'TC NUMBER'
+store NextNum (m.refstr) to m.reforder
+select 0
+use tchdr 
+append blank
+gather memvar
+replace order with m.reforder, ref_order with ae_order.order, divisi with 'TC',;
+   refno with right(m.reforder,3)+'/IPT/TC/'+romawimonth(date())+'/'+left(dtos(date()),4),;
+   eta with ae_order.eta, etd with ae_order.etd, mawb with ae_order.mawb,;
+   hawb with ae_order.hawb, custcode with ae_order.custcode, written with date(),;
+   valas with 'IDR', valrate with 1, export with .t., from_div with 'AE',;
+   import with .f., so_ref with 'AE'+alltrim(ae_order.custcode)+'-'+ae_order.order,;
+   consignee with ae_order.consignee, exporter with ae_order.exporter,;
+   ccconsignee with FNotified(ae_order.consignee,'company'), cexporter with FNotified(ae_order.exporter,'company'),;
+   origin with '', destin with '',;
+   mgoods with ae_order.mgoods, vessel with ae_order.flight_1,;
+   grs_wgt with ae_order.grs_wgt, chg_wgt with ae_order.chg_wgt, qty with ae_order.qty, unit with ae_order.unit
+select ae_order
+replace ae_order.ref_order with m.reforder
+= fLogs_add('ae_log.dbf', ae_order.order, 'ADD TC', 'TRUCKING')
+=MESSAGEBOX("An Truck entry has been created. New TC no. is " + m.reforder + ".",0+48, "Command Warning")
+thisform.PAGEFRAME1.Hal1.m_ref_order.value = m.reforder
+thisform.refresh
+ENDPROC
+PROCEDURE Command1.Click
+select ae_order
+if eof() or bof()
+   DO FORM fPesan.scx WITH 'File belum ada data.',20,.T.
+   return
+endif
+select 0
+use trhdr alias fdbf
+set filter to divisi = 'AE' and branch = 'JHO'
+set order to order
+seek ae_order.order
+set key to ae_order.order
+do form View_TR.scx with 'fdbf', "View AE Temporary Receipt"
+select fdbf
+select ae_order
+ENDPROC
+fPesan.scx
+File belum ada data.
+ae_log
+order
+View_Log.scx
+fdbf
+View AE Log
+AE_ORDER
+FPESAN
+AE_LOG
+FDBF
+ORDER
+VIEW_LOGp
+Can't INVOICE: File is empty.
+Command Warning
+ORDER
+order
+Can't INVOICE: Detail cost has not been defined.
+Command Warning
+Can't INVOICE: No detail cost available to be invoiced.
+Command Warning
+Can't INVOICE: Customer code doesn't exist.
+Command Warning
+cus_cus
+fBuatFaktur.scx(
+fDaftar.scx(
+Can't INVOICE: no item is selected.
+Command Warning
+invoice
+invoice
+lineitem
+lineitem
+order
+INVOICE PREFIX
+divisi
+divisi
+PREFIX TAX
+EFAKTUR
+9050
+90406
+TAX NUMBER
+CCCC
+INVOICE TN NUMBER
+INVOICE DN NUMBER
+PREFIX TAX
+EFAKTUR
+9050
+90406
+TAX NUMBER
+CCCC
+INVOICE HN NUMBER
+INVOICE CN NUMBER
+INVOICE NUMBER
+fPesan.scx
+Membuat faktur jual no : 
+  /  /    #
+  /  /  #
+MAWB        : 
+QUANTITY    : 
+999999.99_
+HAWB        : 
+WEIGHT /KGS : 
+999999.99_
+ORIGIN      : C
+DESTINATION : C
+SHIPPER     : C
+company
+invoice_log.dbf
+Created from AE Entry
+invoice
+fPesan.scx
+Tidak dapat diposting. No order tidak sama.
+invoice_log.dbf
+Appended from AE Entry
+lns_itm
+fPesan.scx
+ sudah ada. Tidak diposting.
+fPesan.scx
+Ada kesalahan untuk kode 
+ae_log.dbf
+Invoice : 
+order
+AE_ORDER
+EDITABLE
+AE_ORDLINE
+ORDER
+POSTED
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+LJAWAB
+AE_CUSTOMER
+CUS_CUS
+PERIOD
+INVOICE
+QWRITTEN
+BILLTO
+QTAX
+QTAXRATE
+QVAL
+QRATE
+QNOTES
+CUSTCODE
+GLAR1
+_GLAR
+GETPERIOD
+VALAS
+FRATE
+FBUATFAKTUR
+AE_PFLAG
+_VALAS
+GLAR
+MNEWINV
+AE_NOORDER
+TEMPFILE
+TAXABLE
+REIMBUST
+ARATE
+AE_LBATAL
+FDAFTAR
+ERASER
+INVOPEN
+LINEITEM
+LINOPEN
+MCONTINUE
+MPREFIX
+SYSVAL
+DIVISI
+AE_DIVISI
+GLREFUND
+TYPES
+SETNUM
+TAXRATE
+QTAXRATEE
+_TAXTYPE
+XGOLONGAN
+XTAXNO
+NEXTNUM
+TAXNO
+BOOKNO
+TERMOFPAY
+LMATERAI
+MINVOICE
+FPESAN
+BRANCH
+PRINTED
+WRITTEN
+VALRATE
+VAL_JOB
+RATE_JOB
+RATE_INV
+BC_NO
+INV_NO
+GOODS
+MGOODS
+NOTES
+DESC_1
+MAWB
+UNIT
+DESC_2
+HAWB
+CHG_WGT
+DESC_3
+ORIGIN
+DESC_4
+DESTIN
+DESC_5
+FNOTIFIED
+EXPORTER
+FLOGS_ADD
+AMOUNT
+ITEMCODE
+AE_ITEM
+LNS_ITM
+DEPT
+AMT_ORIG
+GLREV
+GLCOGS
+MINVSUB
+INVSUB
+MINVTAX
+INVTAX
+MINVPPH
+INVPPH
+MINVMAT
+INVMATERAI
+MINVPAY
+INVPAY
+MINVBAL
+INVBAL
+AMOUNT_SUB
+AMOUNT_VAT
+AMOUNT_PPH
+AMOUNT_MAT
+AMOUNT_TOT
+AMOUNT_PAY
+AMOUNT_BAL
+OLDORDER
+aehdr
+order
+fSoSearch(
+order
+AE_LTMBADD
+AE_LTMBEDIT
+AE_LTMBSEARCH
+AE_LBATAL
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+AE_ORDER
+ORDER
+MORDER
+MSEARCH
+AEHDR
+ORDER_
+FSOSEARCH
+TAMPILKANDATA
+fPesan.scx
+Akhir dari file, tidak ada pesanan berikutnya
+fPesan.scx
+Akhir dari file, tidak ada pesanan berikutnya
+AE_ORDER
+FPESAN
+THISFORM
+TAMPILKANDATA
+fPesan.scx
+Awal dari file, tidak ada pesanan sebelumnya
+fPesan.scx
+Awal dari file, tidak ada pesanan sebelumnya
+AE_ORDER
+FPESAN
+THISFORM
+TAMPILKANDATA
+01/07/2019#
+Can't Add: SO Open = CC
+999,999_
+ Max = 
+. Please Posted your other SO to open Limit.
+Command Warning
+MMAX
+_MAX_AE
+AE_ORDER
+MJUMLAH
+POSTED
+VOIDED
+WRITTEN
+MTAMBAH
+AE_LTMBADD
+AE_LTMBEDIT
+AE_LTMBSEARCH
+AE_LBATAL
+THISFORM
+PAGEFRAME1
+ACTIVEPAGE
+HAL1
+M_CUSTCODE
+ENABLED
+HILANGKANSEMUATOMBOLGROUP1
+TAMPILKANSEMUATOMBOLGROUP2
+GROUPTMBPILIHAN2
+TMBOK
+VALUE
+M_CUSTOMER
+M_FROM_ORDER
+M_SONO
+M_WRITTEN
+M_REFNO
+M_EXPORTER
+M_CONSIGNEE
+M_NOTIFIED
+M_OVRAGENT
+M_MAWB
+M_HAWB
+M_ETD
+M_ETA
+M_ISSUED
+M_DT2CONS
+M_QTY
+M_UNIT
+M_GRS_WGT
+M_CHG_WGT
+M_VALAS
+M_VALRATE
+M_FREIGHT
+M_COST_KG
+M_VOIDED
+M_POSTED
+C_POSTEDBY
+C_VOIDEDBY
+M_ORIGIN
+M_DESTIN
+M_REMARK
+M_DECLARED
+M_INSURANCE
+_EXPORTER
+_CONSIGNEE
+_NOTIFIED
+_OVRAGENT
+COXSOURCE
+HAL2
+M_MGOODS
+M_MHANDLING
+M_MSHIP
+M_CARRIER1
+M_CARRIER2
+M_CARRIER3
+M_TO1
+M_TO2
+M_TO3
+M_MFLIGHT
+M_OTHER1
+M_OTHER2
+M_OTHER3
+M_OTHER_CHG
+M_CARR_CHG
+SETFOCUS&
+fPesan.scx
+Database belum ada data
+ORDER
+ae_log.dbf
+EDIT
+AE_LTMBEDIT
+AE_LTMBADD
+AE_LTMBSEARCH
+AE_LBATAL
+AE_ORDER
+FPESAN
+EDITABLE
+FLOGS_ADD
+ORDER
+THISFORM
+HIDUPKANFIELD
+PAGEFRAME1
+HAL1
+M_CUSTCODE
+ENABLED
+HILANGKANSEMUATOMBOLGROUP1
+TAMPILKANSEMUATOMBOLGROUP2
+GROUPTMBPILIHAN2
+TMBOK
+M_REFNO
+SETFOCUS
+Can't VIEW: File is empty.
+Command Warning
+ORDER
+order
+fBrow.scx
+ae_order
+ae_ordline
+fBrow.scx
+NOMODIFY
+ae_order
+ae_ordline
+NOWAIT
+AE_ORDER
+EDITABLE
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+BROW_OPT
+MCUSTOMER
+PAGEFRAME1
+HAL1
+M_CUSTOMER
+VALUE
+MSONO
+M_SONO
+AE_ORDLINE
+ORDER
+AE_NOORDER
+POSTED
+FBROW
+AE_PPVF
+Can't VIEW: File is empty.
+Command Warning
+Can't VIEW: No detail items for this order.
+Command Warning
+order
+fBrow.scx
+NOMODIFY
+ae_order
+ae_ordline
+AE_ORDER
+AE_ORDLINE
+AE_NOORDER
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+MCUSTOMER
+PAGEFRAME1
+HAL1
+M_CUSTOMER
+VALUE
+MSONO
+M_SONO
+ORDER
+FBROW
+AE_PPVF
+TAMPILKANDATA+
+Can't VOID: File is empty.
+Command Warning
+Can't VOID: it has been POSTED.
+Command Warning
+Can't VOID: it has been VOIDED.
+Command Warning
+VOID
+UN-VOID6
+Do you want to 
+, now ?
+Command Warning
+Can't 
+ : you have cancelled the procedure.
+Command Warning
+VOID
+order
+Can't VOID: Invoice/ PV/ IP exists.
+Command Warning
+ae_log.dbf
+VOID
+Order has been VOIDED.
+Command Warning
+  /  /  #
+ae_log.dbf
+UN-VOID
+Order has been UN-VOIDED.
+Command Warning
+AE_ORDER
+POSTED
+VOIDED
+_PASS
+MACTION
+NANSWER
+AE_ORDLINE
+ORDER
+AE_NOORDER
+INVOICE
+VINVOICE
+WHILE
+VOIDEDBY
+_USERID
+FLOGS_ADD
+OLDORDER
+THISFORM
+TAMPILKANDATA
+GROUPTMBPILIHAN1
+VISIBLE
+Can't POST: File is empty.
+Command Warning
+Can't POST: SO has been VOIDED.
+Command Warning
+Can't POST: SO has been POSTED.
+Command Warning
+Can't POST: there is selling amount that has not been INVOICED.
+Command Warning
+Can't POST: there is buying cost that has not been IPM.
+Command Warning
+Can't POST: there is buying cost that has not been PV.
+Command Warning
+Can't POST: this order is loss. Check Job Sheet first.
+Command Warning
+POST
+UN-POST6
+Do you want to 
+, now ?
+Command Warning
+Can't 
+ : you have cancelled the procedure.
+Command Warning
+POST
+ae_log.dbf
+POST
+Order has been POSTED.
+Command Warning
+  /  /  #
+ae_log.dbf
+UN-POST
+Order has been UNPOSTED.
+Command Warning
+AE_ORDER
+VOIDED
+POSTED
+_PASS
+AE_ORDLINE
+AE_NOORDER
+AMOUNT
+INVOICE
+ORDER
+COST
+VINVOICE
+MAMOUNT
+MCOST
+ARATE
+RATE
+MACTION
+NANSWER
+THISFORM
+UPDATE_DETAIL
+POSTEDBY
+_USERID
+FLOGS_ADD
+OLDORDER
+TAMPILKANDATA
+GROUPTMBPILIHAN1
+VISIBLE>
+fPesan.scx
+Sales order sudah dibatalkan, tidak dapat dicetak
+aehdr
+order
+aeline
+customer
+cus_cus
+fAEPrint.scx
+AE_ORDER
+VOIDED
+FPESAN
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+AEHDR
+ORDER_
+ORDER
+AE_NOORDER
+AELINE
+ORDLINE
+CUSTOMER
+CUS_CUS
+FAEPRINT
+fPesan.scx
+Database belum ada data
+fPesan.scx
+Sales order sudah dibatalkan, tidak dapat diedit lagi.
+fPesan.scx
+Sales order sudah diposting, tidak dapat diedit lagi.
+fPesan.scx
+Tidak ada nomor pelanggan di file.
+cus_cus
+AE_LTMBADD
+AE_LTMBEDIT
+AE_LTMBSEARCH
+AE_LTMBCUST
+AE_LBATAL
+AE_ORDER
+FPESAN
+VOIDED
+POSTED
+AE_CUSTOMER
+CUS_CUS
+THISFORM
+PAGEFRAME1
+ACTIVEPAGE
+HAL1
+M_CUSTCODE
+ENABLED
+HILANGKANSEMUATOMBOLGROUP1
+TAMPILKANSEMUATOMBOLGROUP2
+GROUPTMBPILIHAN2
+TMBOK
+_SYSCAPTION
+M_FROM_ORDER
+SETFOCUS
+THISFORM
+RELEASEO
+Can't TR: File is empty.
+Command Warning
+ORDER
+Can't TR: Staff code doesn't exist.
+Command Warning
+staff
+Other
+trhdr
+trhdr
+trdtl
+trdtl
+fBuatTr.scx(
+fDaftarTr.scx(
+Can't TR: no item is selected.
+Command Warning
+order
+valas
+valas
+TR NUMBER
+fPesan.scx
+Membuat TR no : 
+  /  /    #
+  /  /    #
+  /  /    #
+fPesan.scx
+Ada kesalahan untuk kode 
+trlog.dbf
+Created from AE Entry
+order
+AE_ORDER
+EDITABLE
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+LJAWAB
+AE_STAFF
+STAFF
+PERIOD
+QWRITTEN
+BILLTO
+QVAL
+QRATE
+QAC_NO
+QAC_NAME
+QTYPES
+GETPERIOD
+VALAS
+FRATE
+TRHDR
+TROPEN
+TRDTL
+DTLOPEN
+FBUATTR
+AE_PFLAG
+ORDER
+MNEWINV
+AE_ORDLINE
+AE_NOORDER
+TEMPFILE
+VINVOICE
+ARATE
+AE_LBATAL
+FDAFTARTR
+ERASER
+POSTEMP
+MCONTINUE
+MGLCASH
+GLCASH
+MGLTR
+GLTR
+_GLCASH
+_GLTR
+NEXTNUM
+MTR_NO
+FPESAN
+BRANCH
+DIVISI
+PRINTED
+PAID
+POSTED
+WRITTEN
+VALRATE
+AC_NO
+AC_NAME
+TYPES
+REFNO
+CONSIGNEE
+HAWB
+MAWB
+VESSEL
+MFLIGHT
+OPERATOR
+_USERID
+ITEMCODE
+AE_ITEM
+INCREMENT
+NEXTLINENO
+RATE
+TR_COST
+COST
+DESCRIPT
+TR_TRSUB
+MSUBTR
+TR_PVSUB
+MSUBPV
+SUBTR
+SUBPV
+FLOGS_ADD
+OLDORDER
+Can't IPM: File is empty.
+Command Warning
+ORDER
+order
+Can't IPM: Detail cost has not been defined.
+Command Warning
+Can't IPM: No detail cost available to be IPM.
+Command Warning
+Can't IPM: Vendor code doesn't exist.
+Command Warning
+ven_ven
+fBuatAp.scx(
+fDaftarTr.scx(
+Can't TR: no item is selected.
+Command Warning
+vinvoice
+vinvoice
+vline
+vline
+order
+VINVOICE NUMBER
+fPesan.scx
+Membuat IPM no : 
+  /  /    #
+  /  /    #
+fPesan.scx
+Ada kesalahan untuk kode 
+order
+AE_ORDER
+EDITABLE
+AE_ORDLINE
+ORDER
+VINVOICE
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+LJAWAB
+AE_VENDOR
+VEN_VEN
+PERIOD
+QWRITTEN
+BILLTO
+QVAL
+QRATE
+GETPERIOD
+VALAS
+FRATE
+FBUATAP
+AE_PFLAG
+MGLAP
+_GLAP
+_GLAP_USD
+MNEWINV
+AE_NOORDER
+TEMPFILE
+ARATE
+AE_LBATAL
+FDAFTARTR
+ERASER
+POSTEMP
+VINVOPEN
+VLINE
+VLINOPEN
+MCONTINUE
+NEXTNUM
+MINVOICE
+FPESAN
+INVOICE
+BRANCH
+DIVISI
+PRINTED
+POSTED
+WRITTEN
+VALRATE
+GLAP
+TAXNO
+REFNO
+VENDCODE
+OPERATOR
+_USERID
+ITEMCODE
+AE_ITEM
+GLCOGS
+RATE
+COST
+OLDORDER
+Create an Trucking entry now ?
+MEMORY PROBLEM
+Can't create an Trucking entry: it has been cancelled.
+Command Warning
+Can't create Trucking: This AE has an Truck entry already.
+Command Warning
+TC NUMBER
+tchdr
+/IPT/TC/
+CCC$
+company
+company
+ae_log.dbf
+ADD TC
+TRUCKING
+An Truck entry has been created. New TC no. is 
+Command Warning
+NANSWER
+AE_ORDER
+REF_ORDER
+REFSTR
+_DEPT
+NEXTNUM
+REFORDER
+TCHDR
+ORDER
+DIVISI
+REFNO
+ROMAWIMONTH
+MAWB
+HAWB
+CUSTCODE
+WRITTEN
+VALAS
+VALRATE
+EXPORT
+FROM_DIV
+IMPORT
+SO_REF
+CONSIGNEE
+EXPORTER
+CCCONSIGNEE
+FNOTIFIED
+CEXPORTER
+ORIGIN
+DESTIN
+MGOODS
+VESSEL
+FLIGHT_1
+GRS_WGT
+CHG_WGT
+UNIT
+FLOGS_ADD
+THISFORM
+PAGEFRAME1
+HAL1
+M_REF_ORDER
+VALUE
+REFRESH
+fPesan.scx
+File belum ada data.
+trhdr
+order
+View_TR.scx
+fdbf
+View AE Temporary Receipt
+AE_ORDER
+FPESAN
+TRHDR
+FDBF
+DIVISI
+BRANCH
+ORDER
+VIEW_TR
+cmdLog.Click,
+TmbItem.ClickC
+TmbSearch.Click
+TmbNext.Click
+TmbPrev.Click
+TmbAdd.Click
+TmbEdit.Click
+TmbCost.Click
+TmbView.Click
+TmbVoid.Click
+TmbPost.Click
+TmbPrint.Click
+TmbCus.Click
+TmbExit.Click
+tmbTR.Click
+tmbVinv.Click?O
+TmbTc.Click
+Command1.Click
+ENABLED-
+TEXTBOX
+ENABLED-
+COMBOBOX
+ENABLED-
+TEXTBOX
+ENABLED-
+EDITBOX
+THISFORM
+PAGEFRAME1
+HAL1
+SETALL
+HAL2
+ENABLEDa
+TEXTBOX
+ENABLEDa
+COMBOBOX
+ENABLEDa
+TEXTBOX
+ENABLEDa
+EDITBOX
+THISFORM
+PAGEFRAME1
+HAL1
+SETALL
+HAL2
+M_SONO
+ENABLED
+M_CUSTOMER
+M_CUSTCODE
+M_FROM_ORDER
+M_REF_ORDER
+M_NOPOL
+_EXPORTER
+_CONSIGNEE
+_NOTIFIED
+_OVRAGENT
+M_VOIDED
+M_POSTED
+C_POSTEDBY
+C_VOIDEDBY.
+ENABLED-
+COMMANDBUTTON
+THISFORM
+GROUPTMBPILIHAN1
+SETALL
+ENABLEDa
+COMMANDBUTTON
+THISFORM
+GROUPTMBPILIHAN1
+SETALL
+TMBADD
+ENABLED
+_PASS
+TMBEDIT
+TMBTR
+TMBVINV
+TMBVOID
+TMBPOST
+TMBITEM
+XVIEWONLY
+TMBCOST
+TMBCUS
+TMBTC
+TMBPRINT
+AE_ORDER
+THISFORM
+PAGEFRAME1
+HAL1
+M_CUSTCODE
+VALUE
+CUSTCODE
+M_SONO
+DEPT
+DIVISI
+ORDER
+M_FROM_ORDER
+FROM_ORDER
+M_WRITTEN
+WRITTEN
+M_REFNO
+REFNO
+COXSOURCE
+SOURCE
+M_REF_ORDER
+REF_ORDER
+M_NOPOL
+NOPOL
+M_EXPORTER
+EXPORTER
+M_CONSIGNEE
+CONSIGNEE
+M_NOTIFIED
+NOTIFIED
+M_OVRAGENT
+OVRAGENT
+M_MAWB
+MAWB
+M_HAWB
+HAWB
+M_ETD
+M_ETA
+M_ISSUED
+ISSUED
+M_DT2CONS
+DT2CONS
+M_QTY
+M_UNIT
+UNIT
+M_GRS_WGT
+GRS_WGT
+M_CHG_WGT
+CHG_WGT
+M_VALAS
+VALAS
+M_VALRATE
+VALRATE
+M_FREIGHT
+FREIGHT
+M_COST_KG
+COST_KG
+M_VOIDED
+VOIDED
+M_POSTED
+POSTED
+C_POSTEDBY
+POSTEDBY
+C_VOIDEDBY
+VOIDEDBY
+M_ORIGIN
+ORIGIN
+M_DESTIN
+DESTIN
+M_REMARK
+REMARK
+M_DECLARED
+DECLARED
+M_INSURANCE
+INSURANCE
+M_QUOTATION
+QUOTATION
+HAL2
+M_MGOODS
+MGOODS
+M_MHANDLING
+MHANDLING
+M_MSHIP
+MSHIP
+M_CARRIER1
+CARRIER_1
+M_CARRIER2
+CARRIER_2
+M_CARRIER3
+CARRIER_3
+M_TO1
+TO_1
+M_TO2
+TO_2
+M_TO3
+TO_3
+M_MFLIGHT
+MFLIGHT
+M_OTHER1
+OTHER_1
+M_OTHER2
+OTHER_2
+M_OTHER3
+OTHER_3
+M_OTHER_CHG
+OTHER_CHG
+M_CARR_CHG
+CARR_CHG
+AE_NOORDER
+AE_CUSTOMER
+M_CUSTOMER
+COMPANY
+AE_NOTIFY
+CODE
+_EXPORTER
+_CONSIGNEE
+_NOTIFIED
+_OVRAGENT
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+THISFORM
+GROUPTMBPILIHAN2
+VISIBLE
+THISFORM
+GROUPTMBPILIHAN2
+VISIBLE
+THISFORM
+GROUPTMBPILIHAN1
+VISIBLE
+VALUE
+TEXTBOX
+VALUE
+COMBOBOX
+VALUE
+TEXTBOX
+VALUE
+EDITBOX
+THISFORM
+PAGEFRAME1
+HAL1
+SETALL
+HAL2s
+order
+itemcode
+AE_ORDLINE
+ORDER
+AE_ORDER
+AE_ITEM
+ITEMCODE
+DIVISI
+AE_PITEM
+DESCRIPT
+AE_NOORDER
+GLREV
+GLCOGS
+AMOUNT
+PRICE
+VALAS
+TAXABLE
+COST
+RATE
+_VALAS
+FRATE
+ARATE
+POSTED
+trdtl
+order
+dndtl
+order
+lineitem
+lineitem
+vline
+vline
+pv.dbf
+order
+Please wait, update cost...
+order
+order
+SI020
+SI034
+SE020
+SE034
+SC020
+SC034
+SI520
+SI534
+SE520
+SE534
+SC520
+SC534
+LNS_ORD
+LNS_ORD
+order
+TRDTL
+FTRDTL
+ORDER
+DNDTL
+LINEITEM
+LINOPEN
+VLINE
+VINOPEN
+FPVFILE
+AE_PFLAG
+AE_ORDER
+MORDER_
+MDIVISI_
+DIVISI
+AE_ORDLINE
+MITEM
+ITEMCODE
+COST
+AMOUNT
+INVOICE
+VINVOICE
+POSTED
+LCANCEL
+XCOST
+TR_COST
+LPOSTED
+MCOST
+NUMBER
+XRATE
+RATE
+XNTR
+LNS_ORD
+MAMOUNT
+AMT_ORIG
+XINVOICE
+MRATE
+RATE_JOB
+ARATE
+DEBIT
+CREDIT
+BATCH
+mzoomorderb
+Copy To :
+MZOOMORDER
+XVIEWONLY
+THISFORM
+WINDOWTYPE
+_SYSCAPTION
+PAGEFRAME1
+HAL1
+LABEL28
+CAPTION
+STARTQTY
+MINPRICE_
+AE_ORDER
+ORDER
+SYSVAL
+AE_PMGR
+MORDERLEN
+OLDORDER
+AE_CUSTOMER
+CUSTCODE
+AE_ORDLINE
+HIDUPKANSEMUATOMBOLGROUP1
+TAMPILKANSEMUATOMBOLGROUP1
+AE NUMBER
+AEHDR
+AELINE
+AEPV
+AEAP
+source
+src_src
+staff
+staff
+item
+itemcode
+lcline
+vendor
+ven_ven
+customer
+cus_cus
+notified
+code
+aehdr
+order
+aeline
+order
+_LMENU
+_SOMENU
+AE_LTMBADD
+AE_LTMBEDIT
+AE_LTMBSEARCH
+AE_LTMBCUST
+AE_NOORDER
+AE_PFLAG
+AE_PITEM
+AE_PMGR
+AE_PHDRF
+AE_PDTLF
+AE_PPVF
+AE_PAPF
+AE_LBATAL
+AE_LAWAL
+AE_LDATAADA
+AE_LCARIDATA
+_DEPT
+SOURCE
+AE_SOURCE
+SRC_SRC
+STAFF
+AE_STAFF
+ITEM
+AE_ITEM
+ITEMCODE
+LCLINE
+VENDOR
+AE_VENDOR
+VEN_VEN
+CUSTOMER
+AE_CUSTOMER
+CUS_CUS
+NOTIFIED
+AE_NOTIFY
+CODE
+AEHDR
+AE_ORDER
+ORDER
+AELINE
+AE_ORDLINE
+NKEYCODE
+NSHIFTALTCTRL
+THISFORM
+PAGEFRAME1
+ACTIVEPAGE
+AE_LBATAL
+HAL1
+M_CUSTCODE
+VALUE
+GROUPTMBPILIHAN2
+TMBOK
+ENABLED
+SETFOCUS
+TMBCANCEL.
+AE_LTMBADD
+AE_LTMBEDIT
+AE_LTMBSEARCH
+AE_NOORDER
+PERIOD
+INVOICE
+WRITTEN
+BILLTO
+QTAX
+QVAL
+QRATE
+QNOTES
+XVIEWONLY
+AE_CUSTOMER
+AE_NOTIFY
+AE_ITEM
+AE_ORDER
+AE_ORDLINE
+AE_SOURCE
+AE_STAFF
+AE_VENDOR
+LCLINE
+_SOMENU
+_LMENUt
+AE_LAWAL
+AE_ORDER
+THISFORM
+TAMPILKANDATA
+HILANGKANSEMUATOMBOLGROUP2
+GROUPTMBPILIHAN1
+TMBADD
+SETFOCUS
+AE_LCARIDATA
+LFOCUSTETAP
+LCUSTCODE
+LEXPORTER
+LCONSIGNEE
+LNOTIFIED
+LOVRAGENT
+AE_LBATAL
+THISFORM
+DATAAWAL
+PAGEFRAME1
+HAL1
+M_SONO
+VALUE
+OLDORDERNO
+MATIKANFIELD
+HILANGKANSEMUATOMBOLGROUP2
+TAMPILKANSEMUATOMBOLGROUP1
+matikanfield,
+hidupkanfield
+matikansemuatombolgroup1_
+hidupkansemuatombolgroup1
+tampilkandatam
+hilangkansemuatombolgroup1
+tampilkansemuatombolgroup2,
+hilangkansemuatombolgroup2i
+tampilkansemuatombolgroup1
+kosongkansemuafield
+append_item
+update_detail
+Init
+Load
+KeyPress=$
+Unload
+Activate
+RightClick

@@ -1,0 +1,1565 @@
+--- /home/erpkeytech/cargo/apps/tbs_indoprostime/foxpro/Form/fsovalid.SCT ---
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+JLeft = 1
+Top = 220
+Width = 520
+Height = 200
+Name = "Dataenvironment"
+form
+form
+frmSovalid
+?Top = 0
+Left = 158
+Height = 400
+Width = 463
+ShowWindow = 1
+DoCreate = .T.
+Caption = "  Select Sales Order Number"
+ControlBox = .F.
+MaxHeight = 400
+MaxWidth = 463
+MinHeight = 400
+MinWidth = 463
+KeyPreview = .T.
+WindowType = 1
+WindowState = 0
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSovalid"
+PROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+PROCEDURE Init
+PARAMETERS nNumber
+public _soorder
+_soorder = ""
+THISFORM.grdSo.SETALL('FONTNAME','Times New Roman','HEADER1')
+THISFORM.grdSo.SETALL('FONTSIZE','11','HEADER1')
+if type('nNumber') # 'C'
+   nNumber = '-1'
+endif
+select sohdr
+set order to order
+set near on
+seek nNumber
+set near off
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+if nKeyCode = 13
+   _soorder = sohdr.order
+   thisform.release
+endif
+if nKeyCode = 27
+   _soorder = ""
+   thisform.release
+endif
+ENDPROC
+PROCEDURE Unload
+mretval = _soorder
+release _soorder
+return mretval
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+hawb
+SOHDR
+HAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+frmSovalid
+Label2
+label
+label
+frmSovalid.grdSo.Column6
+grid
+grid
+grdSo
+frmSovalid
+DColumnCount = 6
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 361
+Left = 10
+Panel = 1
+ReadOnly = .T.
+RecordMark = .F.
+RecordSource = "sohdr"
+ScrollBars = 3
+Top = 10
+Width = 444
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdSo"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "sohdr.divisi"
+Column1.Enabled = .F.
+Column1.Width = 28
+Column1.ReadOnly = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "sohdr.order"
+Column2.Width = 65
+Column2.ReadOnly = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.Alignment = 0
+Column3.ControlSource = "sohdr.refno"
+Column3.Width = 93
+Column3.ReadOnly = .T.
+Column3.DynamicBackColor = ""
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.Alignment = 0
+Column4.ControlSource = "sohdr.mawb"
+Column4.Width = 86
+Column4.ReadOnly = .T.
+Column4.DynamicBackColor = ""
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.Alignment = 0
+Column5.ControlSource = "sohdr.hawb"
+Column5.Width = 88
+Column5.ReadOnly = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.Alignment = 0
+Column6.ControlSource = "sohdr.written"
+Column6.Width = 58
+Column6.ReadOnly = .T.
+Column6.DynamicBackColor = ""
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+EPROCEDURE DblClick
+retval = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Dv"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Order"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to order
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+mawb
+SOHDR
+MAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Refno"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to refno
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+refno
+SOHDR
+REFNO
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Mawb"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to mawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+order
+SOHDR
+ORDER
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+RETVAL
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Hawb"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to hawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+dArial, 0, 9, 5, 15, 12, 32, 3, 0
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Arial, 0, 10, 6, 16, 13, 35, 3, 0
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+Text1
+textbox
+textbox
+frmSovalid.grdSo.Column6
+Header1
+header
+header
+Text1
+textbox
+textbox
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 12
+Alignment = 2
+BackStyle = 0
+Caption = "Press ENTER or double clik mouse to select"
+Height = 22
+Left = 82
+Top = 376
+Width = 298
+Name = "Label2"
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Date"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+ControlSource = "sohdr.written"
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+FONTNAME
+Times New Roman
+HEADER1
+FONTSIZE
+HEADER1
+nNumberb
+order
+NNUMBER
+_SOORDER
+THISFORM
+GRDSO
+SETALL
+SOHDR
+ORDERi
+NKEYCODE
+NSHIFTALTCTRL
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE 
+MRETVAL
+_SOORDER
+DblClick,
+Initx
+KeyPress
+Unload>
+--- /home/erpkeytech/cargo/apps/tbs_indoprostime/foxpro/Form/fsovalid1.SCT ---
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+JLeft = 1
+Top = 220
+Width = 520
+Height = 200
+Name = "Dataenvironment"
+form
+form
+frmSovalid
+?Top = 9
+Left = 136
+Height = 400
+Width = 463
+ShowWindow = 1
+DoCreate = .T.
+Caption = "  Select Sales Order Number"
+ControlBox = .F.
+MaxHeight = 400
+MaxWidth = 463
+MinHeight = 400
+MinWidth = 463
+KeyPreview = .T.
+WindowType = 1
+WindowState = 0
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSovalid"
+PROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+PROCEDURE Init
+PARAMETERS nNumber
+public _soorder
+_soorder = ""
+THISFORM.grdSo.SETALL('FONTNAME','Times New Roman','HEADER1')
+THISFORM.grdSo.SETALL('FONTSIZE','11','HEADER1')
+if type('nNumber') # 'C'
+   nNumber = '-1'
+endif
+select sohdr
+set order to refno
+set near on
+seek nNumber
+set near off
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+if nKeyCode = 13
+   _soorder = sohdr.refno
+   thisform.release
+endif
+if nKeyCode = 27
+   _soorder = ""
+   thisform.release
+endif
+ENDPROC
+PROCEDURE Unload
+mretval = _soorder
+release _soorder
+return mretval
+ENDPROC
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+hawb
+SOHDR
+HAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+frmSovalid
+Label2
+label
+label
+frmSovalid.grdSo.Column6
+grid
+grid
+grdSo
+frmSovalid
+DColumnCount = 6
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 361
+Left = 10
+Panel = 1
+ReadOnly = .T.
+RecordMark = .F.
+RecordSource = "sohdr"
+ScrollBars = 3
+Top = 10
+Width = 444
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdSo"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "sohdr.divisi"
+Column1.Enabled = .F.
+Column1.Width = 28
+Column1.ReadOnly = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "sohdr.order"
+Column2.Width = 65
+Column2.ReadOnly = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.Alignment = 0
+Column3.ControlSource = "sohdr.refno"
+Column3.Width = 93
+Column3.ReadOnly = .T.
+Column3.DynamicBackColor = ""
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.Alignment = 0
+Column4.ControlSource = "sohdr.mawb"
+Column4.Width = 86
+Column4.ReadOnly = .T.
+Column4.DynamicBackColor = ""
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.Alignment = 0
+Column5.ControlSource = "sohdr.hawb"
+Column5.Width = 88
+Column5.ReadOnly = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.Alignment = 0
+Column6.ControlSource = "sohdr.written"
+Column6.Width = 58
+Column6.ReadOnly = .T.
+Column6.DynamicBackColor = ""
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+EPROCEDURE DblClick
+retval = sohdr.refno
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Dv"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Order"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to order
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+mawb
+SOHDR
+MAWB
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Refno"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to refno
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+refno
+SOHDR
+REFNO
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Mawb"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to mawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+order
+SOHDR
+ORDER
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+RETVAL
+SOHDR
+REFNO
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Hawb"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to hawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+dArial, 0, 9, 5, 15, 12, 32, 3, 0
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Arial, 0, 10, 6, 16, 13, 35, 3, 0
+GPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+Text1
+textbox
+textbox
+frmSovalid.grdSo.Column6
+Header1
+header
+header
+Text1
+textbox
+textbox
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.refno
+thisform.release
+ENDPROC
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 12
+Alignment = 2
+BackStyle = 0
+Caption = "Press ENTER or double clik mouse to select"
+Height = 22
+Left = 82
+Top = 376
+Width = 298
+Name = "Label2"
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Date"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+ControlSource = "sohdr.written"
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE
+FONTNAME
+Times New Roman
+HEADER1
+FONTSIZE
+HEADER1
+nNumberb
+refno
+NNUMBER
+_SOORDER
+THISFORM
+GRDSO
+SETALL
+SOHDR
+REFNOi
+NKEYCODE
+NSHIFTALTCTRL
+_SOORDER
+SOHDR
+REFNO
+THISFORM
+RELEASE 
+MRETVAL
+_SOORDER
+DblClick,
+Initx
+KeyPress
+Unload>
+--- /home/erpkeytech/cargo/apps/tbs_indoprostime/foxpro/Form/fsovalid2.SCT ---
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+JLeft = 1
+Top = 220
+Width = 520
+Height = 200
+Name = "Dataenvironment"
+form
+form
+frmSovalid
+;Top = 9
+Left = 4
+Height = 400
+Width = 675
+ShowWindow = 1
+DoCreate = .T.
+Caption = "  Select Quotation Number"
+ControlBox = .F.
+MaxHeight = 400
+MaxWidth = 800
+MinHeight = 400
+MinWidth = 463
+KeyPreview = .T.
+WindowType = 1
+WindowState = 0
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSovalid"
+PROCEDURE Unload
+mretval = _soorder
+release _soorder
+return mretval
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+if nKeyCode = 13
+   _soorder = sohdr.order
+   thisform.release
+endif
+if nKeyCode = 27
+   _soorder = ""
+   thisform.release
+endif
+ENDPROC
+PROCEDURE Init
+PARAMETERS nNumber
+public _soorder
+_soorder = ""
+THISFORM.grdSo.SETALL('FONTNAME','Times New Roman','HEADER1')
+THISFORM.grdSo.SETALL('FONTSIZE','11','HEADER1')
+if type('nNumber') # 'C'
+   nNumber = '-1'
+endif
+select sohdr
+set order to order
+set near on
+seek nNumber
+set near off
+ENDPROC
+PROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+dArial, 0, 9, 5, 15, 12, 32, 3, 0
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Arial, 0, 10, 6, 16, 13, 35, 3, 0
+frmSovalid
+Label2
+label
+grid
+grid
+grdSo
+frmSovalid
+IColumnCount = 8
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 361
+Left = 10
+Panel = 1
+ReadOnly = .T.
+RecordMark = .F.
+RecordSource = "sohdr"
+ScrollBars = 3
+Top = 10
+Width = 656
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdSo"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "sohdr.divisi"
+Column1.Enabled = .F.
+Column1.Width = 28
+Column1.ReadOnly = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "sohdr.order"
+Column2.Width = 65
+Column2.ReadOnly = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.Alignment = 0
+Column3.ColumnOrder = 3
+Column3.ControlSource = "sohdr.refno"
+Column3.Width = 98
+Column3.ReadOnly = .T.
+Column3.DynamicBackColor = ""
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.Alignment = 0
+Column4.ColumnOrder = 5
+Column4.ControlSource = "sohdr.custcode"
+Column4.Width = 71
+Column4.ReadOnly = .T.
+Column4.DynamicBackColor = ""
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.Alignment = 0
+Column5.ColumnOrder = 6
+Column5.ControlSource = "proper(FNotified (sohdr.ovragent,'company'))"
+Column5.Width = 175
+Column5.ReadOnly = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.Alignment = 0
+Column6.ColumnOrder = 4
+Column6.ControlSource = "sohdr.written"
+Column6.Width = 62
+Column6.ReadOnly = .T.
+Column6.DynamicBackColor = ""
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+Column7.FontSize = 8
+Column7.ControlSource = "sohdr.eta"
+Column7.Width = 65
+Column7.ReadOnly = .T.
+Column7.ForeColor = 0,0,0
+Column7.BackColor = 255,255,255
+Column7.Name = "Column7"
+Column8.FontSize = 8
+Column8.ControlSource = "sohdr.etd"
+Column8.Width = 63
+Column8.ReadOnly = .T.
+Column8.ForeColor = 0,0,0
+Column8.BackColor = 255,255,255
+Column8.Name = "Column8"
+EPROCEDURE DblClick
+retval = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Dv"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Enabled = .F.
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+Click,
+label
+frmSovalid.grdSo.Column8
+Text1
+textbox
+header
+header
+Header1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 2
+Caption = "Order"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to order
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+textbox
+frmSovalid.grdSo.Column8
+Header1
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 2
+Caption = "Refno"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to refno
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+refno
+SOHDR
+REFNO
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 2
+Caption = "Custcode"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to company
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+company
+SOHDR
+COMPANY
+MRECNO
+THISFORM
+REFRESH
+Click,
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 2
+Caption = "Agent"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+PROCEDURE Click
+select sohdr
+set order to hawb
+store recno() to mrecno
+thisform.refresh
+if mrecno > 0 and not eof()
+   go mrecno
+endif
+ENDPROC
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+KAlignment = 2
+Caption = "ETD"
+BackColor = 192,192,192
+Name = "Header1"
+header
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+RETVAL
+SOHDR
+ORDER
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSovalid.grdSo.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 9
+Alignment = 2
+Caption = "Date"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+ControlSource = "sohdr.written"
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+AutoSize = .T.
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 12
+Alignment = 2
+BackStyle = 0
+Caption = "Press ENTER or double clik mouse to select"
+Height = 22
+Left = 190
+Top = 376
+Width = 298
+Name = "Label2"
+header
+header
+header
+Header1
+frmSovalid.grdSo.Column7
+YFontSize = 9
+Alignment = 2
+Caption = "ETA"
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSovalid.grdSo.Column7
+wFontSize = 8
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+GPROCEDURE DblClick
+_soorder = sohdr.order
+thisform.release
+ENDPROC
+order
+SOHDR
+ORDER
+MRECNO
+THISFORM
+REFRESH
+Click,
+wFontSize = 8
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+MRETVAL
+_SOORDERi
+NKEYCODE
+NSHIFTALTCTRL
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+FONTNAME
+Times New Roman
+HEADER1
+FONTSIZE
+HEADER1
+nNumberb
+order
+NNUMBER
+_SOORDER
+THISFORM
+GRDSO
+SETALL
+SOHDR
+ORDER
+_SOORDER
+SOHDR
+ORDER
+THISFORM
+RELEASE
+Unload,
+KeyPressc
+Init
+DblClick)

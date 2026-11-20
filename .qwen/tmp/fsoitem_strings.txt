@@ -1,0 +1,1104 @@
+--- /home/erpkeytech/cargo/apps/tbs_indoprostime/foxpro/Form/fsoitem_ap.SCT ---
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+Name = "Dataenvironment"
+cursor
+cursor
+Cursor1
+Dataenvironment
+NAlias = "aehdr"
+CursorSource = ..\..\data\sodbf\aehdr.dbf
+Name = "Cursor1"
+cursor
+cursor
+Cursor2
+Dataenvironment
+PAlias = "aeline"
+CursorSource = ..\..\data\sodbf\aeline.dbf
+Name = "Cursor2"
+form
+form
+frmSoitem
+Top = 4
+Left = 210
+Height = 400
+Width = 578
+ShowWindow = 1
+DoCreate = .T.
+Caption = "  Select Sales Order items"
+ControlBox = .F.
+MaxButton = .F.
+KeyPreview = .T.
+WindowType = 1
+WindowState = 0
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSoitem"
+MPROCEDURE Unload
+select sodtl
+set key to
+mretval = _soitem
+release _soitem
+return mretval
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+if nKeyCode = 13
+   _soitem = sodtl.itemcode
+   thisform.release
+endif
+if nKeyCode = 27
+   _soitem = ""
+   thisform.release
+endif
+ENDPROC
+PROCEDURE Init
+PARAMETERS nNumber, nValas
+public _soitem
+_soitem = ""
+THISFORM.grdsoitem.SETALL('FONTNAME','Times New Roman','HEADER1')
+THISFORM.grdsoitem.SETALL('FONTSIZE','11','HEADER1')
+if type('nNumber') # 'C'
+   nNumber = '200101001'
+endif
+nNumber = padr(nNumber, 9, ' ')
+if type('nValas') # 'C'
+   nValas = ''
+endif
+nNumber = nNumber + nValas
+select sodtl
+set order to ord_val  &&order
+set key to nNumber
+go top
+ENDPROC
+PROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+frmSoitem.grdSoItem.Column9
+label
+label
+Label2
+frmSoitem
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 12
+Alignment = 2
+BackStyle = 0
+Caption = "Press ENTER or double clik mouse to select"
+Height = 25
+Left = 78
+Top = 376
+Width = 416
+Name = "Label2"
+grid
+grid
+grdSoItem
+frmSoitem
+ColumnCount = 9
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 361
+Left = 10
+Panel = 1
+ReadOnly = .T.
+RecordMark = .F.
+RecordSource = "sodtl"
+ScrollBars = 3
+TabIndex = 2
+Top = 10
+Width = 560
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdSoItem"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "sodtl.itemcode"
+Column1.Width = 40
+Column1.ReadOnly = .T.
+Column1.Visible = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "sodtl.descript"
+Column2.Width = 150
+Column2.ReadOnly = .T.
+Column2.Visible = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.ControlSource = "sodtl.amount"
+Column3.Width = 65
+Column3.ReadOnly = .T.
+Column3.Visible = .T.
+Column3.DynamicBackColor = ""
+Column3.InputMask = "999,999,999.99"
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.ControlSource = "sodtl.cost"
+Column4.Width = 65
+Column4.ReadOnly = .T.
+Column4.Visible = .T.
+Column4.DynamicBackColor = ""
+Column4.InputMask = "999,999,999.99"
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.Alignment = 0
+Column5.ControlSource = "sodtl.pv"
+Column5.Width = 45
+Column5.ReadOnly = .T.
+Column5.Visible = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.Alignment = 0
+Column6.ControlSource = "sodtl.ntr"
+Column6.Width = 45
+Column6.ReadOnly = .T.
+Column6.Visible = .T.
+Column6.DynamicBackColor = ""
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+Column7.ControlSource = "sodtl.invoice"
+Column7.Width = 45
+Column7.ReadOnly = .T.
+Column7.Visible = .T.
+Column7.ForeColor = 0,0,0
+Column7.BackColor = 255,255,255
+Column7.Name = "Column7"
+Column8.ControlSource = "sodtl.vinvoice"
+Column8.Width = 45
+Column8.ReadOnly = .T.
+Column8.Visible = .T.
+Column8.ForeColor = 0,0,0
+Column8.BackColor = 255,255,255
+Column8.Name = "Column8"
+Column9.Alignment = 2
+Column9.ControlSource = "sodtl.valas"
+Column9.ReadOnly = .T.
+Column9.ForeColor = 0,0,0
+Column9.BackColor = 255,255,255
+Column9.Name = "Column9"
+HPROCEDURE DblClick
+retval = sodtl.itemcode
+thisform.release
+ENDPROC
+RETVAL
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Item"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Description"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Amount"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Cost"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Pv"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+, 0, 9, 6, 14, 10, 12, 2, 2
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Arial, 0, 10, 6, 16, 13, 35, 3, 0
+hAlignment = 2
+BorderStyle = 0
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+Text1
+textbox
+header
+header
+Header1
+frmSoitem.grdSoItem.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Ntr"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+textbox
+MAlignment = 2
+Caption = "Valas"
+BackColor = 192,192,192
+Name = "Header1"
+frmSoitem.grdSoItem.Column9
+Header1
+header
+header
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+header
+header
+Header1
+frmSoitem.grdSoItem.Column7
+OAlignment = 2
+Caption = "Invoice"
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column7
+xBorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+hBorderStyle = 0
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+frmSoitem.grdSoItem.Column8
+Text1
+textbox
+textbox
+frmSoitem.grdSoItem.Column8
+Header1
+header
+header
+LAlignment = 2
+Caption = "Vinv"
+BackColor = 192,192,192
+Name = "Header1"
+SODTL
+MRETVAL
+_SOITEMi
+NKEYCODE
+NSHIFTALTCTRL
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE1
+FONTNAME
+Times New Roman
+HEADER1
+FONTSIZE
+HEADER1
+nNumberb
+200101001
+nValasb
+ord_val
+NNUMBER
+NVALAS
+_SOITEM
+THISFORM
+GRDSOITEM
+SETALL
+SODTL
+ORD_VAL
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+Unload,
+KeyPressv
+Init)
+DblClick
+--- /home/erpkeytech/cargo/apps/tbs_indoprostime/foxpro/Form/fsoitem.SCT ---
+VERSION =   3.00
+dataenvironment
+dataenvironment
+Dataenvironment
+Name = "Dataenvironment"
+cursor
+cursor
+Cursor1
+Dataenvironment
+NAlias = "aehdr"
+CursorSource = ..\..\data\sodbf\aehdr.dbf
+Name = "Cursor1"
+cursor
+cursor
+Cursor2
+Dataenvironment
+PAlias = "aeline"
+CursorSource = ..\..\data\sodbf\aeline.dbf
+Name = "Cursor2"
+form
+form
+frmSoitem
+Top = 5
+Left = 210
+Height = 400
+Width = 578
+ShowWindow = 1
+DoCreate = .T.
+Caption = "  Select Sales Order items"
+ControlBox = .F.
+MaxButton = .F.
+KeyPreview = .T.
+WindowType = 1
+WindowState = 0
+LockScreen = .F.
+BackColor = 96,200,194
+Name = "frmSoitem"
+PROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+PROCEDURE Init
+PARAMETERS nNumber
+public _soitem
+_soitem = ""
+THISFORM.grdsoitem.SETALL('FONTNAME','Times New Roman','HEADER1')
+THISFORM.grdsoitem.SETALL('FONTSIZE','11','HEADER1')
+if type('nNumber') # 'C'
+   nNumber = '200101001'
+endif
+nNumber = padr(nNumber, 9, ' ')
+select sodtl
+set order to order
+set key to nNumber
+go top
+ENDPROC
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+if nKeyCode = 13
+   _soitem = sodtl.itemcode
+   thisform.release
+endif
+if nKeyCode = 27
+   _soitem = ""
+   thisform.release
+endif
+ENDPROC
+PROCEDURE Unload
+select sodtl
+set key to
+mretval = _soitem
+release _soitem
+return mretval
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+dArial, 0, 9, 5, 15, 12, 32, 3, 0
+Arial, 0, 8, 5, 14, 11, 29, 3, 0
+Arial, 0, 10, 6, 16, 13, 35, 3, 0
+frmSoitem.grdSoItem.Column9
+Text1
+textbox
+textbox
+Header1
+label
+label
+Label2
+frmSoitem
+FontBold = .T.
+FontName = "Times New Roman"
+FontSize = 12
+Alignment = 2
+BackStyle = 0
+Caption = "Press ENTER or double clik mouse to select"
+Height = 25
+Left = 78
+Top = 376
+Width = 416
+Name = "Label2"
+grid
+grid
+grdSoItem
+frmSoitem
+ColumnCount = 9
+DeleteMark = .F.
+GridLines = 3
+GridLineWidth = 1
+HeaderHeight = 20
+Height = 361
+Left = 10
+Panel = 1
+ReadOnly = .T.
+RecordMark = .F.
+RecordSource = "sodtl"
+ScrollBars = 3
+TabIndex = 2
+Top = 10
+Width = 560
+ForeColor = 0,0,0
+BackColor = 255,255,255
+GridLineColor = 192,192,192
+Name = "grdSoItem"
+Column1.FontBold = .F.
+Column1.FontName = "Arial"
+Column1.FontSize = 8
+Column1.Alignment = 0
+Column1.ControlSource = "sodtl.itemcode"
+Column1.Width = 40
+Column1.ReadOnly = .T.
+Column1.Visible = .T.
+Column1.DynamicBackColor = ""
+Column1.ForeColor = 0,0,0
+Column1.BackColor = 255,255,255
+Column1.Name = "Column1"
+Column2.FontBold = .F.
+Column2.FontName = "Arial"
+Column2.FontSize = 8
+Column2.Alignment = 0
+Column2.ControlSource = "sodtl.descript"
+Column2.Width = 150
+Column2.ReadOnly = .T.
+Column2.Visible = .T.
+Column2.DynamicBackColor = ""
+Column2.ForeColor = 0,0,0
+Column2.BackColor = 255,255,255
+Column2.Name = "Column2"
+Column3.FontBold = .F.
+Column3.FontName = "Arial"
+Column3.FontSize = 8
+Column3.ControlSource = "sodtl.amount"
+Column3.Width = 65
+Column3.ReadOnly = .T.
+Column3.Visible = .T.
+Column3.DynamicBackColor = ""
+Column3.InputMask = "999,999,999.99"
+Column3.ForeColor = 0,0,0
+Column3.BackColor = 255,255,255
+Column3.Name = "Column3"
+Column4.FontBold = .F.
+Column4.FontName = "Arial"
+Column4.FontSize = 8
+Column4.ControlSource = "sodtl.cost"
+Column4.Width = 65
+Column4.ReadOnly = .T.
+Column4.Visible = .T.
+Column4.DynamicBackColor = ""
+Column4.InputMask = "999,999,999.99"
+Column4.ForeColor = 0,0,0
+Column4.BackColor = 255,255,255
+Column4.Name = "Column4"
+Column5.FontBold = .F.
+Column5.FontName = "Arial"
+Column5.FontSize = 8
+Column5.Alignment = 0
+Column5.ControlSource = "sodtl.pv"
+Column5.Width = 45
+Column5.ReadOnly = .T.
+Column5.Visible = .T.
+Column5.DynamicBackColor = ""
+Column5.ForeColor = 0,0,0
+Column5.BackColor = 255,255,255
+Column5.Name = "Column5"
+Column6.FontBold = .F.
+Column6.FontName = "Arial"
+Column6.FontSize = 8
+Column6.Alignment = 0
+Column6.ControlSource = "sodtl.ntr"
+Column6.Width = 45
+Column6.ReadOnly = .T.
+Column6.Visible = .T.
+Column6.DynamicBackColor = ""
+Column6.ForeColor = 0,0,0
+Column6.BackColor = 255,255,255
+Column6.Name = "Column6"
+Column7.ControlSource = "sodtl.invoice"
+Column7.Width = 45
+Column7.ReadOnly = .T.
+Column7.Visible = .T.
+Column7.ForeColor = 0,0,0
+Column7.BackColor = 255,255,255
+Column7.Name = "Column7"
+Column8.ControlSource = "sodtl.vinvoice"
+Column8.Width = 45
+Column8.ReadOnly = .T.
+Column8.Visible = .T.
+Column8.ForeColor = 0,0,0
+Column8.BackColor = 255,255,255
+Column8.Name = "Column8"
+Column9.Alignment = 2
+Column9.ControlSource = "sodtl.valas"
+Column9.ReadOnly = .T.
+Column9.ForeColor = 0,0,0
+Column9.BackColor = 255,255,255
+Column9.Name = "Column9"
+HPROCEDURE DblClick
+retval = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Item"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column1
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Description"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column2
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Amount"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column3
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Cost"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column4
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 3
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Pv"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column5
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+RETVAL
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+DblClick,
+header
+header
+Header1
+frmSoitem.grdSoItem.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 10
+Alignment = 2
+Caption = "Ntr"
+ForeColor = 0,0,0
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column6
+FontBold = .F.
+FontName = "Arial"
+FontSize = 8
+Alignment = 0
+BorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+hAlignment = 2
+BorderStyle = 0
+Margin = 0
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+MAlignment = 2
+Caption = "Valas"
+BackColor = 192,192,192
+Name = "Header1"
+frmSoitem.grdSoItem.Column9
+header
+header
+header
+Header1
+frmSoitem.grdSoItem.Column7
+OAlignment = 2
+Caption = "Invoice"
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+Text1
+frmSoitem.grdSoItem.Column7
+xBorderStyle = 0
+Margin = 0
+ReadOnly = .T.
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+header
+IPROCEDURE DblClick
+_soitem = sodtl.itemcode
+thisform.release
+ENDPROC
+hBorderStyle = 0
+Margin = 0
+Visible = .T.
+ForeColor = 0,0,0
+BackColor = 255,255,255
+Name = "Text1"
+frmSoitem.grdSoItem.Column8
+Text1
+header
+header
+Header1
+frmSoitem.grdSoItem.Column8
+LAlignment = 2
+Caption = "Vinv"
+BackColor = 192,192,192
+Name = "Header1"
+textbox
+textbox
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE
+FONTNAME
+Times New Roman
+HEADER1
+FONTSIZE
+HEADER1
+nNumberb
+200101001
+order
+NNUMBER
+_SOITEM
+THISFORM
+GRDSOITEM
+SETALL
+SODTL
+ORDERi
+NKEYCODE
+NSHIFTALTCTRL
+_SOITEM
+SODTL
+ITEMCODE
+THISFORM
+RELEASE-
+SODTL
+MRETVAL
+_SOITEM
+DblClick,
+Initz
+KeyPress
+Unload]

@@ -620,6 +620,8 @@ function make_vendor_invoice(frm) {
 		pi.project = frm.doc.project;
 		pi.custom_branch = frm.doc.custom_branch;
 		pi.custom_division = frm.doc.custom_division;
+		pi.currency = frm.doc.custom_valas || "IDR";
+		pi.exchange_rate = frm.doc.custom_kurs || 1;
 
 		frm.doc.items.forEach((row) => {
 			let pi_item = frappe.model.add_child(pi, "Purchase Invoice Item", "items");
@@ -628,10 +630,18 @@ function make_vendor_invoice(frm) {
 			pi_item.description = row.description;
 			pi_item.qty = 1;
 			pi_item.rate = row.custom_cost;
+			pi_item.price_list_rate = row.custom_cost;
+			pi_item.amount = row.custom_cost;
+			pi_item.base_rate = row.custom_cost;
+			pi_item.base_amount = row.custom_cost;
 			pi_item.uom = row.uom;
 			pi_item.sales_order = frm.doc.name;
 			pi_item.custom_customer_order = frm.doc.name;
 			pi_item.custom_so_detail = row.name;
+			pi_item.custom_cost = row.custom_cost;
+			pi_item.custom_total_cost = row.custom_cost;
+			pi_item.custom_valas = frm.doc.custom_valas || "IDR";
+			pi_item.custom_kurs = frm.doc.custom_kurs || 1;
 		});
 
 		frappe.set_route("Form", "Purchase Invoice", pi.name);
