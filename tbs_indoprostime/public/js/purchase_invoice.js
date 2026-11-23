@@ -19,6 +19,7 @@ frappe.ui.form.on("Purchase Invoice", {
 		setup_get_items_from(frm);
 		lock_item_code_in_grid(frm);
 		override_items_add_row(frm);
+		hide_add_multiple_button(frm);
 	},
 });
 
@@ -289,4 +290,17 @@ function show_customer_order_dialog(frm, filters, existing_so_details) {
 	});
 
 	d.show();
+}
+
+function hide_add_multiple_button(frm) {
+	if (frm._add_multiple_hidden) return;
+	frm._add_multiple_hidden = true;
+
+	$(frm.wrapper).addClass("pi-hide-add-multiple");
+
+	if ($("#pi-hide-add-multiple-style").length) return;
+
+	$("<style id='pi-hide-add-multiple-style'>")
+		.text(".pi-hide-add-multiple .grid-add-multiple-rows { display: none !important; }")
+		.appendTo("head");
 }

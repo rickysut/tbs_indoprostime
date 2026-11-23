@@ -32,6 +32,7 @@ app_license = "mit"
 doctype_js = {
 	"Sales Order": "public/js/sales_order.js",
 	"Purchase Invoice": "public/js/purchase_invoice.js",
+	"Sales Invoice": "public/js/sales_invoice.js",
 }
 
 # include js, css files in header of web template

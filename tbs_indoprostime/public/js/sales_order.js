@@ -48,6 +48,8 @@ frappe.ui.form.on("Sales Order", {
         // });
 	},
 	refresh(frm) {
+		hide_add_multiple_button(frm);
+
 		setTimeout(() => {
 			frm.set_query("item_code", "items", function (doc, cdt, cdn) {
 				let filters = {};
@@ -1118,4 +1120,17 @@ function add_input_prefix(frm, fieldname, prefix) {
 
 function add_input_suffix(frm, fieldname, suffix) {
 	add_input_affix(frm, fieldname, suffix, "suffix");
+}
+
+function hide_add_multiple_button(frm) {
+	if (frm._add_multiple_hidden) return;
+	frm._add_multiple_hidden = true;
+
+	$(frm.wrapper).addClass("pi-hide-add-multiple");
+
+	if ($("#pi-hide-add-multiple-style").length) return;
+
+	$("<style id='pi-hide-add-multiple-style'>")
+		.text(".pi-hide-add-multiple .grid-add-multiple-rows { display: none !important; }")
+		.appendTo("head");
 }
