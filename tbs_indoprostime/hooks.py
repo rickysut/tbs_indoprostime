@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/tbs_indoprostime/css/tbs_indoprostime.css"
-# app_include_js = "/assets/tbs_indoprostime/js/tbs_indoprostime.js"
+app_include_js = "print_tracker.bundle.js"
 
 # include js in doctype views
 doctype_js = {

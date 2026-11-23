@@ -1,0 +1,10 @@
+{
+    "doctype": "Page",
+    "icon": "fa fa-file-text",
+    "module": "TBS Indoprostime",
+    "name": "print_log_report",
+    "page_name": "print_log_report",
+    "roles": [],
+    "standard": "Yes",
+    "title": "Printing Activity Report"
+}
