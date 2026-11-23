@@ -31,19 +31,24 @@ frappe.provide("tbs_indoprostime.print_tracker");
         const info = get_print_info();
         if (!info) return;
 
-        clearTimeout(window._tbs_print_log_debounce);
-        window._tbs_print_log_debounce = setTimeout(() => {
-            frappe.call({
-                method: "tbs_indoprostime.utils.print_log.log_print_activity",
-                args: {
-                    doctype: info.doctype,
-                    doctype_label: __(info.doctype) || info.doctype,
-                    name: info.name,
-                    print_format: print_format || "",
-                },
-                freeze: false,
-            });
-        }, 250);
+        const now = Date.now();
+        const key = info.doctype + ":" + info.name;
+        const last = window._tbs_print_log_sent?.[key] || 0;
+        if (now - last < 2000) return;
+
+        window._tbs_print_log_sent = window._tbs_print_log_sent || {};
+        window._tbs_print_log_sent[key] = now;
+
+        frappe.call({
+            method: "tbs_indoprostime.utils.print_log.log_print_activity",
+            args: {
+                doctype: info.doctype,
+                doctype_label: __(info.doctype) || info.doctype,
+                name: info.name,
+                print_format: print_format || "",
+            },
+            freeze: false,
+        });
     }
 
     function is_print_button($el) {
