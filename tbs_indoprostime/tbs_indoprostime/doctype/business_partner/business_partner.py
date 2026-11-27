@@ -44,6 +44,7 @@ class BusinessPartner(Document):
 			"tax_withholding_category": self.tax_withholding_category,
 			"payment_terms": self.get_payment_terms(self.selling_payment_term),
 			"custom_customer_code": self.name,
+			"custom_company_group": self.company_group,
 			"customer_primary_address": self.primary_address,
 			"customer_primary_contact": self.primary_contact,
 		})
