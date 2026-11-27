@@ -17,6 +17,7 @@
   "territory",
   "industry",
   "company_bank_account",
+  "company_group",
   "party_section",
   "customer",
   "vendor",
@@ -611,6 +612,13 @@
    "fieldname": "tax_address",
    "fieldtype": "Small Text",
    "label": "Tax Address"
+  },
+  {
+   "depends_on": "eval:doc.customer==1",
+   "fieldname": "company_group",
+   "fieldtype": "Link",
+   "label": "Company Group",
+   "options": "Company Group"
   }
  ],
  "grid_page_length": 50,
@@ -628,7 +636,7 @@
    "link_fieldname": "custom_supplier_code"
   }
  ],
- "modified": "2026-09-30 21:29:52.605024",
+ "modified": "2026-11-27 15:13:25.012566",
  "modified_by": "Administrator",
  "module": "TBS Indoprostime",
  "name": "Business Partner",
