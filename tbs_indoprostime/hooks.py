@@ -148,6 +148,11 @@ override_doctype_class = {
 doc_events = {
     "Warehouse": {
         "autoname": "tbs_indoprostime.overrides.warehouse.set_custom_name"
+    },
+    "Purchase Invoice": {
+        "validate": "tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.update_sales_order_costs",
+        "on_submit": "tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.on_submit",
+        "on_cancel": "tbs_indoprostime.tbs_indoprostime.utils.purchase_invoice.on_cancel",
     }
 }
 

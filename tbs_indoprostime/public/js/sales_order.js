@@ -47,8 +47,18 @@ frappe.ui.form.on("Sales Order", {
         //     });
         // });
 	},
+	items_add(frm) {
+		apply_item_row_locks(frm);
+	},
+	items_delete(frm) {
+		apply_item_row_locks(frm);
+	},
 	refresh(frm) {
 		hide_add_multiple_button(frm);
+
+		if (!frm.is_new()) {
+			apply_item_row_locks(frm);
+		}
 
 		setTimeout(() => {
 			frm.set_query("item_code", "items", function (doc, cdt, cdn) {
@@ -93,6 +103,12 @@ frappe.ui.form.on("Sales Order", {
 			if (frm.doc.workflow_state === "To Bill") {
 				frm.add_custom_button(__("Vendor Invoice"), function () {
 					make_vendor_invoice(frm);
+				}, __("Create"));
+			}
+
+			if (frm.doc.workflow_state === "To Bill" && flt(frm.doc.total_qty) > 0) {
+				frm.add_custom_button(__("Customer Invoice"), function () {
+					make_customer_invoice(frm);
 				}, __("Create"));
 			}
 
@@ -650,6 +666,82 @@ function make_vendor_invoice(frm) {
 	});
 }
 
+function make_customer_invoice(frm) {
+	frappe.model.with_doctype("Sales Invoice", () => {
+		let si = frappe.model.get_new_doc("Sales Invoice");
+		si.company = frm.doc.company;
+		si.customer = frm.doc.customer;
+		si.cost_center = frm.doc.cost_center;
+		si.project = frm.doc.project;
+		si.custom_branch = frm.doc.custom_branch;
+		si.custom_division = frm.doc.custom_division;
+		si.custom_customer_order = frm.doc.name;
+		si.currency = frm.doc.currency || frm.doc.custom_valas || "IDR";
+		si.conversion_rate = frm.doc.conversion_rate || frm.doc.custom_kurs || 1;
+		si.posting_date = frappe.datetime.get_today();
+
+		frm.doc.items.forEach((row) => {
+			let si_item = frappe.model.add_child(si, "Sales Invoice Item", "items");
+			si_item.item_code = row.item_code;
+			si_item.item_name = row.item_name;
+			si_item.description = row.description;
+			si_item.qty = row.qty;
+			si_item.rate = row.rate;
+			si_item.price_list_rate = row.rate;
+			si_item.amount = row.amount;
+			si_item.base_rate = row.rate;
+			si_item.base_amount = row.amount;
+			si_item.uom = row.uom;
+			si_item.conversion_factor = row.conversion_factor || 1;
+			si_item.sales_order = frm.doc.name;
+			si_item.so_detail = row.name;
+			si_item.custom_valas = frm.doc.custom_valas || "IDR";
+			si_item.custom_kurs = frm.doc.custom_kurs || 1;
+		});
+
+		frappe.set_route("Form", "Sales Invoice", si.name);
+	});
+}
+
+function apply_item_row_locks(frm) {
+	if (frm.is_new() || !frm.doc.items || !frm.doc.name) return;
+
+	frm.fields_dict.items.grid.grid_rows.forEach((row) => {
+		if (!row.doc || !row.doc.name) return;
+
+		if (row.doc.custom_customer_invoice) {
+			lock_si_item_row(row);
+		} else if (row.doc.custom_purchase_invoice) {
+			lock_pi_item_row(row);
+		}
+	});
+}
+
+function lock_pi_item_row(row) {
+	["item_code", "qty", "custom_cost", "description"].forEach((fn) => {
+		if (row.columns[fn]) {
+			row.toggle_editable(fn, false);
+		}
+	});
+}
+
+function lock_si_item_row(row) {
+	[
+		"item_code",
+		"description",
+		"qty",
+		"uom",
+		"rate",
+		"custom_cost",
+		"discount_percentage",
+		"discount_amount",
+	].forEach((fn) => {
+		if (row.columns[fn]) {
+			row.toggle_editable(fn, false);
+		}
+	});
+}
+
 // Pastikan Delivered full width saat Division = SE (juga setelah pindah dari division lain)
 function fix_delivered_full(frm) {
 	const f = frm.get_field("custom_delivered");
@@ -705,10 +797,14 @@ function arrange_notes_fields(frm) {
 
 	// simpan posisi asli sekali saja
 	if (!frm._notes_orig) {
-		frm._notes_orig = fieldnames.map((fn) => {
-			const w = frm.get_field(fn).$wrapper;
-			return { fn: fn, parent: w.parent(), prev: w.prev() };
-		});
+		frm._notes_orig = fieldnames
+			.map((fn) => {
+				const f = frm.get_field(fn);
+				if (!f || !f.$wrapper) return null;
+				const w = f.$wrapper;
+				return { fn: fn, parent: w.parent(), prev: w.prev() };
+			})
+			.filter(Boolean);
 	}
 
 	if (frm.doc.custom_division === "SC") {
@@ -717,13 +813,17 @@ function arrange_notes_fields(frm) {
 		let clearfix = anchor.$wrapper.next(".tbs-group-clearfix");
 		let last = clearfix.length ? clearfix : anchor.$wrapper;
 		fieldnames.forEach((fn) => {
-			const w = frm.get_field(fn).$wrapper;
+			const f = frm.get_field(fn);
+			if (!f || !f.$wrapper) return;
+			const w = f.$wrapper;
 			last.after(w);
 			last = w;
 		});
 	} else {
 		frm._notes_orig.forEach((o) => {
-			const w = frm.get_field(o.fn).$wrapper;
+			const f = frm.get_field(o.fn);
+			if (!f || !f.$wrapper) return;
+			const w = f.$wrapper;
 			if (o.prev.length) {
 				o.prev.after(w);
 			} else {

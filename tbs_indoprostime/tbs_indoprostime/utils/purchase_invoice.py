@@ -129,3 +129,64 @@ def make_purchase_invoice(source_name, target_doc=None, args=None):
 		target.exchange_rate = source.custom_kurs or 1
 
 	return target
+
+
+def on_submit(doc, method=None):
+	_update_so_item_links(doc)
+
+
+def on_cancel(doc, method=None):
+	_clear_so_item_links(doc)
+
+
+def _update_so_item_links(doc):
+	for item in doc.items:
+		if not item.custom_so_detail:
+			continue
+		frappe.db.set_value(
+			"Sales Order Item",
+			item.custom_so_detail,
+			{
+				"custom_purchase_invoice": doc.name,
+				"custom_purchase_invoice_item": item.name,
+			},
+			update_modified=False,
+		)
+
+
+def _clear_so_item_links(doc):
+	for item in doc.items:
+		if not item.custom_so_detail:
+			continue
+		frappe.db.set_value(
+			"Sales Order Item",
+			item.custom_so_detail,
+			{
+				"custom_purchase_invoice": "",
+				"custom_purchase_invoice_item": "",
+			},
+			update_modified=False,
+		)
+
+
+def update_sales_order_costs(doc, method=None):
+	for item in doc.items:
+		if not item.custom_so_detail:
+			continue
+
+		so_item_qty = frappe.db.get_value("Sales Order Item", item.custom_so_detail, "qty")
+		if so_item_qty is None:
+			continue
+
+		new_cost = flt(item.rate)
+		new_total_cost = new_cost * flt(so_item_qty)
+
+		frappe.db.set_value(
+			"Sales Order Item",
+			item.custom_so_detail,
+			{
+				"custom_cost": new_cost,
+				"custom_total_cost": new_total_cost,
+			},
+			update_modified=False,
+		)

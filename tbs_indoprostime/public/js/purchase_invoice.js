@@ -20,6 +20,7 @@ frappe.ui.form.on("Purchase Invoice", {
 		lock_item_code_in_grid(frm);
 		override_items_add_row(frm);
 		hide_add_multiple_button(frm);
+		hide_create_purchase_receipt(frm);
 	},
 });
 
@@ -303,4 +304,14 @@ function hide_add_multiple_button(frm) {
 	$("<style id='pi-hide-add-multiple-style'>")
 		.text(".pi-hide-add-multiple .grid-add-multiple-rows { display: none !important; }")
 		.appendTo("head");
+}
+
+function hide_create_purchase_receipt(frm) {
+	setTimeout(() => {
+		try {
+			frm.remove_custom_button(__("Purchase Receipt"), __("Create"));
+		} catch (e) {
+			// tombol tidak ditemukan, abaikan
+		}
+	}, 1200);
 }

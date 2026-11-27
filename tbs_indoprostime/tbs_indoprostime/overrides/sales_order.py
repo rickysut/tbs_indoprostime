@@ -337,12 +337,57 @@ class CustomSalesOrder(SalesOrder):
 			"conversion_factor": 1,
 		})
 
+	def _check_locked_items(self):
+		if self.is_new():
+			return
+		old_doc = self.get_doc_before_save() or frappe.get_doc(self.doctype, self.name)
+		if not old_doc:
+			return
+		old_items = {row.name: row for row in old_doc.items}
+		if not old_items:
+			return
+
+		new_names = {row.name for row in self.items if row.name}
+		for old_row in old_doc.items:
+			if (old_row.custom_purchase_invoice or old_row.custom_customer_invoice) and old_row.name not in new_names:
+				frappe.throw(
+					_("Row {0}: Cannot delete item because it is already invoiced.").format(old_row.idx),
+					title=_("Locked Item"),
+				)
+
+		pi_fields = {"item_code", "qty", "custom_cost", "description"}
+		si_fields = {"item_code", "description", "qty", "uom", "rate", "custom_cost"}
+
+		for row in self.items:
+			if not row.name or row.name not in old_items:
+				continue
+			old_row = old_items[row.name]
+			if old_row.custom_customer_invoice:
+				changed = [f for f in si_fields if row.get(f) != old_row.get(f)]
+				if changed:
+					frappe.throw(
+						_("Row {0}: Cannot edit {1} because Sales Invoice exists.").format(
+							row.idx, ", ".join(changed)
+						),
+						title=_("Locked Item"),
+					)
+			elif old_row.custom_purchase_invoice:
+				changed = [f for f in pi_fields if row.get(f) != old_row.get(f)]
+				if changed:
+					frappe.throw(
+						_("Row {0}: Cannot edit {1} because Vendor Invoice exists.").format(
+							row.idx, ", ".join(changed)
+						),
+						title=_("Locked Item"),
+					)
+
 	def before_save(self):
 		self.set_title()
 		if self.get("items") and self.get("payment_schedule"):
 			self.payment_schedule = []
 
 	def validate(self):
+		self._check_locked_items()
 		self.update_rate()
 		if not self.get("items"):
 			self.grand_total = self.grand_total or 0

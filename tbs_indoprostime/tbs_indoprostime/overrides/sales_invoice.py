@@ -11,6 +11,39 @@ class CustomSalesInvoice(SalesInvoice):
 	def on_submit(self):
 		super().on_submit()
 		self.update_sales_order_posted()
+		self._update_so_item_links()
+
+	def on_cancel(self):
+		self._clear_so_item_links()
+		super().on_cancel()
+
+	def _update_so_item_links(self):
+		for item in self.items:
+			if not item.so_detail:
+				continue
+			frappe.db.set_value(
+				"Sales Order Item",
+				item.so_detail,
+				{
+					"custom_customer_invoice": self.name,
+					"custom_customer_invoice_item": item.name,
+				},
+				update_modified=False,
+			)
+
+	def _clear_so_item_links(self):
+		for item in self.items:
+			if not item.so_detail:
+				continue
+			frappe.db.set_value(
+				"Sales Order Item",
+				item.so_detail,
+				{
+					"custom_customer_invoice": "",
+					"custom_customer_invoice_item": "",
+				},
+				update_modified=False,
+			)
 
 	def update_sales_order_posted(self):
 		"""Update custom_posted on linked Sales Orders."""
